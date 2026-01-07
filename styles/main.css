@@ -20,7 +20,7 @@ body {
 	margin-top: 3em;
 }
 
-.top-bar-container #name {
+.top-bar-container #name a {
 	font-weight: 700;
 }
 
@@ -30,11 +30,12 @@ body {
 	font-size: .6em;
 	gap: 3%;
 	justify-content: flex-end;
+	white-space: nowrap;
 }
 
-.nav-item:hover {
+.nav-item-selected {
 	color: #B76010;
-	text-decoration: underline;
+	font-weight: 700;
 }
 
 .summary-container {
@@ -54,6 +55,12 @@ body {
 	margin-top: 0;
 }
 
+.contact-info {
+	font-size: .8em;
+	margin-top: 2em;
+	text-align: center;
+}
+
 a {
 	color: #B76010;
 	text-decoration: none;
@@ -63,16 +70,11 @@ a:hover {
 	text-decoration: underline;
 }
 
-.contact-info {
-	font-size: .8em;
-	text-align: center;
-}
-
-.contact-info a {
+.link-no-color {
 	color: black;
 }
 
-.contact-info:hover a {
+.link-no-color:hover {
 	color: #B76010;
 }
 
