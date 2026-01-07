@@ -51,7 +51,20 @@ body {
 }
 
 .summary-container h1 {
-	font-size: 1.6em;
+	margin-top: 0;
+}
+
+.project-experience-item {
+	display: flex;
+	flex-direction: row;
+	gap: 5%;
+}
+
+.project-experience-item img {
+	width: 30%;
+}
+
+.project-experience-item h2 {
 	margin-top: 0;
 }
 
@@ -60,6 +73,9 @@ body {
 	margin-top: 2em;
 	text-align: center;
 }
+ h1 {
+	font-size: 1.6em;
+ }
 
 a {
 	color: #B76010;

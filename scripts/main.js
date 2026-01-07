@@ -1,9 +1,8 @@
 const pageNamesToPages = new Map([
 	["About", "about.html"],
-	["Experience", "experience.html"],
-	["Projects", "projects.html"],
+	["Projects and Experience", "projects_and_experience.html"],
 	["Other Interests", "other_interests.html"],
-	["Resume", "resume.pdf"]
+	["Resume", "Fan_Summit_Resume.pdf"]
 ]);
 
 function createNav(currentPageName) {
