@@ -68,11 +68,27 @@ body {
 	margin-top: 0;
 }
 
-.contact-info {
+#contactInfo {
+	display: flex;
+	flex-direction: row;
 	font-size: .8em;
+	justify-content: space-around;
+	margin-bottom: 8em;
 	margin-top: 2em;
 	text-align: center;
 }
+
+.contact-info-item {
+	align-items: center;
+	display: flex;
+	flex-direction: row;
+	gap: .5em;
+}
+
+.icon {
+	height: 1.6em;
+}
+
  h1 {
 	font-size: 1.6em;
  }
