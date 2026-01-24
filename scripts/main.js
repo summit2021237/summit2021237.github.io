@@ -19,7 +19,7 @@ function addWebsite(id, displayText, url) {
 }
 
 function addProjectLink(id, displayText, url, icon) {
-	$(`#${id}`).append(`<div class="project-link">${icon}<a class="link-no-color" href="${url}" target="_blank">${displayText}</a></div>`);
+	$(`#${id}`).append(`<div class="project-link">${icon}<a href="${url}" target="_blank">${displayText}</a></div>`);
 }
 
 function createNav(currentPageName) {
