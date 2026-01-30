@@ -68,6 +68,39 @@ body {
 	margin-top: 0;
 }
 
+.image-with-text {
+	align-items: flex-start;
+	display: flex;
+	flex-direction: row;
+	gap: 5%;
+}
+
+.image-with-text figure {
+	margin: 0;
+}
+
+.image-with-text img {
+	width: 100%;
+}
+
+#polyglotPersistenceDiagrams {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.polyglot-persistence-diagram {
+	width: 30%;
+}
+
+.polyglot-persistence-diagram figure {
+	margin: 0;
+}
+
+.polyglot-persistence-diagram img {
+	width: 100%;
+}
+
 #contactInfo {
 	display: flex;
 	flex-direction: row;
@@ -89,9 +122,17 @@ body {
 	height: 1.6em;
 }
 
- h1 {
+h1 {
 	font-size: 1.6em;
- }
+}
+
+h2 {
+	font-size: 1.4em;
+}
+
+h3 {
+	font-size: 1.2em;
+}
 
 a {
 	color: #B76010;
@@ -100,6 +141,14 @@ a {
 
 a:hover {
 	text-decoration: underline;
+}
+
+figcaption {
+	text-align: center;
+}
+
+.no-top-margin {
+	margin-top: 0;
 }
 
 .link-no-color {
