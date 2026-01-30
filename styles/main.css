@@ -93,14 +93,6 @@ body {
 	width: 30%;
 }
 
-.polyglot-persistence-diagram figure {
-	margin: 0;
-}
-
-.polyglot-persistence-diagram img {
-	width: 100%;
-}
-
 #contactInfo {
 	display: flex;
 	flex-direction: row;
@@ -141,6 +133,14 @@ a {
 
 a:hover {
 	text-decoration: underline;
+}
+
+.figure-no-margin-100-width {
+	margin: 0;
+}
+
+.figure-no-margin-100-width img {
+	width: 100%;
 }
 
 figcaption {
