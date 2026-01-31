@@ -61,11 +61,22 @@ body {
 }
 
 .project-experience-item img {
-	width: 30%;
+	align-items: flex-start;
+	max-width: 30%;
+	object-fit: contain;
+	object-position: top;
 }
 
 .project-experience-item h2 {
 	margin-top: 0;
+}
+
+.learned-list {
+	margin: 0;
+}
+
+.languages-frameworks-tools {
+	font-size: .85em;
 }
 
 .image-with-text {
