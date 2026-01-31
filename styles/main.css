@@ -118,19 +118,33 @@ body {
 	gap: .3em;
 }
 
-#rockoIntro {
+.image-with-text {
+	align-items: flex-start;
 	display: flex;
 	flex-direction: row;
 	gap: 5%;
 }
 
-#rockoIntro figure {
+.image-with-text figure {
 	margin: 0;
+}
+
+.image-with-text img {
+	width: 100%;
+}
+
+#rockoIntroFigure {
 	width: 45%;
 }
 
-#rockoIntro img {
-	width: 100%;
+#polyglotPersistenceDiagrams {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.polyglot-persistence-diagram {
+	width: 30%;
 }
 
 #contactInfo {
@@ -173,6 +187,14 @@ a {
 
 a:hover {
 	text-decoration: underline;
+}
+
+.figure-no-margin-100-width {
+	margin: 0;
+}
+
+.figure-no-margin-100-width img {
+	width: 100%;
 }
 
 figcaption {

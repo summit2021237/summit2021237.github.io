@@ -1,0 +1,78 @@
+@startuml
+left to right direction
+actor User
+
+interface "Command Line"
+
+action "Add, Delete, Edit"
+action View
+
+agent "Kafka Producer"
+
+together {
+	queue MongoDBQueue
+	queue Neo4jQueue
+	queue InfluxDB1Queue
+	queue InfluxDB2Queue
+}
+
+together {
+	agent "MongoDB Consumer"
+	agent "Neo4j Consumer"
+	rectangle "InfluxDB Consumer" {
+		agent "InfluxDB1 Consumer"
+		agent "InfluxDB2 Consumer"
+	}
+}
+
+agent "MongoDB Client"
+agent "Neo4j Client"
+rectangle "InfluxDB Client" {
+	agent "InfluxDB1 Client"
+	agent "InfluxDB2 Client"
+}
+
+rectangle MongoDB {
+	database Primary
+	database Secondary
+	database Arbiter
+}
+database Neo4j
+database InfluxDB1
+database InfluxDB2
+
+User -down-> "Command Line"
+
+"Command Line" -down-> "Add, Delete, Edit"
+"Command Line" -left-> View
+
+"Add, Delete, Edit" -down-> "Kafka Producer"
+
+"Kafka Producer" -down-> MongoDBQueue : "Event Message"
+"Kafka Producer" -down-> Neo4jQueue : "Event Message"
+"Kafka Producer" -down-> InfluxDB1Queue : "Event Message"
+"Kafka Producer" -down-> InfluxDB2Queue : "Event Message"
+
+MongoDBQueue -down-> "MongoDB Consumer"
+Neo4jQueue -down-> "Neo4j Consumer"
+InfluxDB1Queue -down-> "InfluxDB1 Consumer"
+InfluxDB2Queue -down-> "InfluxDB2 Consumer"
+
+"MongoDB Consumer" -down-> "MongoDB Client"
+"Neo4j Consumer" -down-> "Neo4j Client"
+"InfluxDB1 Consumer" -down-> "InfluxDB1 Client"
+"InfluxDB2 Consumer" -down-> "InfluxDB2 Client"
+
+"MongoDB Client" --> Primary
+Primary --> Secondary : Replicate
+Primary <..> Secondary
+Primary <..> Arbiter
+Secondary <.left.> Arbiter
+"Neo4j Client" --> Neo4j
+"InfluxDB1 Client" --> InfluxDB1
+"InfluxDB2 Client" --> InfluxDB2
+
+View --> "MongoDB Client" : Query
+View --> "Neo4j Client" : Query
+View --> "InfluxDB1 Client" : Query
+@enduml

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/home/fank1/Documents/website/website/styles/main.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+		<script src="/home/fank1/Documents/website/website/scripts/jquery.min.js"></script>
+		<script src="/home/fank1/Documents/website/website/scripts/main.js"></script>
+
+		<title>Summit Fan</title>
+	</head>
+	<body>
+		<div id="navBar" class="top-bar-container"></div>
+		<script>createNav("Projects and Experience")</script>
+		
+		<div>
+			<h1>Get Attacked By a Bear</h1>
+			<p>This was my group's final project for an advanced database systems course. The project was to develop an information system with <b>three</b> different <b>NoSQL systems</b> to demonstrate <b>polyglot persistence</b>, use <b>scalability</b> and <b>consistency</b> features of those systems, and implement a <b>recovery</b> strategy.</p>
+			<div class="image-with-text">
+				<div>
+					<p class="no-top-margin">The instructor wanted the project to be creative and interesting to us, so we chose a system that recommends locations to get attacked by bears. From our problem statement,</p>
+					<blockquote>
+						Bear attacks are, despite common perception, quite rare. Even where bears are relatively common, they tend to either avoid humans or coexist peacefully, and many places have policies and strategies in place to prevent bear attacks. This poses a problem for anyone who wants the opportunity to be attacked by a bear. Even bear sightings can be hard to achieve in many places.
+					</blockquote>
+				</div>
+				<figure>
+					<img src="../images/feeding_wildlife.png"></img>
+					<figcaption>An example of a law to prevent bear attacks from Mt. Seymour in Canada</figcaption>
+				</figure>
+			</div>
+			<p>This project was written in </b>Python</b> and uses <b>MongoDB</b>, <b>Neo4j</b>, <b>InfluxDB</b>, and <b>Kafka</b>. The NoSQL systems were hosted on <b>Debian virtual machines</b> from the computer science department, and each of us could simultaneously run the information system, make changes to the data, and see each other's changes.</p>
+			<h2>Software Architecture</h2>
+			<p>The diagram describes the software architecture. Each of the MongoDB nodes are run on different virtual machines, and the two InfluxDB nodes are run on separate virtual machines.</p>
+			<figure class="figure-no-margin-100-width">
+				<img src="../images/get_attacked_by_a_bear_plantuml.png"></img>
+				<figcaption>Get Attacked By a Bear software architecture</figcaption>
+			</figure>
+			<h2>Features</h2>
+			<ul>
+				<li>Search for bear encounters by</li>
+				<ul>
+					<li>Location</li>
+					<li>Person</li>
+					<li>Species</li>
+					<li>Wild or captive bear</li>
+					<li>Attack or sighting</li>
+					<li>Date</li>
+				</ul>
+				<li>Track bear encounters (add, delete, edit, and view)</li>
+				<ul>
+					<li>Location</li>
+					<li>Person</li>
+					<li>Species</li>
+					<li>Wild or captive bear</li>
+					<li>Attack or sighting</li>
+					<li>Date</li>
+				</ul>
+				<li>Filter locations based on the likelihood of bear attacks or sightings</li>
+				<li>Recommend nearby locations with high bear attack frequencies</li>
+				<li>Display the frequency of bear attacks as time-series data over the years</li>
+				<li>Display times of the year that attacks occur more frequently</li>
+				<li>Recommend times for getting attacked utilizing time-series representation of historic data</li>
+				<li>Track bear population density for different locations to use for recommendations (add and edit)</li>
+				<li>Review bear encounters on a scale from 1 to 5 stars, with comments (add, delete, edit, and view)</li>
+			</ul>
+			<h2>Polyglot Persistence</h2>
+			Systems with polyglot persistence use multiple data storage systems depending on the ways the data will be used. Based on our features list, we decided to use MongoDB, Neo4j, and InfluxDB.
+			<div id="polyglotPersistenceDiagrams">
+				<div class="polyglot-persistence-diagram">
+					<h3>MongoDB</h3>
+					<p class="no-top-margin">We track locations, encounters, and reviews of encounters, which all have many attributes. So it made since to use a system like MongoDB, which is <b>document-based</b>, and the ID of a document of one type can be a field in a document of another type, letting us simplify how locations are stored. The Encounter documents have a list of Reviews and reference a location ID, and the Location documents have a field containing encounter IDs of all the encounters that have occurred in that location.</p>
+					<figure class="figure-no-margin-100-width">
+						<img src="../images/mongodb_diagram.png"></img>
+						<figcaption>MongoDB Diagram</figcaption>
+					</figure>
+				</div>
+				<div class="polyglot-persistence-diagram">
+					<h3>Neo4j</h3>
+					<p class="no-top-margin">Since we recommend locations with high bear attack frequencies, we use Neo4j. The <b>graph</b> database would also make it easier to add other methods for recommending locations in the future. Neo4j tracks the population densities of species in various locations, as well as encounters.</p>
+					<figure class="figure-no-margin-100-width">
+						<img src="../images/neo4j_diagram.png"></img>
+						<figcaption>Neo4j Diagram</figcaption>
+					</figure>
+				</div>
+				<div class="polyglot-persistence-diagram">
+					<h3>InfluxDB</h3>
+					<p class="no-top-margin">We wanted to track encounters over time to determine the best times to try to get attacked by a bear. InfluxDB is a <b>time-series</b> database that stores measurements, a collection of points associating a values with times, and it has tags to add more information about the values stored. InfluxDB tracks the number of encounters for dates with tags providing more details on the encounters.</p>
+					<figure class="figure-no-margin-100-width">
+						<img src="../images/influxdb_diagram.png"></img>
+						<figcaption>InfluxDB Diagram</figcaption>
+					</figure>
+				</div>
+			</div>
+			<h2>Scalability and Consistency</h2>
+			<p>Another part of the project was learning about and implementing scalability and consistency features for the databases.</p>
+			<p>MongoDB has <b>replica sets</b> and <b>shards</b>, which can ensure <b>eventual consistency</b>, <b>durability</b>, and <b>efficiency</b>. We do not implement sharding because we do not have a lot of data. For consistency, we use a replica set with <b>two data nodes</b> and <b>one arbiter node</b>.</p> 
+			<p>Neo4j has <b>sharding</b> and <b>data federation</b> for the Enterprise Edition. Since it would be outside the scope of this project to implement sharding (subgraph of the entire graph on each node) or data federation (disjoint graphs with different labels and relationship types on each node) ourselves, we do not use scalability and consistency options for the Neo4j part of the system.</p>
+			<p>InfluxDB automatically uses <b>sharding</b> with shard groups based on durations, but it has no additional scalability options for the free version. However, the paid versions allow multiple nodes and support clustering. Since we are using the free version, we run <b>two separate InfluxDB nodes</b> to support replication.</p>
+			<h2>Recovery</h2>
+			<p>For recovery, we use <b>Kafka</b> to queue events, and each database will consume events from their own queues. Then, each database ensures that it does not lose data when it goes down by reading all the missed modifications when it comes back up.</p>
+		</div>
+		<div id="contactInfo"></div>
+
+		<script>createContactInfo()</script>
+	</body>
+</html>
