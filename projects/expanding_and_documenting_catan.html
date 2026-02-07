@@ -21,12 +21,56 @@
 			<p>In Software Construction and Evolution, we learned about software <b>maintenance</b>, <b>refactoring</b>, and <b>documentation</b>. For our course project, my group expanded on another member's Software Quality Assurance project, which was Catan written in Java.</p>
 			<h2>Tasks</h2>
 			<p>For the project, we added <b>new features</b> and <b>refactored 20 code smells</b> (15 unique smells) and <b>10 unique testing code smells or seams</b>. In addition, we wrote <b>user and developer guides</b> to document how a user installs and plays the game and processes for developers to add to and maintain the game.</p>
+			<h2>Software Architecture and Design</h2>
+			<p>We used a <b>three-layer architecture</b> because we had a graphical user interface, game logic, and a feature for loading and saving games. This architecture would make it easy to change how games are loaded and stored or load other information into the game. Also, if a user wanted a different frontend but still have the Catan game logic, they could build another frontend and use the existing game logic.</p>
+			<p>Below are some simplified UML class diagrams of our final design depicting some changes from our new features and refactorings.</p>
+			<div id="csse375Diagrams">
+				<figure class="no-margin">
+					<img class="width-100" src="../images/csse375_frontend_uml.svg"></img>
+					<figcaption>Presentation layer</figcaption>
+				</figure>
+				<figure class="no-margin">
+					<img class="width-100" src="../images/csse375_catan_uml.svg"></img>
+					<figcaption>Domain layer</figcaption>
+				</figure>
+				<figure class="no-margin">
+					<img class="width-50" src="../images/csse375_datasource_uml.svg"></img>
+					<figcaption>Data layer</figcaption>
+				</figure>
+			</div>
 			<h2>Development Processes</h2>
-			This is an overview of our build tasks and development workflow.
+			<p>This is an overview of our build tasks and development workflow.</p>
 			<h3>Build Processes</h3>
 			<p>The project used <b>Gradle</b> as a build tool. It also had many software quality tools and test cases since the original project was developed with test-driven development. The build build task assembles the game and runs <b>unit</b>, <b>integration</b>, <b>style</b>, <b>mutation</b>, and <b>code coverage tests</b>, including <b>854 automated unit and integration tests</b>. We also have build tasks for creating the JAR for deployment and generating test reports.</p>
 			<h3>Version Control and Continuous Integration</h3>
 			<p>The original project had a continuous integration framework using <b>GitHub Actions</b> to run the build task when a developer creates a pull request to merge into main. We included that <b>continuous integration</b> framework in our project and used <b>branch protection</b>. Then, for developers to merge into main they need review and approval from two group members, and all their tests must pass.</p>
+			<h2>New Features</h2>
+			<p>We added the following new features:</p>
+			<ol>
+				<li>Gameplay Themes</li>
+				<li>Natural Disasters</li>
+				<li>Road Sales</li>
+				<li>Save and Load games</li>
+				<li>Restart Game</li>
+			</ol>
+			<p>TODO: Architecture/design overview</p>
+			<h2>(Whatever new feature I worked on (pause and resume?))</h2>
+			<h2>Saving and Loading Games</h2>
+			<h2>Code Smells</h2>
+			<h3>Duplicate Code (m2 p21)</h3>
+			<h3>Large Method (m2 p29)</h3>
+			<h3>Temporary Field (m2 p35)</h3>
+			<h3>Speculative Generality (m3 p37)</h3>
+			<h2>Testing Code Smells (correct name?)</h2>
+			<h3>Test Only Code in Production (m3 p38)</h2>
+			<h2>Testing Along Seams (m3 p46)</h2>
+			<h2>Documentation Overview</h2>
+			<h3>Getting Started Guide (m4 p6)</h3>
+			<h3>Parts of Development and Maintenance Guide</h3>
+			<p>TODO: challenge of packaging game for release (create zip file containg JAR file and image resources)</p>
+			<p>TODO: something about getting better at understanding legacy code (look at documentation, test code)</p>
+			<p>TODO: possibly for short overview: learned about documentation types, installation audiences, refactoring in practice, refactoring vs. redesign, appropriately applying testing levels)</p>
+			<p>TODO: JUnit, EasyMock, 2 polymorphic seams for unit test approach, cucumber, bdd for integration tests</p>
 		</div>
 		<div id="contactInfo"></div>
 

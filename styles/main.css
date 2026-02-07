@@ -104,6 +104,12 @@ body {
 	width: 30%;
 }
 
+#csse375Diagrams {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6em;
+}
+
 #contactInfo {
 	display: flex;
 	flex-direction: row;
@@ -146,20 +152,24 @@ a:hover {
 	text-decoration: underline;
 }
 
-.figure-no-margin-100-width {
-	margin: 0;
-}
-
-.figure-no-margin-100-width img {
-	width: 100%;
-}
-
-figcaption {
+figure {
 	text-align: center;
+}
+
+.no-margin {
+	margin: 0;
 }
 
 .no-top-margin {
 	margin-top: 0;
+}
+
+.width-50 {
+	width: 50%;
+}
+
+.width-100 {
+	width: 100%;
 }
 
 .link-no-color {
