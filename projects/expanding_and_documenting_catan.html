@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/home/fank1/Documents/website/website/styles/main.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+		<script src="/home/fank1/Documents/website/website/scripts/jquery.min.js"></script>
+		<script src="/home/fank1/Documents/website/website/scripts/main.js"></script>
+
+		<title>Summit Fan</title>
+	</head>
+	<body>
+		<div id="navBar" class="top-bar-container"></div>
+		<script>createNav("Projects and Experience")</script>
+		
+		<div>
+			<h1>Expanding and Documenting Catan</h1>
+			<p>In Software Construction and Evolution, we learned about software <b>maintenance</b>, <b>refactoring</b>, and <b>documentation</b>. For our course project, my group expanded on another member's Software Quality Assurance project, which was Catan written in Java.</p>
+			<h2>Tasks</h2>
+			<p>For the project, we added <b>new features</b> and <b>refactored 20 code smells</b> (15 unique smells) and <b>10 unique testing code smells or seams</b>. In addition, we wrote <b>user and developer guides</b> to document how a user installs and plays the game and processes for developers to add to and maintain the game.</p>
+			<h2>Development Processes</h2>
+			This is an overview of our build tasks and development workflow.
+			<h3>Build Processes</h3>
+			<p>The project used <b>Gradle</b> as a build tool. It also had many software quality tools and test cases since the original project was developed with test-driven development. The build build task assembles the game and runs <b>unit</b>, <b>integration</b>, <b>style</b>, <b>mutation</b>, and <b>code coverage tests</b>, including <b>854 automated unit and integration tests</b>. We also have build tasks for creating the JAR for deployment and generating test reports.</p>
+			<h3>Version Control and Continuous Integration</h3>
+			<p>The original project had a continuous integration framework using <b>GitHub Actions</b> to run the build task when a developer creates a pull request to merge into main. We included that <b>continuous integration</b> framework in our project and used <b>branch protection</b>. Then, for developers to merge into main they need review and approval from two group members, and all their tests must pass.</p>
+		</div>
+		<div id="contactInfo"></div>
+
+		<script>createContactInfo()</script>
+	</body>
+</html>
