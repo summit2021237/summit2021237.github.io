@@ -47,17 +47,47 @@
 			<h2>New Features</h2>
 			<p>We added the following new features:</p>
 			<ol>
-				<li>Gameplay Themes</li>
-				<li>Natural Disasters</li>
-				<li>Road Sales</li>
-				<li>Save and Load games</li>
-				<li>Restart Game</li>
+				<li>Gameplay themes</li>
+				<li>Natural disasters</li>
+				<li>Road sales</li>
+				<li>Save and load games</li>
+				<li>Restart game</li>
 			</ol>
-			<p>TODO: Architecture/design overview</p>
-			<h2>(Whatever new feature I worked on (pause and resume?))</h2>
-			<h2>Saving and Loading Games</h2>
+			<h3>Saving and Loading Games</h3>
+			<div id="saveLoadGamesFile">
+				<p class="no-top-margin">This is the feature that I implemented. A user can save the game to a text file and then load that game to start in the exact same state. The file structure was inspired by the <a href="./expanding_and_documenting_catan/rocko_tank_mode.ros2_control.xacro" target="_blank">ros2_control xacro files used in ROCKO</a>, which are actually XML files, with three main blocks for storing general information, like the current player, board data, and player data. A complete game file can be found <a href="./expanding_and_documenting_catan/game2026286930.txt" target="_blank">here</a>.</p>
+				<div>
+					<pre class="no-top-margin border code-block"><code>
+&lt;player color="white"&gt;
+    &lt;resource_cards&gt;
+    &lt;resource_card type="ore"&gt;2&lt;/resource_card&gt;
+    &lt;resource_card type="ore"&gt;1&lt;/resource_card&gt;
+    &lt;resource_card type="wheat"&gt;1&lt;/resource_card&gt;
+    &lt;resource_card type="brick"&gt;1&lt;/resource_card&gt;
+    &lt;resource_card type="lumber"&gt;0&lt;/resource_card&gt;
+    &lt;resource_card type="wool"&gt;0&lt;/resource_card&gt;
+  &lt;/resource_cards&gt;
+  &lt;development_cards&gt;
+    &lt;knight/&gt;
+  &lt;/development_cards&gt;
+  &lt;largest_army has_largest=false size=0/&gt;
+  &lt;longest_road has_longest=false length=1/&gt;
+&lt;/player&gt;
+					</code></pre>
+					<p class="center">Player block example</p>
+				</div>
+			</div>
+			<p>Since we only had a data layer and frontend layer, we created a new data layer with classes to read and write blocks and elements. Methods in those classes are called from importer and exporter classes in the domain layer, which populate the block, line, and element fields with game data to write and read the data. Also, the loader is used by the adjacency initializer to create the board, which was added in the same project milestone as the save feature to fix a <a href="expanding_and_documenting_catan.html#duplicateCode">code smell</a>.</p>
+			<figure class="no-margin">
+				<img class="width-100" src="../images/csse375_save_load.svg"></img>
+				<figcaption>UML class diagram for the save and load feature containing the main fields, methods, and relationships</figcaption>
+			</figure>
+			<h4>Design Rationale</h4>
+			<p>The <code>writeBlock</code> method takes the block's name, attributes, <b>method</b> for writing the block's contents, and the arguments for that method. That <b>reduces duplicate code</b> because the blocks are all structured the same way, but their contents depends on what is being stored. For example, a block may store multiple player blocks or the locations of game tiles. Since the methods for writing block contents may need different parameters, those parameters are passed into <code>writeBlock</code> as a map, using the <code>WriteBlockArgName</code> enum as the keys.</p>
+			<p>This is not shown in the simplified UML class diagram, but <code>FileLineInfo</code> is abstract to improve code for error checking and handling.</p>
+			<p>We use <code>CatanFileWriter</code> and <code>CatanScanner</code> to implement the <b>adapter pattern</b> so that our code does not directly depend on external libraries. Then, if those libraries change, we would only need to update our code in one place.</p>
 			<h2>Code Smells</h2>
-			<h3>Duplicate Code (m2 p21)</h3>
+			<h3 id="duplicateCode">Duplicate Code (m2 p21)</h3>
 			<h3>Large Method (m2 p29)</h3>
 			<h3>Temporary Field (m2 p35)</h3>
 			<h3>Speculative Generality (m3 p37)</h3>

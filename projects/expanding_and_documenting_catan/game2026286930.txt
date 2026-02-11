@@ -1,0 +1,214 @@
+<general_info>
+    <current_player_index>2</current_player_index>
+    <turn_count>20</turn_count>
+    <development_cards>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <knight/>
+        <roadBuilding/>
+        <roadBuilding/>
+        <monopoly/>
+        <monopoly/>
+        <yearOfPlenty/>
+        <yearOfPlenty/>
+        <victoryPoint/>
+        <victoryPoint/>
+        <victoryPoint/>
+        <victoryPoint/>
+        <victoryPoint/>
+    </development_cards>
+</general_info>
+<board>
+    <tiles>
+        <tile type="none">
+            <location>"L"</location>
+        </tile>
+        <tile type="wool" number=11>
+            <location>"A"</location>
+        </tile>
+        <tile type="wool" number=5>
+            <location>"B"</location>
+        </tile>
+        <tile type="ore" number=9>
+            <location>"C"</location>
+        </tile>
+        <tile type="ore" number=3>
+            <location>"D"</location>
+        </tile>
+        <tile type="wool" number=8>
+            <location>"Q"</location>
+        </tile>
+        <tile type="lumber" number=5>
+            <location>"P"</location>
+        </tile>
+        <tile type="wheat" number=10>
+            <location>"S"</location>
+        </tile>
+        <tile type="brick" number=3>
+            <location>"E"</location>
+        </tile>
+        <tile type="wheat" number=6>
+            <location>"F"</location>
+        </tile>
+        <tile type="wheat" number=4>
+            <location>"M"</location>
+        </tile>
+        <tile type="ore" number=11>
+            <location>"G"</location>
+        </tile>
+        <tile type="lumber" number=4>
+            <location>"K"</location>
+        </tile>
+        <tile type="wool" number=2>
+            <location>"N"</location>
+        </tile>
+        <tile type="wheat" number=6>
+            <location>"H"</location>
+        </tile>
+        <tile type="lumber" number=12>
+            <location>"I"</location>
+        </tile>
+        <tile type="lumber" number=10>
+            <location>"R"</location>
+        </tile>
+        <tile type="brick" number=9>
+            <location>"J"</location>
+        </tile>
+        <tile type="brick" number=8>
+            <location>"O"</location>
+        </tile>
+    </tiles>
+    <ports>
+        <port type="none" location="p"/>
+        <port type="none" location="f"/>
+        <port type="none" location="j"/>
+        <port type="none" location="r"/>
+        <port type="wheat" location="n"/>
+        <port type="ore" location="h"/>
+        <port type="wool" location="d"/>
+        <port type="brick" location="b"/>
+        <port type="lumber" location="l"/>
+    </ports>
+    <robber>
+        <location>"A"</location>
+    </robber>
+    <roads>
+        <road color="blue">
+            <location>"a"</location>
+            <location>"A"</location>
+        </road>
+        <road color="orange">
+            <location>"b"</location>
+            <location>"B"</location>
+        </road>
+        <road color="white">
+            <location>"c"</location>
+            <location>"C"</location>
+        </road>
+        <road color="white">
+            <location>"C"</location>
+            <location>"F"</location>
+        </road>
+        <road color="orange">
+            <location>"I"</location>
+            <location>"J"</location>
+        </road>
+        <road color="blue">
+            <location>"O"</location>
+            <location>"P"</location>
+        </road>
+        <road color="orange">
+            <location>"I"</location>
+            <location>"N"</location>
+        </road>
+    </roads>
+    <settlements>
+        <settlement isCity=false color="blue">
+            <location>"r"</location>
+            <location>"a"</location>
+            <location>"A"</location>
+        </settlement>
+        <settlement isCity=false color="orange">
+            <location>"a"</location>
+            <location>"b"</location>
+            <location>"B"</location>
+        </settlement>
+        <settlement isCity=false color="white">
+            <location>"b"</location>
+            <location>"c"</location>
+            <location>"C"</location>
+        </settlement>
+        <settlement isCity=false color="white">
+            <location>"B"</location>
+            <location>"C"</location>
+            <location>"F"</location>
+        </settlement>
+        <settlement isCity=false color="orange">
+            <location>"E"</location>
+            <location>"I"</location>
+            <location>"J"</location>
+        </settlement>
+        <settlement isCity=false color="blue">
+            <location>"O"</location>
+            <location>"P"</location>
+            <location>"S"</location>
+        </settlement>
+        <settlement isCity=false color="orange">
+            <location>"M"</location>
+            <location>"I"</location>
+            <location>"N"</location>
+        </settlement>
+    </settlements>
+</board>
+<players>
+    <player color="blue">
+        <resource_cards>
+            <resource_card type="ore">0</resource_card>
+            <resource_card type="wheat">0</resource_card>
+            <resource_card type="brick">0</resource_card>
+            <resource_card type="lumber">0</resource_card>
+            <resource_card type="wool">0</resource_card>
+        </resource_cards>
+        <development_cards>
+        </development_cards>
+        <largest_army has_largest=false size=0/>
+        <longest_road has_longest=false length=1/>
+    </player>
+    <player color="orange">
+        <resource_cards>
+            <resource_card type="ore">0</resource_card>
+            <resource_card type="wheat">0</resource_card>
+            <resource_card type="brick">2</resource_card>
+            <resource_card type="lumber">0</resource_card>
+            <resource_card type="wool">0</resource_card>
+        </resource_cards>
+        <development_cards>
+        </development_cards>
+        <largest_army has_largest=false size=0/>
+        <longest_road has_longest=false length=2/>
+    </player>
+    <player color="white">
+        <resource_cards>
+            <resource_card type="ore">1</resource_card>
+            <resource_card type="wheat">1</resource_card>
+            <resource_card type="brick">1</resource_card>
+            <resource_card type="lumber">0</resource_card>
+            <resource_card type="wool">0</resource_card>
+        </resource_cards>
+        <development_cards>
+            <knight/>
+        </development_cards>
+        <largest_army has_largest=false size=0/>
+        <longest_road has_longest=false length=1/>
+    </player>
+</players>

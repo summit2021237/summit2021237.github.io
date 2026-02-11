@@ -110,6 +110,12 @@ body {
 	gap: 1.6em;
 }
 
+#saveLoadGamesFile {
+	display: flex;
+	flex-direction: row;
+	gap: 5%;
+}
+
 #contactInfo {
 	display: flex;
 	flex-direction: row;
@@ -170,6 +176,16 @@ figure {
 
 .width-100 {
 	width: 100%;
+}
+
+.center {
+	text-align: center;
+}
+
+.code-block {
+	border-style: solid;
+	border-width: 1px;
+	padding: 0 1em;
 }
 
 .link-no-color {
