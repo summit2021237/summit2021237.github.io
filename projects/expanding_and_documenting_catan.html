@@ -54,7 +54,7 @@
 				<li>Restart game</li>
 			</ol>
 			<h3>Saving and Loading Games</h3>
-			<div id="saveLoadGamesFile">
+			<div class="code-with-text">
 				<p class="no-top-margin">This is the feature that I implemented. A user can save the game to a text file and then load that game to start in the exact same state. The file structure was inspired by the <a href="./expanding_and_documenting_catan/rocko_tank_mode.ros2_control.xacro" target="_blank">ros2_control xacro files used in ROCKO</a>, which are actually XML files, with three main blocks for storing general information, like the current player, board data, and player data. A complete game file can be found <a href="./expanding_and_documenting_catan/game2026286930.txt" target="_blank">here</a>.</p>
 				<div>
 					<pre class="no-top-margin border code-block"><code>
@@ -80,27 +80,43 @@
 			<p>Since we only had a data layer and frontend layer, we created a new data layer with classes to read and write blocks and elements. Methods in those classes are called from importer and exporter classes in the domain layer, which populate the block, line, and element fields with game data to write and read the data. Also, the loader is used by the adjacency initializer to create the board, which was added in the same project milestone as the save feature to fix a <a href="expanding_and_documenting_catan.html#duplicateCode">code smell</a>.</p>
 			<figure class="no-margin">
 				<img class="width-100" src="../images/csse375_save_load.svg"></img>
-				<figcaption>UML class diagram for the save and load feature containing the main fields, methods, and relationships</figcaption>
+				<figcaption>UML class diagram of the save and load feature containing the main fields, methods, and relationships</figcaption>
 			</figure>
 			<h4>Design Rationale</h4>
 			<p>The <code>writeBlock</code> method takes the block's name, attributes, <b>method</b> for writing the block's contents, and the arguments for that method. That <b>reduces duplicate code</b> because the blocks are all structured the same way, but their contents depends on what is being stored. For example, a block may store multiple player blocks or the locations of game tiles. Since the methods for writing block contents may need different parameters, those parameters are passed into <code>writeBlock</code> as a map, using the <code>WriteBlockArgName</code> enum as the keys.</p>
 			<p>This is not shown in the simplified UML class diagram, but <code>FileLineInfo</code> is abstract to improve code for error checking and handling.</p>
 			<p>We use <code>CatanFileWriter</code> and <code>CatanScanner</code> to implement the <b>adapter pattern</b> so that our code does not directly depend on external libraries. Then, if those libraries change, we would only need to update our code in one place.</p>
-			<h2>Code Smells</h2>
-			<h3 id="duplicateCode">Duplicate Code (m2 p21)</h3>
-			<h3>Large Method (m2 p29)</h3>
-			<h3>Temporary Field (m2 p35)</h3>
-			<h3>Speculative Generality (m3 p37)</h3>
-			<h2>Testing Code Smells (correct name?)</h2>
-			<h3>Test Only Code in Production (m3 p38)</h2>
-			<h2>Testing Along Seams (m3 p46)</h2>
-			<h2>Documentation Overview</h2>
-			<h3>Getting Started Guide (m4 p6)</h3>
-			<h3>Parts of Development and Maintenance Guide</h3>
-			<p>TODO: challenge of packaging game for release (create zip file containg JAR file and image resources)</p>
-			<p>TODO: something about getting better at understanding legacy code (look at documentation, test code)</p>
-			<p>TODO: possibly for short overview: learned about documentation types, installation audiences, refactoring in practice, refactoring vs. redesign, appropriately applying testing levels)</p>
-			<p>TODO: JUnit, EasyMock, 2 polymorphic seams for unit test approach, cucumber, bdd for integration tests</p>
+			<h2>Code Smell Refactorings</h2>
+			This section briefly describes the code smells I refactored. For a more in-depth version, see <a href="./expanding_and_documenting_catan/code_smell_refactorings.pdf" target="_blank">this</a> pdf, which is a compilation from project milestone submissions.
+			<h3 id="duplicateCode">Duplicate Code</h3>
+			<div class="code-with-text">
+				<p class="no-top-margin">The game is set up using letters for tile locations, vertices, and edges. Since those locations all need to be organized, the <code>Adjacency</code> class defines relationships, like which tile edges are adjacent to a tile intersection. In the original code, there are many calls to mapping functions with hard-coded locations, where the only differences are the location letters. Also, those mapping functions all have very similar logic.</p>
+				<div>
+					<pre class="no-top-margin border code-block"><code>
+// ROW NINE
+this.mapRoadToRoads(’M’, ’m’, ’n’, ’Q’);
+this.mapRoadToRoads(’M’, ’Q’, ’m’, ’N’);
+this.mapRoadToRoads(’N’, ’Q’, ’M’, ’R’);
+this.mapRoadToRoads(’N’, ’R’, ’Q’, ’O’);
+this.mapRoadToRoads(’O’, ’R’, ’N’, ’S’);
+this.mapRoadToRoads(’O’, ’S’, ’R’, ’P’);
+this.mapRoadToRoads(’P’, ’S’, ’O’, ’h’);
+this.mapRoadToRoads(’P’, ’h’, ’S’, ’g’);
+
+// ROW TEN
+this.mapRoadToRoads(’m’, ’Q’, ’l’, ’M’);
+this.mapRoadToRoads(’Q’, ’R’, ’k’, ’N’);
+this.mapRoadToRoads(’R’, ’S’, ’j’, ’O’);
+this.mapRoadToRoads(’S’, ’h’, ’i’, ’P’);
+					</code></pre>
+					<p class="center">Duplicated code in <code>Adjacency</code></p>
+				</div>
+			</div>
+			<p>We removed the duplicated code by <b>reading</b> the adjacency information <b>from a file</b> and using loops to add the information to the maps. We used <b>polymorphism</b> to create an initializer for setting up each type of adjacency map.</p>
+			<figure class="no-margin">
+				<img class="width-100" src="./expanding_and_documenting_catan/duplicate_code.svg"></img>
+				<figcaption>UML class diagram of the refactored version of <code>Adjacency</code> with polymorphism</figcaption>
+			</figure>
 		</div>
 		<div id="contactInfo"></div>
 
