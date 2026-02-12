@@ -110,6 +110,21 @@ body {
 	gap: 1.6em;
 }
 
+#largeMethod {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	tab-size: 4;
+}
+
+#largeMethod pre {
+	overflow-x: scroll;
+}
+
+.large-method-child {
+	width: 45%;
+}
+
 #contactInfo {
 	display: flex;
 	flex-direction: row;

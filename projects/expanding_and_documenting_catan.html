@@ -109,14 +109,75 @@ this.mapRoadToRoads(’Q’, ’R’, ’k’, ’N’);
 this.mapRoadToRoads(’R’, ’S’, ’j’, ’O’);
 this.mapRoadToRoads(’S’, ’h’, ’i’, ’P’);
 					</code></pre>
-					<p class="center">Duplicated code in <code>Adjacency</code></p>
+					<p class="center">Duplicate code in <code>Adjacency</code></p>
 				</div>
 			</div>
-			<p>We removed the duplicated code by <b>reading</b> the adjacency information <b>from a file</b> and using loops to add the information to the maps. We used <b>polymorphism</b> to create an initializer for setting up each type of adjacency map.</p>
+			<p>We removed the duplicate code by <b>reading</b> the adjacency information <b>from a file</b> and using loops to add the information to the maps. We used <b>polymorphism</b> to create an initializer for setting up each type of adjacency map.</p>
 			<figure class="no-margin">
 				<img class="width-100" src="./expanding_and_documenting_catan/duplicate_code.svg"></img>
 				<figcaption>UML class diagram of the refactored version of <code>Adjacency</code> with polymorphism</figcaption>
 			</figure>
+			<h3>Large Method</h3>
+			<p>The <code>Location Checker</code> class has many large methods with nested loops and conditionals, making the methods difficult to read. To make the methods more <b>readable</b>, we extracted the code in the loops and conditional blocks into separate methods with <b>self-documenting</b> names. An example from <code>getDefaultSettlementLocations</code> is below.</p>
+			<div id="largeMethod">
+				<div class="large-method-child">
+					<h4>Before</h4>
+					<pre class="code-block"><code>
+public Set&lt;Location&gt; getDefaultSettlementLocations(Color color) {
+	Set&lt;Location&gt; settlementLocations = new HashSet&lt;&gt;();
+	for (Location roadLocation : this.roads.get(color)) { // find all roads of color
+		for (Location settlementLocation : this.adj.getRoadToSettlements(roadLocation)) { // adjacent settlements
+			if (this.settlementPlacedAt(settlementLocation)) continue; // remove obstruction
+			boolean closeSettlement = false;
+			for (Location adjacentSettlement :
+				this.adj.getSettlementToSettlements(settlementLocation)) {
+				if (this.settlementPlacedAt(adjacentSettlement)) { // remove spots with adjacent settlements
+					closeSettlement = true;
+					break;
+				}
+			}
+			if (!closeSettlement) {
+				settlementLocations.add(settlementLocation);
+			}
+		}
+	}
+	return settlementLocations;
+}
+					</code></pre>
+				</div>
+				<div class="large-method-child">
+					<h4>After</h4>
+					<pre class="code-block"><code>
+public Set&lt;Location&gt; getDefaultSettlementLocations(Color color) {
+	Set&lt;Location&gt; settlementLocations = new HashSet&lt;&gt;();
+	for (Location roadLocation : this.roads.get(color)) {
+		settlementLocations.addAll(this.findSettlementLocationsAdjacentToRoad(roadLocation));
+	}
+	return settlementLocations;
+}
+
+private Set&lt;Location&gt; findSettlementLocationsAdjacentToRoad(Location roadLocation) {
+	Set&lt;Location&gt; settlementLocations = new HashSet&lt;&gt;();
+	for (Location settlementLocation : this.adj.getRoadToSettlements(roadLocation)) {
+		if (this.settlementPlacedAt(settlementLocation)) continue; // remove obstruction
+		if (!this.hasAdjacentSettlement(settlementLocation)) {
+			settlementLocations.add(settlementLocation);
+		}
+	}
+	return settlementLocations;
+}
+
+private boolean hasAdjacentSettlement(Location location) {
+	for (Location adjacentSettlement : this.adj.getSettlementToSettlements(location)) {
+		if (this.settlementPlacedAt(adjacentSettlement)) {
+			return true;
+		}
+	}
+	return false;
+}
+					</code></pre>
+				</div>
+			</div>
 		</div>
 		<div id="contactInfo"></div>
 
