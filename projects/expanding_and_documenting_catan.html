@@ -271,7 +271,24 @@ public class Tile {
 					</code></pre>
 				</div>
 			</div>
-			<h3>Speculative Generality (m3 p37)</h3>
+			<h3>Speculative Generality</h3>
+			<p>Speculative generality is when the code contains hooks, like interfaces or delegation, that are not needed but were added because the developers thought they might be needed at some point. Those add extra complexity and should be added in later if they are needed.</p>
+			<p>We had a <code>Loader</code> interface so that we could use other types of loaders, besides file loaders. Since we only use a file loader, the interface is unnecessary. Also, the methods in <code>Loader</code> are specific to loading files.</p>
+			<p>To fix this code smell, we removed the <code>Loader</code> interface in the datasource layer.</p>
+			<div class="before-after">
+				<div class="before-after-child">
+					<h4>Before</h4>
+					<figure class="no-margin">
+						<img class="width-100" src="./expanding_and_documenting_catan/speculative_generality_before.svg"></img>
+					</figure>
+				</div>
+				<div class="before-after-child">
+					<h4>After</h4>
+					<figure class="no-margin">
+						<img class="width-100" src="./expanding_and_documenting_catan/speculative_generality_after.svg"></img>
+					</figure>
+				</div>
+			</div>
 			<h2>Testing Code Smells (correct name?) Refactorings</h2>
 			<h3>Test Only Code in Production (m3 p38)</h2>
 			<h2>Testing Along Seams (m3 p46)</h2>
