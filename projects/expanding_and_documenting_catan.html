@@ -119,8 +119,8 @@ this.mapRoadToRoads(’S’, ’h’, ’i’, ’P’);
 			</figure>
 			<h3>Large Method</h3>
 			<p>The <code>Location Checker</code> class has many large methods with nested loops and conditionals, making the methods difficult to read. To make the methods more <b>readable</b>, we extracted the code in the loops and conditional blocks into separate methods with <b>self-documenting</b> names. An example from <code>getDefaultSettlementLocations</code> is below.</p>
-			<div id="largeMethod">
-				<div class="large-method-child">
+			<div class="before-after">
+				<div class="before-after-child">
 					<h4>Before</h4>
 					<pre class="code-block"><code>
 public Set&lt;Location&gt; getDefaultSettlementLocations(Color color) {
@@ -145,7 +145,7 @@ public Set&lt;Location&gt; getDefaultSettlementLocations(Color color) {
 }
 					</code></pre>
 				</div>
-				<div class="large-method-child">
+				<div class="before-after-child">
 					<h4>After</h4>
 					<pre class="code-block"><code>
 public Set&lt;Location&gt; getDefaultSettlementLocations(Color color) {
@@ -178,6 +178,110 @@ private boolean hasAdjacentSettlement(Location location) {
 					</code></pre>
 				</div>
 			</div>
+			<h3>Temporary Field</h3>
+			<p>Temporary fields are fields that are only assigned values under specific conditions and could be uninitialized. This code smell can be eliminated by using polymorphism or default values.</p>
+			<p>One example of temporary fields in our project is in the <code>Tile</code> class. That class has temporary fields <code>number</code> and <code>type</code> since those fields are only used when the tile is not a desert (<code>isDesert</code> field is <code>false</code>). Then, when we want to find the number or type of a tile, we first need to check whether it is the desert.</p>
+			<p>We fix this class by introducing a new tile/resource type, <code>NONE</code>, and setting the default number to 0, an impossible value to roll.</p>
+			<div class="before-after">
+				<div class="before-after-child">
+					<h4>Before</h4>
+					<p><code>Type</code>:
+					<pre class="code-block"><code>
+public enum Type {
+	WHEAT("wheat"),
+	ORE("ore"),
+	WOOL("wool"),
+	BRICK("brick"),
+	LUMBER("lumber");
+	...
+}
+					</code></pre>
+					<p><code>Tile</code>:
+					<pre class="code-block"><code>
+public class Tile {
+	Location location;
+	int number;
+	Type type;
+
+	boolean isDesert;
+
+	public Tile(char location, int number, Type type) {
+		assignLocation(location);
+		setNumber(number);
+		this.type = type;
+		this.isDesert = false;
+	}
+
+	public Tile(char location) {
+		assignLocation(location);
+		this.number = 0;
+		this.isDesert = true;
+	}
+
+	public boolean getIsDesert() {
+		return this.isDesert;
+	}
+
+	...
+}
+					</code></pre>
+				</div>
+				<div class="before-after-child">
+					<h4>After</h4>
+					<p><code>Type</code>:
+					<pre class="code-block"><code>
+public enum Type {
+	WHEAT("wheat"),
+	ORE("ore"),
+	WOOL("wool"),
+	BRICK("brick"),
+	LUMBER("lumber"),
+	NONE("none");
+	
+	public static final Type[] RESOURCE_TYPES = new Type[]{WHEAT, ORE, WOOL, BRICK, LUMBER};
+
+	...
+}
+					</code></pre>
+					<p><code>Tile</code>:
+					<pre class="code-block"><code>
+public class Tile {
+	Location location;
+	int number;
+	Type type;
+
+	public Tile(char location, int number, Type type) {
+		assignLocation(location);
+		setNumber(number);
+		this.type = type;
+	}
+
+	public Tile(char location) {
+		assignLocation(location);
+		this.number = 0; // impossible to roll 0
+		this.type = Type.NONE;
+	}
+
+	public boolean getIsDesert() {
+		return this.type == Type.NONE;
+	}
+
+	...
+}
+					</code></pre>
+				</div>
+			</div>
+			<h3>Speculative Generality (m3 p37)</h3>
+			<h2>Testing Code Smells (correct name?) Refactorings</h2>
+			<h3>Test Only Code in Production (m3 p38)</h2>
+			<h2>Testing Along Seams (m3 p46)</h2>
+			<h2>Documentation Overview</h2>
+			<h3>Getting Started Guide (m4 p6)</h3>
+			<h3>Parts of Development and Maintenance Guide</h3>
+			<p>TODO: challenge of packaging game for release (create zip file containg JAR file and image resources)</p>
+			<p>TODO: something about getting better at understanding legacy code (look at documentation, test code)</p>
+			<p>TODO: possibly for short overview: learned about documentation types, installation audiences, refactoring in practice, refactoring vs. redesign, appropriately applying testing levels)</p>
+			<p>TODO: JUnit, EasyMock, 2 polymorphic seams for unit test approach, cucumber, bdd for integration tests</p>
 		</div>
 		<div id="contactInfo"></div>
 

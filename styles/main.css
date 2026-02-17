@@ -110,18 +110,18 @@ body {
 	gap: 1.6em;
 }
 
-#largeMethod {
+.before-after {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	tab-size: 4;
 }
 
-#largeMethod pre {
+.before-after pre {
 	overflow-x: scroll;
 }
 
-.large-method-child {
+.before-after-child {
 	width: 45%;
 }
 
