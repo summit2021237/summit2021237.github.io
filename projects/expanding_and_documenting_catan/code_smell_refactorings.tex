@@ -17,14 +17,7 @@
 \addcontentsline{toc}{section}{Duplicate Code (Milestone 2)}
 \section*{Duplicate Code (Milestone 2)}
 \subsection*{Description}
-In \texttt{Adjacency}, there is duplicated code when initializing the maps containing information on
-which tiles, roads, settlements, and ports are adjacent. For each type of adjacency, there is
-a method for adding the adjacent location information to the adjacency map, and the
-process for adding the information is similar. The code could be improved by reading the
-adjacency information from a ﬁle and using loops to add the information to the maps
-because the adjacency information does not change between games. Also, since the
-process for adding the information is similar, we can use polymorphism to create an
-initializer for setting up each type of adjacency map.
+In \texttt{Adjacency}, there is duplicated code when initializing the maps containing information on which tiles, roads, settlements, and ports are adjacent. For each type of adjacency, there is a method for adding the adjacent location information to the adjacency map, and the process for adding the information is similar. The code could be improved by reading the adjacency information from a ﬁle and using loops to add the information to the maps because the adjacency information does not change between games. Also, since the process for adding the information is similar, we can use polymorphism to create an initializer for setting up each type of adjacency map.
 \subsection*{Before}
 \begin{lstlisting}[style=javacode,language=myJava]
 public class Adjacency {
@@ -549,12 +542,7 @@ public class SettlementToPort extends AdjacencyInitializer {
 \addcontentsline{toc}{section}{Large Method (Milestone 2)}
 \section*{Large Method (Milestone 2)}
 \subsection*{Description}
-The \texttt{LocationChecker} class has many large methods with nested for loops and
-conditionals, making the methods less readable. The for loops and code inside the
-conditoinal blocks can be extracted into separate methods with names clearly indicating
-what they do. For example, with \texttt{getDefaultSettlementLocations}, we can extract a
-\texttt{ﬁndSettlementLocationsAdjacentToRoad} method and a \texttt{hasAdjacentSettlement} method.
-And in \texttt{getInitialRoadLocations}, we can replace conditionals hardcoded values with loops.
+The \texttt{LocationChecker} class has many large methods with nested for loops and conditionals, making the methods less readable. The for loops and code inside the conditoinal blocks can be extracted into separate methods with names clearly indicating what they do. For example, with \texttt{getDefaultSettlementLocations}, we can extract a \texttt{ﬁndSettlementLocationsAdjacentToRoad} method and a \texttt{hasAdjacentSettlement} method. And in \texttt{getInitialRoadLocations}, we can replace conditionals hardcoded values with loops.
 \subsection*{Before and After}
 \subsubsection*{\texttt{getDefaultSettlementLocations}}
 Before:
@@ -880,15 +868,13 @@ private int getPathLengthsMax(Set<Integer> pathLengths) {
 \addcontentsline{toc}{section}{Temporary Field (Milestone 2)}
 \section*{Temporary Field (Milestone 2)}
 \subsection*{Description}
-\texttt{Tile} has the temporary ﬁelds \texttt{number} and \texttt{typ}e since those ﬁelds are only used when
-\texttt{isDesert} is \texttt{false}, so when we want to ﬁnd the \texttt{number} or \texttt{type} of a tile, we ﬁrst need to
-check whether it is the desert.
-\texttt{Port} has the temporary ﬁeld \texttt{type}, which is only used when \texttt{generic} is \texttt{false}.
-To ﬁx both classes with temporary ﬁelds, we can add another \texttt{Type} called \texttt{NONE} and set
-\texttt{number} to \texttt{0}, which is an impossible value to roll. We can also add a constant for the
-resource types, which contains a subset of the types deﬁned in \texttt{Type}.
-Then, when we save the game state, we do not need to check if each tile or port to save is
-the desert or a generic port, and we can save the type.
+\texttt{Tile} has the temporary fields \texttt{number} and \texttt{typ}e since those fields are only used when \texttt{isDesert} is \texttt{false}, so when we want to ﬁnd the \texttt{number} or \texttt{type} of a tile, we ﬁrst need to check whether it is the desert.\\
+
+\texttt{Port} has the temporary field \texttt{type}, which is only used when \texttt{generic} is \texttt{false}.\\
+
+To fix both classes with temporary fields, we can add another \texttt{Type} called \texttt{NONE} and set \texttt{number} to \texttt{0}, which is an impossible value to roll. We can also add a constant for the resource types, which contains a subset of the types deﬁned in \texttt{Type}.\\
+
+Then, when we save the game state, we do not need to check if each tile or port to save is the desert or a generic port, and we can save the type.
 \subsection*{Before}
 \begin{lstlisting}[style=javacode,language=myJava]
 public enum Type {
@@ -1068,11 +1054,7 @@ public class Port {
 \addcontentsline{toc}{section}{Speculative Generality (Milestone 3)}
 \section*{Speculative Generality (Milestone 3)}
 \subsection*{Description}
-The datasource layer has a \texttt{Loader} Interface, so that other types of loaders, besides ﬁle
-loaders could be used. We only use one type of loader, so we do not need the \texttt{Loader}
-interface. Also, the methods in the \texttt{Loader} interface seemed speciﬁc to loading from a ﬁle
-or would require other loaders to give information to the game in a way similar to reading
-from a ﬁle.
+The datasource layer has a \texttt{Loader} Interface, so that other types of loaders, besides ﬁle loaders could be used. We only use one type of loader, so we do not need the \texttt{Loader} interface. Also, the methods in the \texttt{Loader} interface seemed speciﬁc to loading from a ﬁle or would require other loaders to give information to the game in a way similar to reading from a ﬁle.
 \subsection*{Before}
 \texttt{Loader}:
 \begin{lstlisting}[style=javacode,language=myJava]
