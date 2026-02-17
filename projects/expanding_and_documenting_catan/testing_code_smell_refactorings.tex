@@ -1,0 +1,492 @@
+\documentclass{fank1basedocument}
+
+\usepackage{fank1code}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+\settitle{Testing Code Smell Refactorings (Summit)}
+
+\fancyhead[L]{CSSE375}
+\fancyhead[R]{Spring 2024-2025}
+
+\begin{document}
+
+\tableofcontents
+
+\addcontentsline{toc}{section}{Test Only Code in Production}
+\section*{Test Only Code in Production}
+\subsection*{Description}
+Test only code in production is when there is code in production files that is only there to test other production code.
+\subsection*{\texttt{Bank} constructor with parameters in \texttt{Bank}}
+The constructor with no parameters was removed since we could pass in the initial resource supply instead. Since the initial resource supply is always the same, it can be created with a static method.\\
+
+Before:
+\begin{lstlisting}[style=javacode,language=myJava]
+// relevant method
+public Bank() {
+	this.bankSupply = this.getBankSupply();
+	this.developmentCardSupply = this.getDevelopmentCardSupply();
+}
+
+// test only method
+Bank(HashMap<Type, Integer> resources){
+	bankSupply = new HashMap<>(resources);
+	this.developmentCardSupply = new ArrayList<>();
+}
+\end{lstlisting}
+\begin{lstlisting}[style=javacode,language=myJava]
+@Test
+public void giveResourcesAway_0_expectHashmapWithAllResourcesFull() {
+	Bank b = new Bank();
+
+	b.giveResourcesAway(Type.WHEAT, 0);
+	assertEquals(5, b.getResources().size());
+	for (Map.Entry<Type, Integer> resource : b.getResources().entrySet()) {
+		assertEquals(19, resource.getValue());
+	}
+}
+
+@Test
+public void giveResourcesAway_0_expectHashmapWithAllResourcesFull(){
+	HashMap<Type, Integer> resources = new HashMap<>();
+	for(Type type: Type.RESOURCE_TYPES){
+		resources.put(type, 19);
+	}
+	Bank b = new Bank(resources);
+
+	b.giveResourcesAway(Type.WHEAT, 0);
+	assertEquals(5, b.getResources().size());
+	for(Map.Entry<Type, Integer> resource : b.getResources().entrySet()){
+		assertEquals(19, resource.getValue());
+	}
+}
+\end{lstlisting}
+
+After:
+\begin{lstlisting}[style=javacode,language=myJava]
+static Map<Type, Integer> getInitialBankSupply() {
+	Map<Type, Integer> bankSupply = new HashMap<>();
+	for(Type type : Type.RESOURCE_TYPES) {
+		bankSupply.put(type, RESOURCE_COUNT);
+	}
+	return bankSupply;
+}
+
+Bank(Map<Type, Integer> resources) {
+	bankSupply = new HashMap<>(resources);
+	this.developmentCardSupply = this.getInitialDevelopmentCardSupply();
+}
+\end{lstlisting}
+\begin{lstlisting}[style=javacode,language=myJava]
+@Test
+public void giveResourcesAway_0_expectHashmapWithAllResourcesFull() {
+	Bank b = new Bank(Bank.getInitialBankSupply());
+
+	b.giveResourcesAway(Type.WHEAT, 0);
+	assertEquals(5, b.getResources().size());
+	for (Map.Entry<Type, Integer> resource : b.getResources().entrySet()) {
+		assertEquals(19, resource.getValue());
+	}
+}
+
+@Test
+public void giveResourcesAway_19Wheat_expectHashmapWithAllResourcesFullExceptWheat() {
+	Map<Type, Integer> resources = new HashMap<>();
+
+	for (Type type: Type.RESOURCE_TYPES) {
+		resources.put(type, 19);
+	}
+	Bank b = new Bank(resources);
+
+	b.giveResourcesAway(Type.WHEAT, 19);
+	assertEquals(5, b.getResources().size());
+	for (Map.Entry<Type, Integer> resource : b.getResources().entrySet()) {
+		if (resource.getKey().equals(Type.WHEAT)) {
+			assertEquals(0, resource.getValue());
+		} else {
+			assertEquals(19, resource.getValue());
+		}
+	}
+}
+\end{lstlisting}
+\subsection*{\texttt{placeSettlement} in \texttt{Board}}
+There was a second \texttt{placeSettlement} method that was not test only code, and both methods had similar code. The code duplication was removed by having one \texttt{placeSettlement} method call the other one.\\
+
+Before:
+\begin{lstlisting}[style=javacode,language=myJava]
+void placeSettlement(Settlement settlement, LocationChecker locationChecker) {
+	this.settlements.put(settlement.getLocation(), settlement);
+	locationChecker.placeSettlement(settlement);
+}
+\end{lstlisting}
+After:
+\begin{lstlisting}[style=javacode,language=myJava]
+public void placeSettlement(Color color, Location location,
+		LocationChecker locationChecker) {
+	this.placeSettlement(new Settlement(color, location), locationChecker);
+}
+
+void placeSettlement(Settlement settlement, LocationChecker locationChecker) {
+	this.settlements.put(settlement.getLocation(), settlement);
+	locationChecker.placeSettlement(settlement);
+}
+\end{lstlisting}
+\subsection*{\texttt{placeRoad} in \texttt{Board}}
+Similarly to \texttt{placeSettlement}, there was a second \texttt{placeRoad} method that was not test only code, and both methods had similar code. The code duplication was removed by having one \texttt{placeRoad} method call the other one.\\
+
+Before:
+\begin{lstlisting}[style=javacode,language=myJava]
+void placeRoad(Road road, LocationChecker locationChecker) {
+	this.roads.put(road.getLocation(), road);
+	locationChecker.placeRoad(road);
+}
+\end{lstlisting}
+After:
+\begin{lstlisting}[style=javacode,language=myJava]
+public void placeRoad(Color color,Location location, LocationChecker locationChecker) {
+	this.placeRoad(new Road(color, location), locationChecker);
+}
+
+void placeRoad(Road road, LocationChecker locationChecker) {
+	this.roads.put(road.getLocation(), road);
+	locationChecker.placeRoad(road);
+}
+\end{lstlisting}
+\subsection*{\texttt{setDie} in \texttt{DiceManager}}
+The \texttt{setDie} method was used in tests because the dice could not be mocked using the constructor. Changing the constructor so that the dice were passed in let us mock the dice and remove the \texttt{setDie} method, which was only used in tests.\\
+
+Before:
+\begin{lstlisting}[style=javacode,language=myJava]
+public DiceManager() {
+	this.firstDie = new SecureRandom();
+	this.secondDie = new SecureRandom();
+}
+
+public void setDie(Random firstDie, Random secondDie) {
+	this.firstDie = firstDie;
+	this.secondDie = secondDie;
+}
+\end{lstlisting}
+\begin{lstlisting}[style=javacode,language=myJava]
+@ParameterizedTest
+@CsvSource({"0,0", "0,1", "0,2", "0,3",
+		"0,4", "0,5", "1,0", "1,1", "1,2", "1,3", "1,4", "1,5",
+		"2,0", "2,1", "2,2", "2,3",
+		"2,4", "2,5", "3,0", "3,1", "3,2", "3,3", "3,4", "3,5",
+		"4,0", "4,1", "4,2", "4,3",
+		"4,4", "4,5", "5,0", "5,1", "5,2", "5,3", "5,4", "5,5",})
+public void rollDice_Mocked(int firstRoll, int secondRoll) {
+	Random firstDie = EasyMock.createMock(Random.class);
+	Random secondDie = EasyMock.createMock(Random.class);
+
+	EasyMock.expect(firstDie.nextInt(6)).andReturn(firstRoll);
+	EasyMock.expect(secondDie.nextInt(6)).andReturn(secondRoll);
+	EasyMock.replay(firstDie);
+	EasyMock.replay(secondDie);
+
+	DiceManager diceManager = new DiceManager();
+	diceManager.setDie(firstDie, secondDie);
+	List<Integer> diceRolls = diceManager.rollDice();
+	assertEquals(2, diceRolls.size());
+	assertEquals(firstRoll + 1, diceRolls.get(0));
+	assertEquals(secondRoll + 1, diceRolls.get(1));
+	EasyMock.verify(firstDie);
+	EasyMock.verify(secondDie);
+}
+\end{lstlisting}
+After:
+\begin{lstlisting}[style=javacode,language=myJava]
+public DiceManager(Random firstDie, Random secondDie) {
+	this.firstDie = firstDie;
+	this.secondDie = secondDie;
+}
+\end{lstlisting}
+\begin{lstlisting}[style=javacode,language=myJava]
+@ParameterizedTest
+@CsvSource({"0,0", "0,1", "0,2", "0,3",
+		"0,4", "0,5", "1,0", "1,1", "1,2", "1,3", "1,4", "1,5",
+		"2,0", "2,1", "2,2", "2,3",
+		"2,4", "2,5", "3,0", "3,1", "3,2", "3,3", "3,4", "3,5",
+		"4,0", "4,1", "4,2", "4,3",
+		"4,4", "4,5", "5,0", "5,1", "5,2", "5,3", "5,4", "5,5",})
+public void rollDice_Mocked(int firstRoll, int secondRoll) {
+	Random firstDie = EasyMock.createMock(Random.class);
+	Random secondDie = EasyMock.createMock(Random.class);
+
+	EasyMock.expect(firstDie.nextInt(6)).andReturn(firstRoll);
+	EasyMock.expect(secondDie.nextInt(6)).andReturn(secondRoll);
+	EasyMock.replay(firstDie);
+	EasyMock.replay(secondDie);
+
+	DiceManager diceManager = new DiceManager(firstDie, secondDie);
+	List<Integer> diceRolls = diceManager.rollDice();
+	assertEquals(2, diceRolls.size());
+	assertEquals(firstRoll + 1, diceRolls.get(0));
+	assertEquals(secondRoll + 1, diceRolls.get(1));
+
+	EasyMock.verify(firstDie);
+	EasyMock.verify(secondDie);
+}
+\end{lstlisting}
+\subsection*{\texttt{Port} constructor with no parameters and \texttt{setGeneric} in \texttt{Port}}
+The \texttt{Port} constructor that was only used for testing also had external dependencies to the \texttt{Location} class. Refactoring the constructor and tests to mock the location removed the test-only constructor and references to external dependencies. Since we use the constructor that lets us pass in the time, we can also remove the \texttt{setGeneric} method.\\
+
+Before:
+\begin{lstlisting}[style=javacode,language=myJava]
+// other relevant method
+public Port(Location location, Type type) {
+	if (location.getArray()[0] < 'a') {
+		throw new IllegalArgumentException("Invalid marker for location");
+	}
+	this.location = location;
+	this.type = type;
+}
+
+// test only method
+public Port() {
+	this(new Location('a'), Type.WHEAT);
+}
+
+public void setGeneric() {
+	this.type = Type.NONE;
+}
+\end{lstlisting}
+\begin{lstlisting}[style=javacode,language=myJava]
+@Test
+public void isGeneric_expectTrue() {
+	Port p = new Port();
+	p.setGeneric();
+	
+	boolean expected = true;
+	boolean actual = p.isGeneric();
+
+	Assertions.assertEquals(expected, actual);
+}
+\end{lstlisting}
+After:
+\begin{lstlisting}[style=javacode,language=myJava]
+public Port(Location location, Type type) {
+	if (location.getArray()[0] < 'a') {
+		throw new IllegalArgumentException("Invalid marker for location");
+	}
+	this.location = location;
+	this.type = type;
+}
+\end{lstlisting}
+\begin{lstlisting}[style=javacode,language=myJava]
+@Test
+public void isGeneric_expectTrue() {
+	Location location = EasyMock.createMock(Location.class);
+	EasyMock.expect(location.getArray()).andReturn(new char[]{'a'});
+	EasyMock.replay(location);
+	Port p = new Port(location, Type.NONE);
+	boolean expected = true;
+
+	boolean actual = p.isGeneric();
+
+	EasyMock.verify(location);
+	Assertions.assertEquals(expected, actual);
+}
+\end{lstlisting}
+\subsection*{\texttt{ResourceManager} constructor with parameter in \texttt{ResourceManager}}
+The only time the \texttt{ResourceManager} is constructed with no parameters is when everything else for the game is being constructed, so it makes sense to create the bank there instead and pass it into the \texttt{ResourceManager}. Then, the only \texttt{ResourceManager} constructor we need is the one where the bank is passed in.\\
+
+Before:
+\begin{lstlisting}[style=javacode,language=myJava]
+// other relevant method
+ResourceManager() {
+	this.bank = new Bank(Bank.getInitialBankSupply());
+}
+
+// test only method
+ResourceManager(Bank bank) {
+	this.bank = bank;
+}
+\end{lstlisting}
+After:
+\begin{lstlisting}[style=javacode,language=myJava]
+ResourceManager(Bank bank) {
+	this.bank = bank;
+}
+\end{lstlisting}
+\subsection*{\texttt{giveResourcesToPlayer} in \texttt{Game}}
+\texttt{Game} has the test-only method \texttt{giveResourcesToPlayer}, which is used to remove resource from the bank (\texttt{GameTest}) or add resources to a player (\texttt{NaturalDisasterTest}) during tests. One of the reasons that method is needed is because the \texttt{Game} unit tests have external dependencies on \texttt{Player} and \texttt{ResourceManager}. This method can be removed by mocking the \texttt{Player} and \texttt{ResourceManager} objects. Then, when we need to access amounts of resources, we can just return the amounts, which also makes the tests more readable. The natural disaster tests are integration tests that use real \texttt{Game}, \texttt{Player}, and \texttt{ResourceManager} classes. Since \texttt{Player} has an \texttt{addResources} method and \texttt{ResourceManager} has a \texttt{giveResourcesAway} method, which are not test-only, we can use those two methods instead of \texttt{giveResourcesToPlayer}.\\
+
+Before:\\
+\texttt{Game}:
+\begin{lstlisting}[style=javacode,language=myJava]
+void giveResourcesToPlayer(Type type, int amount, Player player) {
+	resourceManager.giveResourcesToPlayer(type, amount, player);
+}
+\end{lstlisting}
+\texttt{GameTest}
+\begin{lstlisting}[style=javacode,language=myJava]
+private void bankTrade_4To1_invalidTrade(Type giveResource, int initialAmount,
+		Type receiveResource, boolean emptyBank) {
+	Game game = new Game(2);
+	if (initialAmount > 0) {
+		game.giveResourcesToCurrentPlayer(giveResource, initialAmount);
+	}
+	if (emptyBank) {
+		game.giveResourcesToPlayer(receiveResource, 19, game.getPlayer(1));
+	}
+	this.bankTrade_invalidTrade(game, giveResource, 4, receiveResource);
+}
+\end{lstlisting}
+\texttt{NaturalDisasterTest}:
+\begin{lstlisting}[style=javacode,language=myJava]
+@ParameterizedTest
+@CsvSource({
+		"1, 2", "1, 3", "1, 4", "1, 5", "1, 6",
+		"2, 1", "2, 3", "2, 4", "2, 5", "2, 6",
+		"3, 1", "3, 2", "3, 4", "3, 5", "3, 6",
+		"4, 1", "4, 2", "4, 3", "4, 5", "4, 6",
+		"5, 1", "5, 2", "5, 3", "5, 4", "5, 6",
+		"6, 1", "6, 2", "6, 3", "6, 4", "6, 5"
+})
+public void rollNonDoubles_PlayerCollectsResources(int diceRoll1, int diceRoll2) {
+	int totalRoll = diceRoll1 + diceRoll2;
+	Board board = EasyMock.mock(Board.class);
+	LocationChecker locationChecker = EasyMock.mock(LocationChecker.class);
+
+	Map<Color, Map<Type, Integer>> diceRollResources = new HashMap<>();
+	Map<Type, Integer> blueResources = new HashMap<>();
+	blueResources.put(Type.WHEAT, 2);
+	blueResources.put(Type.ORE, 1);
+	diceRollResources.put(Color.BLUE, blueResources);
+
+	EasyMock.expect(board.getRollResources(totalRoll, locationChecker))
+			.andReturn(diceRollResources);
+
+	SecureRandom diceOne = EasyMock.mock(SecureRandom.class);
+	EasyMock.expect(diceOne.nextInt(6)).andReturn(diceRoll1 - 1);
+	SecureRandom diceTwo = EasyMock.mock(SecureRandom.class);
+	EasyMock.expect(diceTwo.nextInt(6)).andReturn(diceRoll2 - 1);
+
+	EasyMock.replay(board, diceOne, diceTwo);
+
+	Game game = new Game(board, locationChecker, 4);
+	DiceManager diceManager = new DiceManager();
+	diceManager.setDie(diceOne, diceTwo);
+	game.setDiceManager(diceManager);
+
+	for (int i = 0; i < 4; i++) {
+		Player player = game.getPlayer(i);
+		for (Type type : Type.RESOURCE_TYPES) {
+			game.giveResourcesToPlayer(type, 3, player);
+		}
+	}
+
+	Map<Color, Map<Type, Integer>> expectedResourcesBeforeRoll = new HashMap<>();
+	for (int i = 0; i < 4; i++) {
+		Player player = game.getPlayer(i);
+		expectedResourcesBeforeRoll.put(player.getColor(),
+				new HashMap<>(player.getResources()));
+	}
+
+	game.rollDice();
+
+	for (int i = 0; i < 4; i++) {
+		Player player = game.getPlayer(i);
+		Map<Type, Integer> expectedResources
+				= new HashMap<>(expectedResourcesBeforeRoll.get(player.getColor()));
+		if (player.getColor() == Color.BLUE) {
+			expectedResources.put(Type.WHEAT, expectedResources.get(Type.WHEAT) + 2);
+			expectedResources.put(Type.ORE, expectedResources.get(Type.ORE) + 1);
+		}
+
+		assertEquals(expectedResources, player.getResources());
+	}
+	EasyMock.verify(board, diceOne, diceTwo);
+}
+\end{lstlisting}
+After:\\
+\texttt{GameTest}:
+\begin{lstlisting}[style=javacode,language=myJava]
+private void bankTrade_4To1_invalidTrade(Type giveResource, Type receiveResource) {
+	List<Player> players = new ArrayList<>();
+	Player player = EasyMock.createMock(Player.class);
+	players.add(player);
+	ResourceManager resourceManager = EasyMock.createMock(ResourceManager.class);
+	Game game = new Game(players, resourceManager);
+
+	EasyMock.expect(player.getColor()).andReturn(Color.BLUE);
+	if (giveResource != receiveResource) {
+		EasyMock.expect(resourceManager.hasEnoughResources(player, 4, giveResource,
+				receiveResource)).andReturn(false);
+	}
+
+	EasyMock.replay(player, resourceManager);
+	this.bankTrade_invalidTrade(game, giveResource, 4, receiveResource);
+	EasyMock.verify(player, resourceManager);
+}
+\end{lstlisting}
+\texttt{NaturalDisasterTest}:
+\begin{lstlisting}[style=javacode,language=myJava]
+@ParameterizedTest
+@CsvSource({
+		"1, 2", "1, 3", "1, 4", "1, 5", "1, 6",
+		"2, 1", "2, 3", "2, 4", "2, 5", "2, 6",
+		"3, 1", "3, 2", "3, 4", "3, 5", "3, 6",
+		"4, 1", "4, 2", "4, 3", "4, 5", "4, 6",
+		"5, 1", "5, 2", "5, 3", "5, 4", "5, 6",
+		"6, 1", "6, 2", "6, 3", "6, 4", "6, 5"
+})
+public void rollNonDoubles_PlayerCollectsResources(int diceRoll1, int diceRoll2) {
+	int totalRoll = diceRoll1 + diceRoll2;
+	Board board = EasyMock.mock(Board.class);
+	LocationChecker locationChecker = EasyMock.mock(LocationChecker.class);
+	
+	Map<Color, Map<Type, Integer>> diceRollResources = new HashMap<>();
+	Map<Type, Integer> blueResources = new HashMap<>();
+	blueResources.put(Type.WHEAT, 2);
+	blueResources.put(Type.ORE, 1);
+	diceRollResources.put(Color.BLUE, blueResources);
+
+	EasyMock.expect(board.getRollResources(totalRoll, locationChecker))
+			.andReturn(diceRollResources);
+
+	SecureRandom firstDie = EasyMock.mock(SecureRandom.class);
+	EasyMock.expect(firstDie.nextInt(6)).andReturn(diceRoll1 - 1);
+	SecureRandom secondDie = EasyMock.mock(SecureRandom.class);
+	EasyMock.expect(secondDie.nextInt(6)).andReturn(diceRoll2 - 1);
+
+	EasyMock.replay(board, firstDie, secondDie);
+
+	Game game = new Game(board, locationChecker, 4);
+	DiceManager diceManager = new DiceManager(firstDie, secondDie);
+	game.setDiceManager(diceManager);
+
+	for (int i = 0; i < 4; i++) {
+		Player player = game.getPlayer(i);
+		for (Type type : Type.RESOURCE_TYPES) {
+			player.addResources(type, 3);
+			game.getResourceManager().giveResourcesAway(type, 3);
+		}
+	}
+
+	Map<Color, Map<Type, Integer>> expectedResourcesBeforeRoll = new HashMap<>();
+	for (int i = 0; i < 4; i++) {
+		Player player = game.getPlayer(i);
+		expectedResourcesBeforeRoll.put(player.getColor(),
+				new HashMap<>(player.getResources()));
+	}
+
+	game.rollDice();
+
+	for (int i = 0; i < 4; i++) {
+		Player player = game.getPlayer(i);
+		Map<Type, Integer> expectedResources
+				= new HashMap<>(expectedResourcesBeforeRoll.get(player.getColor()));
+		if (player.getColor() == Color.BLUE) {
+			expectedResources.put(Type.WHEAT, expectedResources.get(Type.WHEAT) + 2);
+			expectedResources.put(Type.ORE, expectedResources.get(Type.ORE) + 1);
+		}
+		
+		assertEquals(expectedResources, player.getResources());
+	}
+	EasyMock.verify(board, firstDie, secondDie);
+}
+\end{lstlisting}
+\end{document}
