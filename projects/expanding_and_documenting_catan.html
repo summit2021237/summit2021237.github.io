@@ -87,7 +87,7 @@
 			<p>This is not shown in the simplified UML class diagram, but <code>FileLineInfo</code> is abstract to improve code for error checking and handling.</p>
 			<p>We use <code>CatanFileWriter</code> and <code>CatanScanner</code> to implement the <b>adapter pattern</b> so that our code does not directly depend on external libraries. Then, if those libraries change, we would only need to update our code in one place.</p>
 			<h2>Code Smell Refactorings</h2>
-			This section briefly describes the code smells I refactored. For a more in-depth version, see this <a href="./expanding_and_documenting_catan/code_smell_refactorings.pdf" target="_blank">pdf</a>, which is a compilation from project milestone submissions.
+			This section briefly describes the code smells I refactored. For a more in-depth version, see this <a href="./expanding_and_documenting_catan/code_smell_refactorings/code_smell_refactorings.pdf" target="_blank">pdf</a>, which is a compilation from project milestone submissions.
 			<h3 id="duplicateCode">Duplicate Code</h3>
 			<div class="code-with-text">
 				<p class="no-top-margin">The game is set up using letters for tile locations, vertices, and edges. Since those locations all need to be organized, the <code>Adjacency</code> class defines relationships, like which tile edges are adjacent to a tile intersection. In the original code, there are many calls to mapping functions with hard-coded locations, where the only differences are the location letters. Also, those mapping functions all have very similar logic.</p>
@@ -114,7 +114,7 @@ this.mapRoadToRoads(’S’, ’h’, ’i’, ’P’);
 			</div>
 			<p>We removed the duplicate code by <b>reading</b> the adjacency information <b>from a file</b> and using loops to add the information to the maps. We used <b>polymorphism</b> to create an initializer for setting up each type of adjacency map.</p>
 			<figure class="no-margin">
-				<img class="width-100" src="./expanding_and_documenting_catan/duplicate_code.svg"></img>
+				<img class="width-100" src="./expanding_and_documenting_catan/duplicate_code/duplicate_code.svg"></img>
 				<figcaption>UML class diagram of the refactored version of <code>Adjacency</code> with polymorphism</figcaption>
 			</figure>
 			<h3>Large Method</h3>
@@ -279,18 +279,18 @@ public class Tile {
 				<div class="before-after-child">
 					<h4>Before</h4>
 					<figure class="no-margin">
-						<img class="width-100" src="./expanding_and_documenting_catan/speculative_generality_before.svg"></img>
+						<img class="width-100" src="./expanding_and_documenting_catan/speculative_generality/speculative_generality_before.svg"></img>
 					</figure>
 				</div>
 				<div class="before-after-child">
 					<h4>After</h4>
 					<figure class="no-margin">
-						<img class="width-100" src="./expanding_and_documenting_catan/speculative_generality_after.svg"></img>
+						<img class="width-100" src="./expanding_and_documenting_catan/speculative_generality/speculative_generality_after.svg"></img>
 					</figure>
 				</div>
 			</div>
 			<h2>Testing Code Smell Refactorings</h2>
-			This section briefly describes the testing code smell I refactored. I only refactored one since I also implemented a <a href="expanding_and_documenting_catan.html#testSeam">test along a seam</a>. For a more in-depth version, see this <a href="./expanding_and_documenting_catan/testing_code_smell_refactorings.pdf" target="_blank">pdf</a>, which is from one of our milestone submissions.
+			This section briefly describes the testing code smell I refactored. I only refactored one since I also implemented a <a href="expanding_and_documenting_catan.html#testSeam">test along a seam</a>. For a more in-depth version, see this <a href="./expanding_and_documenting_catan/testing_code_smell_refactorings/testing_code_smell_refactorings.pdf" target="_blank">pdf</a>, which is from one of our milestone submissions.
 			<h3>Test Only Code in Production</h2>
 			<p>We fix this class by introducing a new tile/resource type, <code>NONE</code>, and setting the default number to 0, an impossible value to roll.</p>
 			<div class="before-after">
@@ -377,6 +377,25 @@ public void rollDice_Mocked(int firstRoll, int secondRoll) {
 					</code></pre>
 				</div>
 			</div>
+			<h2>Documentation Overview</h2>
+			<p>Another main part of the project was writing user documentation for various users, such as <b>players, developers, and maintainers</b>. Our documentation consisted of</p>
+			<ul>
+				<li>an installation guide,</li>
+				<li>a gameplay guide with the Catan rules and our user interface,</li>
+				<li>development environment information,</li>
+				<li>development workflows,</li>
+				<li>development conventions,</li>
+				<li>planned changes,</li>
+				<li>software requirements,</li>
+				<li>software architecture and design, and</li>
+				<li>testing strategy.</li>
+			</ul>
+			<p>I worked on the installation guide and parts of the development and maintenance guide. A summary of those sections are below, and the complete versions are in this <a href="./expanding_and_documenting_catan/documentation/documentation.pdf" target="_blank">pdf</a>.</p>
+			<h3>Installation Guide</h3>
+			<p>The installation guide included prerequisites and instructions for installing and running the game from our GitHub Releases page. It also had a more detailed set of instructions with screenshots.</p>
+			<p>It was challenging to find a good way to package the game for release. We wanted to use a <b>JAR</b> file to simplify the installation and set up process for the user since they would only need to download a single file to play the game. However, we had image files for the game board and pieces, which cannot be included in a JAR file. Instead, we needed to create a zip file with the JAR file and image resources, making the installation process slightly more complex, but the user only needs to download a zip file and unzip it.</p>
+			<h3>Parts of Development and Maintenance Guide</h3>
+			<p>This guide is intended for developers, maintainers, and helpdesk staff. It gives an overview of the <b>development environment</b>, like Java <b>version</b>, <b>file structure</b>, <b>frameworks</b>, <b>build tasks</b>, and <b>programming conventions</b>. Additionally, it describes the <b>developer workflow</b> and how to create a <b>release</b> to deploy with detailed instructions to keep releases consistent.</p>
 		</div>
 		<div id="contactInfo"></div>
 
