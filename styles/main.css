@@ -147,6 +147,33 @@ body {
 	width: 30%;
 }
 
+#csse375Diagrams {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6em;
+}
+
+.before-after-body-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6em;
+	justify-content: space-between;
+}
+
+.before-after {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.before-after pre {
+	overflow-x: scroll;
+}
+
+.before-after-child {
+	width: 45%;
+}
+
 #contactInfo {
 	display: flex;
 	flex-direction: row;
@@ -189,16 +216,12 @@ a:hover {
 	text-decoration: underline;
 }
 
-.figure-no-margin-100-width {
-	margin: 0;
-}
-
-.figure-no-margin-100-width img {
-	width: 100%;
-}
-
-figcaption {
+figure {
 	text-align: center;
+}
+
+.no-margin {
+	margin: 0;
 }
 
 .no-top-margin {
@@ -208,6 +231,39 @@ figcaption {
 .no-side-margins {
 	margin-left: 0;
 	margin-right: 0;
+}
+
+.no-bottom-margin {
+	margin-bottom: 0;
+}
+
+.width-50 {
+	width: 50%;
+}
+
+.width-80 {
+	width: 80%;
+}
+
+.width-100 {
+	width: 100%;
+}
+
+.center {
+	text-align: center;
+}
+
+.code-block {
+	border-style: solid;
+	border-width: 1px;
+	padding: 0 1em;
+	tab-size: 4;
+}
+
+.code-with-text {
+	display: flex;
+	flex-direction: row;
+	gap: 5%;
 }
 
 .link-no-color {

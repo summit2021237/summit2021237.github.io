@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/home/fank1/Documents/website/website/styles/main.css">
+		<link rel="stylesheet" href="../styles/routeros-modified.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+		<script src="/home/fank1/Documents/website/website/scripts/jquery.min.js"></script>
+		<script src="/home/fank1/Documents/website/website/scripts/main.js"></script>
+		<script src="../scripts/highlight.min.js"></script>
+
+		<title>Summit Fan</title>
+	</head>
+	<body>
+		<div id="navBar" class="top-bar-container"></div>
+		<script>createNav("Projects and Experience")</script>
+		
+		<div>
+			<h1>Expanding and Documenting Catan</h1>
+			<p>In Software Construction and Evolution, we learned about software <b>maintenance</b>, <b>refactoring</b>, and <b>documentation</b>. For our course project, my group expanded on another member's Software Quality Assurance project, which was Catan written in Java.</p>
+			<figure class="no-margin">
+				<img class="width-80" src="./expanding_and_documenting_catan/images/default_setup.png"></img>
+				<figcaption>Catan game with default setup</figcaption>
+			</figure>
+			<h2>Tasks</h2>
+			<p>For the project, we added <b>new features</b> and <b>refactored 20 code smells</b> (15 unique smells) and <b>10 unique testing code smells or seams</b>. In addition, we wrote <b>user and developer guides</b> to document how a user installs and plays the game and processes for developers to add to and maintain the game.</p>
+			<h2>Software Architecture and Design</h2>
+			<p>We used a <b>three-layer architecture</b> because we had a graphical user interface, game logic, and a feature for loading and saving games. This architecture would make it easy to change how games are loaded and stored or load other information into the game. Also, if a user wanted a different frontend but still have the Catan game logic, they could build another frontend and use the existing game logic.</p>
+			<p>Below are some simplified UML class diagrams of our final design depicting some changes from our new features and refactorings.</p>
+			<div id="csse375Diagrams">
+				<figure class="no-margin">
+					<img class="width-100" src="./expanding_and_documenting_catan/images/frontend_uml.svg"></img>
+					<figcaption>Presentation layer</figcaption>
+				</figure>
+				<figure class="no-margin">
+					<img class="width-100" src="./expanding_and_documenting_catan/images/catan_uml.svg"></img>
+					<figcaption>Domain layer</figcaption>
+				</figure>
+				<figure class="no-margin">
+					<img class="width-50" src="./expanding_and_documenting_catan/images/datasource_uml.svg"></img>
+					<figcaption>Data layer</figcaption>
+				</figure>
+			</div>
+			<h2>Development Processes</h2>
+			<p>This is an overview of our build tasks and development workflow.</p>
+			<h3>Build Processes</h3>
+			<p>The project used <b>Gradle</b> as a build tool. It also had many software quality tools and test cases since the original project was developed with test-driven development. The build build task assembles the game and runs <b>unit</b>, <b>integration</b>, <b>style</b>, <b>mutation</b>, and <b>code coverage tests</b>, including <b>854 automated unit and integration tests</b>. We also have build tasks for creating the JAR for deployment and generating test reports.</p>
+			<h3>Version Control and Continuous Integration</h3>
+			<p>The original project had a continuous integration framework using <b>GitHub Actions</b> to run the build task when a developer creates a pull request to merge into main. We included that <b>continuous integration</b> framework in our project and used <b>branch protection</b>. Then, for developers to merge into main they need review and approval from two group members, and all their tests must pass.</p>
+			<h2>New Features</h2>
+			<p>We added the following new features:</p>
+			<ol>
+				<li>Gameplay themes</li>
+				<li>Natural disasters</li>
+				<li>Road sales</li>
+				<li>Save and load games</li>
+				<li>Restart game</li>
+			</ol>
+			<h3>Saving and Loading Games</h3>
+			<div class="code-with-text">
+				<p class="no-top-margin">This is the feature that I implemented. A user can save the game to a text file and then load that game to start in the exact same state. The file structure was inspired by the <a href="./expanding_and_documenting_catan/rocko_tank_mode.ros2_control.xacro" target="_blank">ros2_control xacro files used in ROCKO</a>, which are actually XML files, with three main blocks for storing general information, like the current player, board data, and player data. A complete game file can be found <a href="./expanding_and_documenting_catan/game2026286930.txt" target="_blank">here</a>.</p>
+				<div>
+					<pre class="no-top-margin border code-block"><code>
+&lt;player color="white"&gt;
+    &lt;resource_cards&gt;
+    &lt;resource_card type="ore"&gt;2&lt;/resource_card&gt;
+    &lt;resource_card type="ore"&gt;1&lt;/resource_card&gt;
+    &lt;resource_card type="wheat"&gt;1&lt;/resource_card&gt;
+    &lt;resource_card type="brick"&gt;1&lt;/resource_card&gt;
+    &lt;resource_card type="lumber"&gt;0&lt;/resource_card&gt;
+    &lt;resource_card type="wool"&gt;0&lt;/resource_card&gt;
+  &lt;/resource_cards&gt;
+  &lt;development_cards&gt;
+    &lt;knight/&gt;
+  &lt;/development_cards&gt;
+  &lt;largest_army has_largest=false size=0/&gt;
+  &lt;longest_road has_longest=false length=1/&gt;
+&lt;/player&gt;
+					</code></pre>
+					<p class="center">Player block example</p>
+				</div>
+			</div>
+			<p>Since we only had a data layer and frontend layer, we created a new data layer with classes to read and write blocks and elements. Methods in those classes are called from importer and exporter classes in the domain layer, which populate the block, line, and element fields with game data to write and read the data. Also, the loader is used by the adjacency initializer to create the board, which was added in the same project milestone as the save feature to fix a <a href="expanding_and_documenting_catan.html#duplicateCode">code smell</a>.</p>
+			<figure class="no-margin">
+				<img class="width-100" src="./expanding_and_documenting_catan/images/save_load.svg"></img>
+				<figcaption>UML class diagram of the save and load feature containing the main fields, methods, and relationships</figcaption>
+			</figure>
+			<h4>Design Rationale</h4>
+			<p>The <code>writeBlock</code> method takes the block's name, attributes, <b>method</b> for writing the block's contents, and the arguments for that method. That <b>reduces duplicate code</b> because the blocks are all structured the same way, but their contents depends on what is being stored. For example, a block may store multiple player blocks or the locations of game tiles. Since the methods for writing block contents may need different parameters, those parameters are passed into <code>writeBlock</code> as a map, using the <code>WriteBlockArgName</code> enum as the keys.</p>
+			<p>This is not shown in the simplified UML class diagram, but <code>FileLineInfo</code> is abstract to improve code for error checking and handling.</p>
+			<p>We use <code>CatanFileWriter</code> and <code>CatanScanner</code> to implement the <b>adapter pattern</b> so that our code does not directly depend on external libraries. Then, if those libraries change, we would only need to update our code in one place.</p>
+			<h2>Code Smell Refactorings</h2>
+			This section briefly describes the code smells I refactored. For a more in-depth version, see this <a href="./expanding_and_documenting_catan/code_smell_refactorings/code_smell_refactorings.pdf" target="_blank">pdf</a>, which is a compilation from project milestone submissions.
+			<h3 id="duplicateCode">Duplicate Code</h3>
+			<div class="code-with-text">
+				<p class="no-top-margin">The game is set up using letters for tile locations, vertices, and edges. Since those locations all need to be organized, the <code>Adjacency</code> class defines relationships, like which tile edges are adjacent to a tile intersection. In the original code, there are many calls to mapping functions with hard-coded locations, where the only differences are the location letters. Also, those mapping functions all have very similar logic.</p>
+				<div>
+					<pre class="no-top-margin border code-block"><code>
+// ROW NINE
+this.mapRoadToRoads(’M’, ’m’, ’n’, ’Q’);
+this.mapRoadToRoads(’M’, ’Q’, ’m’, ’N’);
+this.mapRoadToRoads(’N’, ’Q’, ’M’, ’R’);
+this.mapRoadToRoads(’N’, ’R’, ’Q’, ’O’);
+this.mapRoadToRoads(’O’, ’R’, ’N’, ’S’);
+this.mapRoadToRoads(’O’, ’S’, ’R’, ’P’);
+this.mapRoadToRoads(’P’, ’S’, ’O’, ’h’);
+this.mapRoadToRoads(’P’, ’h’, ’S’, ’g’);
+
+// ROW TEN
+this.mapRoadToRoads(’m’, ’Q’, ’l’, ’M’);
+this.mapRoadToRoads(’Q’, ’R’, ’k’, ’N’);
+this.mapRoadToRoads(’R’, ’S’, ’j’, ’O’);
+this.mapRoadToRoads(’S’, ’h’, ’i’, ’P’);
+					</code></pre>
+					<p class="center">Duplicate code in <code>Adjacency</code></p>
+				</div>
+			</div>
+			<p>We removed the duplicate code by <b>reading</b> the adjacency information <b>from a file</b> and using loops to add the information to the maps. We used <b>polymorphism</b> to create an initializer for setting up each type of adjacency map.</p>
+			<figure class="no-margin">
+				<img class="width-100" src="./expanding_and_documenting_catan/duplicate_code/duplicate_code.svg"></img>
+				<figcaption>UML class diagram of the refactored version of <code>Adjacency</code> with polymorphism</figcaption>
+			</figure>
+			<h3>Large Method</h3>
+			<p>The <code>Location Checker</code> class has many large methods with nested loops and conditionals, making the methods difficult to read. To make the methods more <b>readable</b>, we extracted the code in the loops and conditional blocks into separate methods with <b>self-documenting</b> names. An example from <code>getDefaultSettlementLocations</code> is below.</p>
+			<div class="before-after">
+				<div class="before-after-child">
+					<h4>Before</h4>
+					<pre class="code-block"><code>
+public Set&lt;Location&gt; getDefaultSettlementLocations(Color color) {
+	Set&lt;Location&gt; settlementLocations = new HashSet&lt;&gt;();
+	for (Location roadLocation : this.roads.get(color)) { // find all roads of color
+		for (Location settlementLocation : this.adj.getRoadToSettlements(roadLocation)) { // adjacent settlements
+			if (this.settlementPlacedAt(settlementLocation)) continue; // remove obstruction
+			boolean closeSettlement = false;
+			for (Location adjacentSettlement :
+				this.adj.getSettlementToSettlements(settlementLocation)) {
+				if (this.settlementPlacedAt(adjacentSettlement)) { // remove spots with adjacent settlements
+					closeSettlement = true;
+					break;
+				}
+			}
+			if (!closeSettlement) {
+				settlementLocations.add(settlementLocation);
+			}
+		}
+	}
+	return settlementLocations;
+}
+					</code></pre>
+				</div>
+				<div class="before-after-child">
+					<h4>After</h4>
+					<pre class="code-block"><code>
+public Set&lt;Location&gt; getDefaultSettlementLocations(Color color) {
+	Set&lt;Location&gt; settlementLocations = new HashSet&lt;&gt;();
+	for (Location roadLocation : this.roads.get(color)) {
+		settlementLocations.addAll(this.findSettlementLocationsAdjacentToRoad(roadLocation));
+	}
+	return settlementLocations;
+}
+
+private Set&lt;Location&gt; findSettlementLocationsAdjacentToRoad(Location roadLocation) {
+	Set&lt;Location&gt; settlementLocations = new HashSet&lt;&gt;();
+	for (Location settlementLocation : this.adj.getRoadToSettlements(roadLocation)) {
+		if (this.settlementPlacedAt(settlementLocation)) continue; // remove obstruction
+		if (!this.hasAdjacentSettlement(settlementLocation)) {
+			settlementLocations.add(settlementLocation);
+		}
+	}
+	return settlementLocations;
+}
+
+private boolean hasAdjacentSettlement(Location location) {
+	for (Location adjacentSettlement : this.adj.getSettlementToSettlements(location)) {
+		if (this.settlementPlacedAt(adjacentSettlement)) {
+			return true;
+		}
+	}
+	return false;
+}
+					</code></pre>
+				</div>
+			</div>
+			<h3>Temporary Field</h3>
+			<p>Temporary fields are fields that are only assigned values under specific conditions and could be uninitialized. This code smell can be eliminated by using polymorphism or default values.</p>
+			<p>One example of temporary fields in our project is in the <code>Tile</code> class. That class has temporary fields <code>number</code> and <code>type</code> since those fields are only used when the tile is not a desert (<code>isDesert</code> field is <code>false</code>). Then, when we want to find the number or type of a tile, we first need to check whether it is the desert.</p>
+			<p>We fix this class by introducing a new tile/resource type, <code>NONE</code>, and setting the default number to 0, an impossible value to roll.</p>
+			<div class="before-after">
+				<div class="before-after-child">
+					<h4>Before</h4>
+				</div>
+				<div class="before-after-child">
+					<h4>After</h4>
+				</div>
+			</div>
+			<div class="before-after-body-container">
+				<div class="before-after">
+					<div class="before-after-child">
+						<p class="no-top-margin"><code>Type</code>:
+						<pre class="code-block no-bottom-margin"><code>
+public enum Type {
+	WHEAT("wheat"),
+	ORE("ore"),
+	WOOL("wool"),
+	BRICK("brick"),
+	LUMBER("lumber");
+	...
+}
+						</code></pre>
+					</div>
+					<div class="before-after-child">
+						<p class="no-top-margin"><code>Type</code>:
+						<pre class="code-block no-bottom-margin"><code>
+public enum Type {
+	WHEAT("wheat"),
+	ORE("ore"),
+	WOOL("wool"),
+	BRICK("brick"),
+	LUMBER("lumber"),
+	NONE("none");
+	
+	public static final Type[] RESOURCE_TYPES = new Type[]{WHEAT, ORE, WOOL, BRICK, LUMBER};
+
+	...
+	}
+						</code></pre>
+					</div>
+				</div>
+				<div class="before-after">
+					<div class="before-after-child">
+						<p class="no-top-margin"><code>Tile</code>:
+						<pre class="code-block no-bottom-margin"><code>
+public class Tile {
+	Location location;
+	int number;
+	Type type;
+
+	boolean isDesert;
+
+	public Tile(char location, int number, Type type) {
+		assignLocation(location);
+		setNumber(number);
+		this.type = type;
+		this.isDesert = false;
+	}
+
+	public Tile(char location) {
+		assignLocation(location);
+		this.number = 0;
+		this.isDesert = true;
+	}
+
+	public boolean getIsDesert() {
+		return this.isDesert;
+	}
+
+	...
+}
+						</code></pre>
+					</div>
+					<div class="before-after-child">
+						<p class="no-top-margin"><code>Tile</code>:
+						<pre class="code-block no-bottom-margin"><code>
+public class Tile {
+	Location location;
+	int number;
+	Type type;
+
+	public Tile(char location, int number, Type type) {
+		assignLocation(location);
+		setNumber(number);
+		this.type = type;
+	}
+
+	public Tile(char location) {
+		assignLocation(location);
+		this.number = 0; // impossible to roll 0
+		this.type = Type.NONE;
+	}
+
+	public boolean getIsDesert() {
+		return this.type == Type.NONE;
+	}
+
+	...
+}
+						</code></pre>
+					</div>
+				</div>
+			</div>
+			<h3>Speculative Generality</h3>
+			<p>Speculative generality is when the code contains hooks, like interfaces or delegation, that are not needed but were added because the developers thought they might be needed at some point. Those add extra complexity and should be added in later if they are needed.</p>
+			<p>We had a <code>Loader</code> interface so that we could use other types of loaders, besides file loaders. Since we only use a file loader, the interface is unnecessary. Also, the methods in <code>Loader</code> are specific to loading files.</p>
+			<p>To fix this code smell, we removed the <code>Loader</code> interface in the datasource layer.</p>
+			<div class="before-after">
+				<div class="before-after-child">
+					<h4>Before</h4>
+					<figure class="no-margin">
+						<img class="width-100" src="./expanding_and_documenting_catan/speculative_generality/speculative_generality_before.svg"></img>
+					</figure>
+				</div>
+				<div class="before-after-child">
+					<h4>After</h4>
+					<figure class="no-margin">
+						<img class="width-100" src="./expanding_and_documenting_catan/speculative_generality/speculative_generality_after.svg"></img>
+					</figure>
+				</div>
+			</div>
+			<h2>Testing Code Smell Refactorings</h2>
+			This section briefly describes the testing code smell I refactored. I only refactored one since I also implemented a <a href="expanding_and_documenting_catan.html#testSeam">test along a seam</a>. For a more in-depth version, see this <a href="./expanding_and_documenting_catan/testing_code_smell_refactorings/testing_code_smell_refactorings.pdf" target="_blank">pdf</a>, which is from one of our milestone submissions.
+			<h3>Test Only Code in Production</h2>
+			<p>We fix this class by introducing a new tile/resource type, <code>NONE</code>, and setting the default number to 0, an impossible value to roll.</p>
+			<div class="before-after">
+				<div class="before-after-child">
+					<h4>Before</h4>
+				</div>
+				<div class="before-after-child">
+					<h4>After</h4>
+				</div>
+			</div>
+			<div class="before-after-body-container">
+				<div class="before-after">
+					<div class="before-after-child">
+						<p class="no-top-margin"><code>DiceManager</code>:
+						<pre class="code-block no-bottom-margin"><code>
+public DiceManager() {
+	this.firstDie = new SecureRandom();
+	this.secondDie = new SecureRandom();
+}
+
+public void setDie(Random firstDie, Random secondDie) {
+	this.firstDie = firstDie;
+	this.secondDie = secondDie;
+}
+					</code></pre>
+				</div>
+				<div class="before-after-child">
+					<p class="no-top-margin"><code>DiceManager</code>:
+					<pre class="code-block no-bottom-margin"><code>
+public DiceManager(Random firstDie, Random secondDie) {
+	this.firstDie = firstDie;
+	this.secondDie = secondDie;
+}
+						</code></pre>
+					</div>
+				</div>
+				<div class="before-after">
+					<div class="before-after-child">
+						<p class="no-top-margin"><code>DiceManagerTest</code>:
+						<pre class="code-block"><code>
+@ParameterizedTest
+@CsvSource({
+		"0,0", "0,1", "0,2", "0,3",
+		"0,4", "0,5", "1,0", "1,1", "1,2", "1,3", "1,4", "1,5",
+		"2,0", "2,1", "2,2", "2,3",
+		"2,4", "2,5", "3,0", "3,1", "3,2", "3,3", "3,4", "3,5",
+		"4,0", "4,1", "4,2", "4,3",
+		"4,4", "4,5", "5,0", "5,1", "5,2", "5,3", "5,4", "5,5",})
+public void rollDice_Mocked(int firstRoll, int secondRoll) {
+	Random firstDie = EasyMock.createMock(Random.class);
+	Random secondDie = EasyMock.createMock(Random.class);
+
+	EasyMock.expect(firstDie.nextInt(6)).andReturn(firstRoll);
+	EasyMock.expect(secondDie.nextInt(6)).andReturn(secondRoll);
+	EasyMock.replay(firstDie);
+	EasyMock.replay(secondDie);
+
+	DiceManager diceManager = new DiceManager();
+	diceManager.setDie(firstDie, secondDie);
+	List<Integer> diceRolls = diceManager.rollDice();
+	assertEquals(2, diceRolls.size());
+	assertEquals(firstRoll + 1, diceRolls.get(0));
+	assertEquals(secondRoll + 1, diceRolls.get(1));
+	EasyMock.verify(firstDie);
+	EasyMock.verify(secondDie);
+}
+						</code></pre>
+					</div>
+					<div class="before-after-child">
+						<p class="no-top-margin"><code>DiceManagerTest</code>:
+						<pre class="code-block"><code>
+@ParameterizedTest
+@CsvSource({"0,0", "0,1", "0,2", "0,3",
+		"0,4", "0,5", "1,0", "1,1", "1,2", "1,3", "1,4", "1,5",
+		"2,0", "2,1", "2,2", "2,3",
+		"2,4", "2,5", "3,0", "3,1", "3,2", "3,3", "3,4", "3,5",
+		"4,0", "4,1", "4,2", "4,3",
+		"4,4", "4,5", "5,0", "5,1", "5,2", "5,3", "5,4", "5,5",})
+public void rollDice_Mocked(int firstRoll, int secondRoll) {
+	Random firstDie = EasyMock.createMock(Random.class);
+	Random secondDie = EasyMock.createMock(Random.class);
+
+	EasyMock.expect(firstDie.nextInt(6)).andReturn(firstRoll);
+	EasyMock.expect(secondDie.nextInt(6)).andReturn(secondRoll);
+	EasyMock.replay(firstDie);
+	EasyMock.replay(secondDie);
+
+	DiceManager diceManager = new DiceManager(firstDie, secondDie);
+	List<Integer> diceRolls = diceManager.rollDice();
+	assertEquals(2, diceRolls.size());
+	assertEquals(firstRoll + 1, diceRolls.get(0));
+	assertEquals(secondRoll + 1, diceRolls.get(1));
+
+	EasyMock.verify(firstDie);
+	EasyMock.verify(secondDie);
+}
+						</code></pre>
+					</div>
+				</div>
+			</div>
+			<h2 id="testSeam">Testing Along Polymorphic Seams</h2>
+			<p>A new testing concept we learned about was <b>testing along polymorphic seams</b>. Testing along seams is especially useful for GUI elements since they cannot be mocked well with tools, like EasyMock.</p>
+			<p>For our software quality assurance projects, we were not required to test the GUI elements since it was outside the scope of the course. Since we were missing those tests, we implemented tests along seams for the <code>getMakeBankTradeAction</code> and <code>getMakePlayerTradeAction</code> methods for the trade buttons. Those tests would ensure that the correct actions were taken when those buttons were pressed.</p>
+			<p>We created a <code>TestableGUI</code> class and a <code>TestableGame</code> class, which extend <code>GUI</code> and <code>Game</code>, respectively. The testable classes contain booleans describing whether specific methods were called and variables for return values for methods. We can then use mocking to create instances of the testable classes, letting us check method calls and their arguments.</p> Then, by creating a mocked version of <code>Controls</code>, we can ensure that methods are called to take the correct actions when a user uses a trade button.</p>
+			<h3>Code</h3>
+			<p>The code for the methods to test, tests, and test classes are below.</p>
+			<details>
+				<summary><code>Controls</code></summary>
+				<pre class="code-block"><code>
+ActionListener getMakeBankTradeAction(GUI gui, JFrame tradeFrame, Map<InputType, JComponent> inputs) {
+	return event -> {
+		Type giveType = this.getRadioType(inputs, InputType.RADIO1);
+		Type receiveType = this.getRadioType(inputs, InputType.RADIO2);
+		int giveAmount = this.getBankRatio(inputs);
+		BankTradeOffer bankTradeOffer = new BankTradeOffer(giveAmount, giveType, receiveType);
+		
+		if (gui.getGame().makeTradeWithBankBoolean(bankTradeOffer)) {
+			tradeFrame.dispose();
+			gui.setGameState(GameState.TURN);
+			gui.updateFrame();
+		} else {
+			showInvalidTradeDialog(tradeFrame);
+		}
+	};
+}
+
+ActionListener getMakePlayerTradeAction(GUI gui, JFrame tradeFrame, Map<InputType, JComponent> inputs) {
+	return event -> {
+		Map<Type, Integer> giveTypes = this.getSpinnerTypes(inputs, InputType.SPINNER1);
+		Map<Type, Integer> receiveTypes = this.getSpinnerTypes(inputs, InputType.SPINNER2);
+		Color color = this.getTradeColor(inputs);
+
+		if (gui.getGame().makeTradeWithPlayerBoolean(color, giveTypes, receiveTypes)) {
+			tradeFrame.dispose();
+			gui.setGameState(GameState.TURN);
+			gui.updateFrame();
+		} else {
+			showInvalidTradeDialog(tradeFrame);
+		}
+	};
+}
+				</code></pre>
+			</details>
+			<details>
+				<summary><code>ControlsTest</code></summary>
+				<pre class="code-block"><code>
+public class ControlsTest {
+	@Test
+	public void getMakeBankTradeAction_validActionPerformed_expectActionPerformed() {
+		Controls controls = EasyMock.partialMockBuilder(Controls.class)
+				.addMockedMethod("getRadioType")
+				.addMockedMethod("getBankRatio")
+				.createStrictMock();
+
+		TestableGame testableGame = new TestableGame();
+		testableGame.setMakeTradeWithBankBooleanReturnValue(true);
+
+		TestableGUI testableGUI = new TestableGUI(testableGame);
+
+		JFrame tradeFrame = EasyMock.createMock(JFrame.class);
+		tradeFrame.dispose();
+		EasyMock.expectLastCall();
+
+		Map&lt;InputType, JComponent&gt; inputs = new HashMap&lt;&gt;();
+		EasyMock.expect(controls.getRadioType(inputs, InputType.RADIO1)).andReturn(Type.ORE);
+		EasyMock.expect(controls.getRadioType(inputs, InputType.RADIO2)).andReturn(Type.WHEAT);
+		EasyMock.expect(controls.getBankRatio(inputs)).andReturn(2);
+			 
+		ActionListener actionListener = controls.getMakeBankTradeAction(testableGUI, tradeFrame, inputs);
+
+		EasyMock.replay(controls);
+		actionListener.actionPerformed(null);
+
+		EasyMock.verify(controls);
+		Assertions.assertTrue(testableGUI.getSetGameStateCalled());
+		Assertions.assertEquals(GameState.TURN, testableGUI.getSetGameStateCalledGameStateArg());
+		Assertions.assertTrue(testableGUI.getUpdateFrameCalled());
+	}
+
+	@Test
+	public void getMakeBankTradeAction_invalidActionPerformed_expectInvalidTradeDialog() {
+		Controls controls = EasyMock.partialMockBuilder(Controls.class)
+				.addMockedMethod("getRadioType")
+				.addMockedMethod("getBankRatio")
+				.addMockedMethod("showInvalidTradeDialog")
+				.createStrictMock();
+
+		TestableGame testableGame = new TestableGame();
+		testableGame.setMakeTradeWithBankBooleanReturnValue(false);
+
+		TestableGUI testableGUI = new TestableGUI(testableGame);
+
+		JFrame tradeFrame = EasyMock.createMock(JFrame.class);
+
+		Map&lt;InputType, JComponent&gt; inputs = new HashMap&lt;&gt;();
+		EasyMock.expect(controls.getRadioType(inputs, InputType.RADIO1)).andReturn(Type.ORE);
+		EasyMock.expect(controls.getRadioType(inputs, InputType.RADIO2)).andReturn(Type.WHEAT);
+		EasyMock.expect(controls.getBankRatio(inputs)).andReturn(2);
+
+		controls.showInvalidTradeDialog(tradeFrame);
+		EasyMock.expectLastCall();
+
+		ActionListener actionListener = controls.getMakeBankTradeAction(testableGUI, tradeFrame, inputs);
+
+		EasyMock.replay(controls);
+		actionListener.actionPerformed(null);
+
+		EasyMock.verify(controls);
+	}
+
+	@Test
+	public void getMakePlayerTradeAction_validActionPerformed_expectActionPerformed() {
+		Controls controls = EasyMock.partialMockBuilder(Controls.class)
+				.addMockedMethod("getSpinnerTypes")
+				.addMockedMethod("getTradeColor")
+				.createStrictMock();
+
+		TestableGame testableGame = new TestableGame();
+		testableGame.setMakeTradeWithPlayerBooleanReturnValue(true);
+
+		TestableGUI testableGUI = new TestableGUI(testableGame);
+
+		JFrame tradeFrame = EasyMock.createMock(JFrame.class);
+		tradeFrame.dispose();
+		EasyMock.expectLastCall();
+
+		Map&lt;InputType, JComponent&gt; inputs = new HashMap&lt;&gt;();
+		Map&lt;Type, Integer&gt; spinner1 = new HashMap&lt;&gt;();
+		spinner1.put(Type.ORE, 1);
+		EasyMock.expect(controls.getSpinnerTypes(inputs, InputType.SPINNER1)).andReturn(spinner1);
+		Map&lt;Type, Integer&gt; spinner2 = new HashMap&lt;&gt;();
+		spinner1.put(Type.WHEAT, 1);
+		EasyMock.expect(controls.getSpinnerTypes(inputs, InputType.SPINNER2)).andReturn(spinner2);
+		EasyMock.expect(controls.getTradeColor(inputs)).andReturn(Color.BLUE);
+
+		ActionListener actionListener = controls.getMakePlayerTradeAction(testableGUI, tradeFrame, inputs);
+
+		EasyMock.replay(controls);
+		actionListener.actionPerformed(null);
+
+		EasyMock.verify(controls);
+		Assertions.assertTrue(testableGUI.getSetGameStateCalled());
+		Assertions.assertEquals(GameState.TURN, testableGUI.getSetGameStateCalledGameStateArg());
+		Assertions.assertTrue(testableGUI.getUpdateFrameCalled());
+	}
+
+	@Test
+	public void getMakePlayerTradeAction_invalidActionPerformed_expectInvalidTradeDialog() {
+		Controls controls = EasyMock.partialMockBuilder(Controls.class)
+				.addMockedMethod("getSpinnerTypes")
+				.addMockedMethod("getTradeColor")
+				.addMockedMethod("showInvalidTradeDialog")
+				.createStrictMock();
+
+		TestableGame testableGame = new TestableGame();
+		testableGame.setMakeTradeWithPlayerBooleanReturnValue(false);
+
+		TestableGUI testableGUI = new TestableGUI(testableGame);
+
+		JFrame tradeFrame = EasyMock.createMock(JFrame.class);
+
+		Map&lt;InputType, JComponent&gt; inputs = new HashMap&lt;&gt;();
+		Map&lt;Type, Integer&gt; spinner1 = new HashMap&lt;&gt;();
+		spinner1.put(Type.ORE, 1);
+		EasyMock.expect(controls.getSpinnerTypes(inputs, InputType.SPINNER1)).andReturn(spinner1);
+		Map&lt;Type, Integer&gt; spinner2 = new HashMap&lt;&gt;();
+		spinner1.put(Type.WHEAT, 1);
+		EasyMock.expect(controls.getSpinnerTypes(inputs, InputType.SPINNER2)).andReturn(spinner2);
+		EasyMock.expect(controls.getTradeColor(inputs)).andReturn(Color.BLUE);
+
+		controls.showInvalidTradeDialog(tradeFrame);
+		EasyMock.expectLastCall();
+
+		ActionListener actionListener = controls.getMakePlayerTradeAction(testableGUI, tradeFrame, inputs);
+
+		EasyMock.replay(controls);
+		actionListener.actionPerformed(null);
+
+		EasyMock.verify(controls);
+	}
+}
+				</code></pre>
+			</details>
+			<details>
+				<summary><code>TestableGame</code></summary>
+				<pre class="code-block"><code>
+public class TestableGame extends Game{
+	private boolean makeTradeWithBankBooleanReturnValue;
+	private boolean makeTradeWithPlayerBooleanReturnValue;
+
+	public TestableGame() {
+		super(true);
+		makeTradeWithBankBooleanReturnValue = false;
+		makeTradeWithPlayerBooleanReturnValue = false;
+	}
+	
+	@Override
+	public boolean makeTradeWithBankBoolean(BankTradeOffer bankTradeOffer) {
+		return makeTradeWithBankBooleanReturnValue;
+	}
+
+	public void setMakeTradeWithBankBooleanReturnValue(boolean returnValue) {
+		this.makeTradeWithBankBooleanReturnValue = returnValue;
+	}
+
+	@Override
+	public boolean makeTradeWithPlayerBoolean(Color color, Map&lt;Type, Integer&gt; give, Map&lt;Type, Integer&gt; receive) {
+		return makeTradeWithPlayerBooleanReturnValue;
+	}
+
+	public void setMakeTradeWithPlayerBooleanReturnValue(boolean returnValue) {
+		this.makeTradeWithPlayerBooleanReturnValue = returnValue;
+	}
+}
+				</code></pre>
+			</details>
+			<details>
+				<summary><code>TestableGUI</code></summary>
+				<pre class="code-block"><code>
+public class TestableGUI extends GUI {
+	private boolean updateFrameCalled;
+
+	private boolean setGameStateCalled;
+	private GameState setGameStateCalledGameStateArg;
+
+	public TestableGUI(TestableGame testGame) {
+		super(true);
+		this.game = testGame;
+
+		this.setGameStateCalled = false;
+		this.setGameStateCalledGameStateArg = null;
+		this.updateFrameCalled = false;
+	}
+
+	@Override
+	public void updateFrame() {
+		this.updateFrameCalled = true;
+	}
+
+	public boolean getUpdateFrameCalled() {
+		return this.updateFrameCalled;
+	}
+
+	@Override
+	public void setGameState(GameState gameState) {
+		this.setGameStateCalled = true;
+		this.setGameStateCalledGameStateArg = gameState;
+	}
+
+	public boolean getSetGameStateCalled() {
+		return this.setGameStateCalled;
+	}
+
+	public GameState getSetGameStateCalledGameStateArg() {
+		return this.setGameStateCalledGameStateArg;
+	}
+
+	@Override
+	public Game getGame() {
+		return this.game;
+	}
+}
+				</code></pre>
+			</details>
+			<h2>Documentation Overview</h2>
+			<p>Another main part of the project was writing user documentation for various users, such as <b>players, developers, and maintainers</b>. Our documentation consisted of</p>
+			<ul>
+				<li>an installation guide,</li>
+				<li>a gameplay guide with the Catan rules and our user interface,</li>
+				<li>development environment information,</li>
+				<li>development workflows,</li>
+				<li>development conventions,</li>
+				<li>planned changes,</li>
+				<li>software requirements,</li>
+				<li>software architecture and design, and</li>
+				<li>testing strategy.</li>
+			</ul>
+			<p>I worked on the installation guide and parts of the development and maintenance guide. A summary of those sections are below, and the complete versions are in this <a href="./expanding_and_documenting_catan/documentation/documentation.pdf" target="_blank">pdf</a>.</p>
+			<h3>Installation Guide</h3>
+			<p>The installation guide included prerequisites and instructions for installing and running the game from our GitHub Releases page. It also had a more detailed set of instructions with screenshots.</p>
+			<p>It was challenging to find a good way to package the game for release. We wanted to use a <b>JAR</b> file to simplify the installation and set up process for the user since they would only need to download a single file to play the game. However, we had image files for the game board and pieces, which cannot be included in a JAR file. Instead, we needed to create a zip file with the JAR file and image resources, making the installation process slightly more complex, but the user only needs to download a zip file and unzip it.</p>
+			<h3>Parts of Development and Maintenance Guide</h3>
+			<p>This guide is intended for developers, maintainers, and helpdesk staff. It gives an overview of the <b>development environment</b>, like Java <b>version</b>, <b>file structure</b>, <b>frameworks</b>, <b>build tasks</b>, and <b>programming conventions</b>. Additionally, it describes the <b>developer workflow</b> and how to create a <b>release</b> to deploy with detailed instructions to keep releases consistent.</p>
+		</div>
+		<div id="contactInfo"></div>
+
+		<script>createContactInfo()</script>
+
+		<script>hljs.highlightAll()</script>
+	</body>
+</html>

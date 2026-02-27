@@ -1,0 +1,140 @@
+@startuml
+package catan {
+	~enum CatanWriteBlockArgName {
+		DEVELOPMENT_CARDS
+		LOCATION
+		PLAYER
+	}
+
+	+class Game {
+		+loadGame(loader: FileLoader): void
+		~loadGeneralInfo(currentPlayerIndex: int, turnCount: int, developmentCardTypes: List<DevelopmentCardType>): void
+		~loadBoard(tiles: List<Tile>, ports: List<Port>, robber: Location roads: List<Road>, settlements: List<Settlement>): void
+		~loadPlayers(playersToLoad: List<Player>): void
+		+saveGame(saver: FileSaver): void
+	}
+
+	+class FileLoaderImporter {
+		+FileLoaderImporter(loader: FileLoader, game: Game)
+		+importGame(): void
+		~loadGeneralInfo(): void
+		~loadBoard(): void
+		~loadPlayers(): void
+	}
+	
+	+class FileSaverExporter {
+		+FileSaverExporter(saver: FileSaver, game: Game)
+		+exportGame(): void
+		-writeGeneralInfoBlock(): void
+		~writeGeneralInfoBlockContents(args: Map<WriteBlockArgName, Object>): Void
+		-writeBoardBlock(): void
+		-writeBoardBlockContents(args: Map<WriteBlockArgName, Object>): Void
+		-writePlayersBlock(): void
+		-writePlayersBlockContents(args: Map<WriteBlockArgName, Object>): Void
+	}
+}
+
+package datasource {
+	+class BlockInfo {
+		+BlockInfo(line: String, name: String, attributes: Map<String, String>)
+	}
+
+	+class CatanFileWriter {
+		+{static}createCatanFileWriter(path: String, fileName: String): CatanFileWriter
+		+write(str: String): void
+		+close(): void
+	}
+
+	+enum DataSourceWriteBlockArgName {
+		INDENTATION_LEVEL
+	}
+
+	+class CatanScanner {
+		+{static}createCatanScanner(path: String, fileName: String): CatanScanner
+		+hasNextLine(): boolean
+		+nextLine(): String
+		+close(): void
+	}
+
+	+class ElementInfo {
+		+ElementInfo(line: String, name: String, attributes: Map<String, String>)
+	}
+
+	+abstract class FileLineInfo {
+		line: String
+		name: String
+		attributes: Map<String, String>
+		+FileLineInfo(line: String, name: String, attributes: Map<String, String>)
+	}
+
+	+class FileLoader {
+		+getNextBlockInfo(): BlockInfo
+		+getBlockInfo(line: String): BlockInfo
+		+getNextLineInfo(): LineInfo
+		+getLineInfo(line: String): LineInfo
+		+getNextElementInfo(): ElementInfo
+		+getElementInfo(line: String): ElementInfo
+		+hasNextLine(): boolean
+		+nextLine(): String
+		+close(): void
+	}
+
+	+class FileSaver {
+		+FileSaver(fileName: String)
+		+writeBlock(name: String, attributesString: String, args: Map<WriteBlockArgName, Object>,
+		writeBlockContents: Function<Map<WriteBlockArgName, Object>, Void>): void
+		+writeIndentedLine(line: String, indentationLevel: int): void
+		+close(): void
+	}
+
+	+class LineInfo {
+		-value: String
+		+LineInfo(line: String, name: String, attributes: Map<String, String>, value: String)
+	}
+
+	+interface WriteBlockArgName {
+	}
+}
+
+package frontend {
+	package factories {
+		+class Controls {
+			+getLoadGameButtonAction(gui: GUI, settingsFrame: JFrame): ActionListener
+			+getSaveGameButtonAction(gui: GUI, settingsFrame: JFrame, gameState: GameState): ActionListener
+		}
+	}
+
+	+class GUI {
+	}
+}
+
+BlockInfo -up-|> FileLineInfo
+CatanFileWriter -down-> java.io.OutputStreamWriter
+CatanScanner -down-> java.util.Scanner
+CatanWriteBlockArgName ..|> WriteBlockArgName
+Controls .down.> CatanScanner
+Controls .down.> FileLoader
+Controls .down.> FileSaver
+Controls .right.> GUI
+DataSourceWriteBlockArgName .up.|> WriteBlockArgName
+ElementInfo -up-|> FileLineInfo
+FileLoader -left-> CatanScanner
+FileLoader .down.> FileLineInfo
+FileLoaderImporter -right-> FileLoader
+FileLoaderImporter -up-> Game
+FileSaver --> CatanFileWriter
+FileSaver ..> WriteBlockArgName
+FileSaverExporter -down-> FileSaver
+FileSaverExporter -up-> Game
+FileSaverExporter ..> WriteBlockArgName
+Game ..> FileLoader
+Game .down.> FileLoaderImporter
+Game ..> FileSaver
+Game .down.> FileSaverExporter
+GUI -right-> Game
+LineInfo -up-|> FileLineInfo
+
+FileLineInfo -[hidden]left-> WriteBlockArgName
+FileLoader -[hidden]right-> FileSaver
+FileSaverExporter .[hidden]right.> CatanWriteBlockArgName
+@enduml

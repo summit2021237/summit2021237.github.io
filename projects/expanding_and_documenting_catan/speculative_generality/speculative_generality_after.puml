@@ -1,0 +1,18 @@
+package catan {
+}
+
+package datasource {
+	+class FileLoader {
+		+FileLoader(scanner: CatanScanner)
+		+hasNextLine(): boolean
+		+nextLine(): String
+		+close(): void
+	}
+
+	+class CatanScanner {
+	}
+}
+
+catan --> FileLoader
+catan ..> CatanScanner
+FileLoader -right-> CatanScanner

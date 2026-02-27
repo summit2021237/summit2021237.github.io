@@ -1,0 +1,54 @@
+left to right direction
+
++class Adjacency {
+	-roadToRoads: Map<Location, Set<Location>>
+	-roadToSettlements: Map<Location, Set<Location>>
+	-settlementToSettlements: Map<Location, Set<Location>>
+	-tileToTiles: Map<Location, Set<Location>>
+	-settlementToPort: MapLocation, Location>
+	+Adjacency()
+}
+
++abstract class AdjacencyInitializer {
+	-fileName: String
+	-mapParamNames: List<ParamName>
+	+AdjacencyInitializer(fileName: String, mapParamNames: ParamName[])
+	~initializeAdjacency(): void
+	~{abstract}addToMap(argMap: Map<ParamName, Character>): void
+}
+
++class RoadToRoads {
+	-map: Map<Location, Set<Location>>
+	+RoadToRoads(map: Map<Location, Set<Location>>)
+}
+
++class RoadToSettlements {
+	-map: Map<Location, Set<Location>>
+	+RoadToSettlements(map: Map<Location, Set<Location>>)
+}
+
++class SettlementToPort {
+	-map: Map<Location, Location>
+	+SettlementToPort(map: Map<Location, Location>)
+}
+
++class SettlementToSettlements {
+	-map: Map<Location, Set<Location>>
+	+SettlementToSettlements(map: Map<Location, Set<Location>>)
+}
+
++class TileToTiles {
+	-map: Map<Location, Set<Location>>
+	+TileToTiles(map: Map<Location, Set<Location>>)
+}
+
++enum ParamName {
+}
+
+Adjacency .left.> AdjacencyInitializer
+AdjacencyInitializer -left->"*" ParamName
+RoadToRoads -up-|> AdjacencyInitializer
+RoadToSettlements -up-|> AdjacencyInitializer
+SettlementToPort -up-|> AdjacencyInitializer
+SettlementToSettlements -up-|> AdjacencyInitializer
+TileToTiles -up-|> AdjacencyInitializer
