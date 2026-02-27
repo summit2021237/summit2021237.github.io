@@ -21,6 +21,10 @@
 		<div>
 			<h1>Expanding and Documenting Catan</h1>
 			<p>In Software Construction and Evolution, we learned about software <b>maintenance</b>, <b>refactoring</b>, and <b>documentation</b>. For our course project, my group expanded on another member's Software Quality Assurance project, which was Catan written in Java.</p>
+			<figure class="no-margin">
+				<img src="./images/catan.png"></img>
+				<figcaption>Catan game with default setup</figcaption>
+			</figure>
 			<h2>Tasks</h2>
 			<p>For the project, we added <b>new features</b> and <b>refactored 20 code smells</b> (15 unique smells) and <b>10 unique testing code smells or seams</b>. In addition, we wrote <b>user and developer guides</b> to document how a user installs and plays the game and processes for developers to add to and maintain the game.</p>
 			<h2>Software Architecture and Design</h2>
@@ -28,15 +32,15 @@
 			<p>Below are some simplified UML class diagrams of our final design depicting some changes from our new features and refactorings.</p>
 			<div id="csse375Diagrams">
 				<figure class="no-margin">
-					<img class="width-100" src="../images/csse375_frontend_uml.svg"></img>
+					<img class="width-100" src="./expanding_and_documenting_catan/images/frontend_uml.svg"></img>
 					<figcaption>Presentation layer</figcaption>
 				</figure>
 				<figure class="no-margin">
-					<img class="width-100" src="../images/csse375_catan_uml.svg"></img>
+					<img class="width-100" src="./expanding_and_documenting_catan/images/catan_uml.svg"></img>
 					<figcaption>Domain layer</figcaption>
 				</figure>
 				<figure class="no-margin">
-					<img class="width-50" src="../images/csse375_datasource_uml.svg"></img>
+					<img class="width-50" src="./expanding_and_documenting_catan/images/datasource_uml.svg"></img>
 					<figcaption>Data layer</figcaption>
 				</figure>
 			</div>
@@ -81,7 +85,7 @@
 			</div>
 			<p>Since we only had a data layer and frontend layer, we created a new data layer with classes to read and write blocks and elements. Methods in those classes are called from importer and exporter classes in the domain layer, which populate the block, line, and element fields with game data to write and read the data. Also, the loader is used by the adjacency initializer to create the board, which was added in the same project milestone as the save feature to fix a <a href="expanding_and_documenting_catan.html#duplicateCode">code smell</a>.</p>
 			<figure class="no-margin">
-				<img class="width-100" src="../images/csse375_save_load.svg"></img>
+				<img class="width-100" src="./expanding_and_documenting_catan/images/save_load.svg"></img>
 				<figcaption>UML class diagram of the save and load feature containing the main fields, methods, and relationships</figcaption>
 			</figure>
 			<h4>Design Rationale</h4>
@@ -667,6 +671,6 @@ public class TestableGUI extends GUI {
 
 		<script>createContactInfo()</script>
 
-		<script>hljs.highlightAll();</script>
+		<script>hljs.highlightAll()</script>
 	</body>
 </html>
