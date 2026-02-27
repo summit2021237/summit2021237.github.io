@@ -3,12 +3,14 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="/home/fank1/Documents/website/website/styles/main.css">
+		<link rel="stylesheet" href="../styles/routeros-modified.css">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
 
 		<script src="/home/fank1/Documents/website/website/scripts/jquery.min.js"></script>
 		<script src="/home/fank1/Documents/website/website/scripts/main.js"></script>
+		<script src="../scripts/highlight.min.js"></script>
 
 		<title>Summit Fan</title>
 	</head>
@@ -377,6 +379,270 @@ public void rollDice_Mocked(int firstRoll, int secondRoll) {
 					</code></pre>
 				</div>
 			</div>
+			<h2 id="testSeam">Testing Along Polymorphic Seams</h2>
+			<p>A new testing concept we learned about was <b>testing along polymorphic seams</b>. Testing along seams is especially useful for GUI elements since they cannot be mocked well with tools, like EasyMock.</p>
+			<p>For our software quality assurance projects, we were not required to test the GUI elements since it was outside the scope of the course. Since we were missing those tests, we implemented tests along seams for the <code>getMakeBankTradeAction</code> and <code>getMakePlayerTradeAction</code> methods for the trade buttons. Those tests would ensure that the correct actions were taken when those buttons were pressed.</p>
+			<p>We created a <code>TestableGUI</code> class and a <code>TestableGame</code> class, which extend <code>GUI</code> and <code>Game</code>, respectively. The testable classes contain booleans describing whether specific methods were called and variables for return values for methods. We can then use mocking to create instances of the testable classes, letting us check method calls and their arguments.</p> Then, by creating a mocked version of <code>Controls</code>, we can ensure that methods are called to take the correct actions when a user uses a trade button.</p>
+			<h3>Code</h3>
+			<p>The code for the methods to test, tests, and test classes are below.</p>
+			<details>
+				<summary><code>Controls</code></summary>
+				<pre class="code-block"><code>
+ActionListener getMakeBankTradeAction(GUI gui, JFrame tradeFrame, Map<InputType, JComponent> inputs) {
+	return event -> {
+		Type giveType = this.getRadioType(inputs, InputType.RADIO1);
+		Type receiveType = this.getRadioType(inputs, InputType.RADIO2);
+		int giveAmount = this.getBankRatio(inputs);
+		BankTradeOffer bankTradeOffer = new BankTradeOffer(giveAmount, giveType, receiveType);
+		
+		if (gui.getGame().makeTradeWithBankBoolean(bankTradeOffer)) {
+			tradeFrame.dispose();
+			gui.setGameState(GameState.TURN);
+			gui.updateFrame();
+		} else {
+			showInvalidTradeDialog(tradeFrame);
+		}
+	};
+}
+
+ActionListener getMakePlayerTradeAction(GUI gui, JFrame tradeFrame, Map<InputType, JComponent> inputs) {
+	return event -> {
+		Map<Type, Integer> giveTypes = this.getSpinnerTypes(inputs, InputType.SPINNER1);
+		Map<Type, Integer> receiveTypes = this.getSpinnerTypes(inputs, InputType.SPINNER2);
+		Color color = this.getTradeColor(inputs);
+
+		if (gui.getGame().makeTradeWithPlayerBoolean(color, giveTypes, receiveTypes)) {
+			tradeFrame.dispose();
+			gui.setGameState(GameState.TURN);
+			gui.updateFrame();
+		} else {
+			showInvalidTradeDialog(tradeFrame);
+		}
+	};
+}
+				</code></pre>
+			</details>
+			<details>
+				<summary><code>ControlsTest</code></summary>
+				<pre class="code-block"><code>
+public class ControlsTest {
+	@Test
+	public void getMakeBankTradeAction_validActionPerformed_expectActionPerformed() {
+		Controls controls = EasyMock.partialMockBuilder(Controls.class)
+				.addMockedMethod("getRadioType")
+				.addMockedMethod("getBankRatio")
+				.createStrictMock();
+
+		TestableGame testableGame = new TestableGame();
+		testableGame.setMakeTradeWithBankBooleanReturnValue(true);
+
+		TestableGUI testableGUI = new TestableGUI(testableGame);
+
+		JFrame tradeFrame = EasyMock.createMock(JFrame.class);
+		tradeFrame.dispose();
+		EasyMock.expectLastCall();
+
+		Map&lt;InputType, JComponent&gt; inputs = new HashMap&lt;&gt;();
+		EasyMock.expect(controls.getRadioType(inputs, InputType.RADIO1)).andReturn(Type.ORE);
+		EasyMock.expect(controls.getRadioType(inputs, InputType.RADIO2)).andReturn(Type.WHEAT);
+		EasyMock.expect(controls.getBankRatio(inputs)).andReturn(2);
+			 
+		ActionListener actionListener = controls.getMakeBankTradeAction(testableGUI, tradeFrame, inputs);
+
+		EasyMock.replay(controls);
+		actionListener.actionPerformed(null);
+
+		EasyMock.verify(controls);
+		Assertions.assertTrue(testableGUI.getSetGameStateCalled());
+		Assertions.assertEquals(GameState.TURN, testableGUI.getSetGameStateCalledGameStateArg());
+		Assertions.assertTrue(testableGUI.getUpdateFrameCalled());
+	}
+
+	@Test
+	public void getMakeBankTradeAction_invalidActionPerformed_expectInvalidTradeDialog() {
+		Controls controls = EasyMock.partialMockBuilder(Controls.class)
+				.addMockedMethod("getRadioType")
+				.addMockedMethod("getBankRatio")
+				.addMockedMethod("showInvalidTradeDialog")
+				.createStrictMock();
+
+		TestableGame testableGame = new TestableGame();
+		testableGame.setMakeTradeWithBankBooleanReturnValue(false);
+
+		TestableGUI testableGUI = new TestableGUI(testableGame);
+
+		JFrame tradeFrame = EasyMock.createMock(JFrame.class);
+
+		Map&lt;InputType, JComponent&gt; inputs = new HashMap&lt;&gt;();
+		EasyMock.expect(controls.getRadioType(inputs, InputType.RADIO1)).andReturn(Type.ORE);
+		EasyMock.expect(controls.getRadioType(inputs, InputType.RADIO2)).andReturn(Type.WHEAT);
+		EasyMock.expect(controls.getBankRatio(inputs)).andReturn(2);
+
+		controls.showInvalidTradeDialog(tradeFrame);
+		EasyMock.expectLastCall();
+
+		ActionListener actionListener = controls.getMakeBankTradeAction(testableGUI, tradeFrame, inputs);
+
+		EasyMock.replay(controls);
+		actionListener.actionPerformed(null);
+
+		EasyMock.verify(controls);
+	}
+
+	@Test
+	public void getMakePlayerTradeAction_validActionPerformed_expectActionPerformed() {
+		Controls controls = EasyMock.partialMockBuilder(Controls.class)
+				.addMockedMethod("getSpinnerTypes")
+				.addMockedMethod("getTradeColor")
+				.createStrictMock();
+
+		TestableGame testableGame = new TestableGame();
+		testableGame.setMakeTradeWithPlayerBooleanReturnValue(true);
+
+		TestableGUI testableGUI = new TestableGUI(testableGame);
+
+		JFrame tradeFrame = EasyMock.createMock(JFrame.class);
+		tradeFrame.dispose();
+		EasyMock.expectLastCall();
+
+		Map&lt;InputType, JComponent&gt; inputs = new HashMap&lt;&gt;();
+		Map&lt;Type, Integer&gt; spinner1 = new HashMap&lt;&gt;();
+		spinner1.put(Type.ORE, 1);
+		EasyMock.expect(controls.getSpinnerTypes(inputs, InputType.SPINNER1)).andReturn(spinner1);
+		Map&lt;Type, Integer&gt; spinner2 = new HashMap&lt;&gt;();
+		spinner1.put(Type.WHEAT, 1);
+		EasyMock.expect(controls.getSpinnerTypes(inputs, InputType.SPINNER2)).andReturn(spinner2);
+		EasyMock.expect(controls.getTradeColor(inputs)).andReturn(Color.BLUE);
+
+		ActionListener actionListener = controls.getMakePlayerTradeAction(testableGUI, tradeFrame, inputs);
+
+		EasyMock.replay(controls);
+		actionListener.actionPerformed(null);
+
+		EasyMock.verify(controls);
+		Assertions.assertTrue(testableGUI.getSetGameStateCalled());
+		Assertions.assertEquals(GameState.TURN, testableGUI.getSetGameStateCalledGameStateArg());
+		Assertions.assertTrue(testableGUI.getUpdateFrameCalled());
+	}
+
+	@Test
+	public void getMakePlayerTradeAction_invalidActionPerformed_expectInvalidTradeDialog() {
+		Controls controls = EasyMock.partialMockBuilder(Controls.class)
+				.addMockedMethod("getSpinnerTypes")
+				.addMockedMethod("getTradeColor")
+				.addMockedMethod("showInvalidTradeDialog")
+				.createStrictMock();
+
+		TestableGame testableGame = new TestableGame();
+		testableGame.setMakeTradeWithPlayerBooleanReturnValue(false);
+
+		TestableGUI testableGUI = new TestableGUI(testableGame);
+
+		JFrame tradeFrame = EasyMock.createMock(JFrame.class);
+
+		Map&lt;InputType, JComponent&gt; inputs = new HashMap&lt;&gt;();
+		Map&lt;Type, Integer&gt; spinner1 = new HashMap&lt;&gt;();
+		spinner1.put(Type.ORE, 1);
+		EasyMock.expect(controls.getSpinnerTypes(inputs, InputType.SPINNER1)).andReturn(spinner1);
+		Map&lt;Type, Integer&gt; spinner2 = new HashMap&lt;&gt;();
+		spinner1.put(Type.WHEAT, 1);
+		EasyMock.expect(controls.getSpinnerTypes(inputs, InputType.SPINNER2)).andReturn(spinner2);
+		EasyMock.expect(controls.getTradeColor(inputs)).andReturn(Color.BLUE);
+
+		controls.showInvalidTradeDialog(tradeFrame);
+		EasyMock.expectLastCall();
+
+		ActionListener actionListener = controls.getMakePlayerTradeAction(testableGUI, tradeFrame, inputs);
+
+		EasyMock.replay(controls);
+		actionListener.actionPerformed(null);
+
+		EasyMock.verify(controls);
+	}
+}
+				</code></pre>
+			</details>
+			<details>
+				<summary><code>TestableGame</code></summary>
+				<pre class="code-block"><code>
+public class TestableGame extends Game{
+	private boolean makeTradeWithBankBooleanReturnValue;
+	private boolean makeTradeWithPlayerBooleanReturnValue;
+
+	public TestableGame() {
+		super(true);
+		makeTradeWithBankBooleanReturnValue = false;
+		makeTradeWithPlayerBooleanReturnValue = false;
+	}
+	
+	@Override
+	public boolean makeTradeWithBankBoolean(BankTradeOffer bankTradeOffer) {
+		return makeTradeWithBankBooleanReturnValue;
+	}
+
+	public void setMakeTradeWithBankBooleanReturnValue(boolean returnValue) {
+		this.makeTradeWithBankBooleanReturnValue = returnValue;
+	}
+
+	@Override
+	public boolean makeTradeWithPlayerBoolean(Color color, Map&lt;Type, Integer&gt; give, Map&lt;Type, Integer&gt; receive) {
+		return makeTradeWithPlayerBooleanReturnValue;
+	}
+
+	public void setMakeTradeWithPlayerBooleanReturnValue(boolean returnValue) {
+		this.makeTradeWithPlayerBooleanReturnValue = returnValue;
+	}
+}
+				</code></pre>
+			</details>
+			<details>
+				<summary><code>TestableGUI</code></summary>
+				<pre class="code-block"><code>
+public class TestableGUI extends GUI {
+	private boolean updateFrameCalled;
+
+	private boolean setGameStateCalled;
+	private GameState setGameStateCalledGameStateArg;
+
+	public TestableGUI(TestableGame testGame) {
+		super(true);
+		this.game = testGame;
+
+		this.setGameStateCalled = false;
+		this.setGameStateCalledGameStateArg = null;
+		this.updateFrameCalled = false;
+	}
+
+	@Override
+	public void updateFrame() {
+		this.updateFrameCalled = true;
+	}
+
+	public boolean getUpdateFrameCalled() {
+		return this.updateFrameCalled;
+	}
+
+	@Override
+	public void setGameState(GameState gameState) {
+		this.setGameStateCalled = true;
+		this.setGameStateCalledGameStateArg = gameState;
+	}
+
+	public boolean getSetGameStateCalled() {
+		return this.setGameStateCalled;
+	}
+
+	public GameState getSetGameStateCalledGameStateArg() {
+		return this.setGameStateCalledGameStateArg;
+	}
+
+	@Override
+	public Game getGame() {
+		return this.game;
+	}
+}
+				</code></pre>
+			</details>
 			<h2>Documentation Overview</h2>
 			<p>Another main part of the project was writing user documentation for various users, such as <b>players, developers, and maintainers</b>. Our documentation consisted of</p>
 			<ul>
@@ -400,5 +666,7 @@ public void rollDice_Mocked(int firstRoll, int secondRoll) {
 		<div id="contactInfo"></div>
 
 		<script>createContactInfo()</script>
+
+		<script>hljs.highlightAll();</script>
 	</body>
 </html>
