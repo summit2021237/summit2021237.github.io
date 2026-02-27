@@ -110,6 +110,13 @@ body {
 	gap: 1.6em;
 }
 
+.before-after-body-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1.6em;
+	justify-content: space-between;
+}
+
 .before-after {
 	display: flex;
 	flex-direction: row;
@@ -176,6 +183,10 @@ figure {
 
 .no-top-margin {
 	margin-top: 0;
+}
+
+.no-bottom-margin {
+	margin-bottom: 0;
 }
 
 .width-50 {
