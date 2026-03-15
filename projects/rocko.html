@@ -17,13 +17,158 @@
 		<script>createNav("Projects and Experience")</script>
 
 		<h1>ROCKO</h1>
-		<div class="image-with-text">
-			<p>ROCKO is an educational platform that my multidisciplinary capstone group developed. TODO: look at our documentation for intro</p>
-			<figure id="rockoIntroFigure">
-				<img src="../images/capstone.jpg">
-				<figcaption>ROCKO</figcaption>
-			</figure>
-		</div>
+		<p><i>An application of software requirements engineering, software architecture, calculus of variations, and writing documentation</i></p>
+		<figure class="margin-2em">
+			<img class="width-80" src="../images/capstone.jpg"></img>
+			<figcaption>ROCKO balancing at the Rose Show, where ROCKO was given the William A. Kline Innovation Award</figcaption>
+		</figure>
+		<p>ROCKO is an <b>educational, bipedal, wheeled robotics platform</b> designed to bridge the gap between introductory robotics education and graduate-level applications. It is intended <b>for hobbyists, students, and educators</b> and is <b>open-source</b> and <b>highly expandable</b> for applications like controls, automation, and vision.</p>
+
+		<h2>Goal</h2>
+		<p>This project was inspired by our primary stakeholder's experience with a mobile robotics course. The course content revolved around implementing a robotic system to autonomously navigate an environment with sensor integration. However, the stakeholder and their team struggled to implement features to the level they wanted because the provided robotics platform did not have high-accuracy sensor readings and had limited onboard computation power.</p>
+		<p>While researching existing robotics platforms, we found that there is <b>no commonly-used platform targeting "intermediate" level learners</b>. With ROCKO, we aim to provide a <b>reliable mechanical system</b> with <b>high-performance electrical hardware</b> and an <b>extensible, production-like software architecture</b> that is <b>capable of advanced robotics research</b> costing <b>less than $750</b>.</p>
+
+		<h2>Key Features</h2>
+		Some key features of the final product include:
+		<ol>
+			<li>Standing mode and tank mode</li>
+			<li>ros2_control PID controllers</li>
+			<li>Python integration</li>
+			<li>Detailed and understsandable documentation</li>
+		</ol>
+
+		<h2>System Overview</h2>
+		<p>ROCKO has two modes. It can operate as a balancing, wheeled biped robot and as a stable tank drive robot.</p>
+		<figure class="no-margin">
+			<div id="rockoModesGrid">
+				<p>Standing Mode</p>
+				<p>Tank Mode</p>
+				<img class="width-80" src="./rocko/images/standing_mode.png"></img>
+				<img class="width-80" src="./rocko/images/tank_mode.png"></img>
+			</div>
+			<figcaption>Standing mode and tank mode</figcaption>
+		</figure>
+		<p>ROCKO can be described in terms of mechanical, electrical, and software subsystems.</p>
+		<figure class="no-margin">
+			<img class="width-50" src="./rocko/images/subsystems.png"></img>
+			<figcaption>A high-level diagram of how the subsystems work together</figcaption>
+		</figure>
+
+		<h2>Requirements</h2>
+		<p>We started by applying what some of us had learned in Software Requirements Engineering to <b>elicit needs</b> from four stakeholder categories:</p>
+		<ul>
+			<li>benefactor</li>
+			<li>hobbyist</li>
+			<li>student</li>
+			<li>educator</li>
+		</ul>
+		<p>From the needs, we developed <b>features</b> and then <b>requirements</b>. Below is a list of our hardware and software requirements. See the linked pdfs for the <a href="./rocko/requirements/formal_needs_features_requirements.pdf" target="_blank">formal needs, features, and requirements</a> with mapping and <a href="./rocko/requirements/reasoning_and_results.pdf" target="_blank">reasoning and final results</a> for the requirements below.</p>
+		<details>
+			<summary>Requirements</summary>
+			<p>Hardware</p>
+			<ul>
+				<li>Robot stays intact and functioning when it falls over or is dropped from 8 inches high</li>
+				<li>Robot is under 25 pounds</li>
+				<li>Robot has encoders or potentiometers on each joint for closed-loop control</li>
+				<li>Center of mass is directly above wheels for balancing</li>
+				<li>Robot has a motor driving a wheel on the left and right side</li>
+				<li>Robot’s core functionality (driving and balancing) is assembled and wired</li>
+				<li>Total cost of the robot is $750</li>
+				<li>Robot will be no larger than 20 x 18 x 10 inches when extended</li>
+				<li>Robot has a battery that has enough current delivery capacity to run all motors and sensors simultaneously</li>
+				<li>Robot power supply can be disconnected when manually handled but will not disconnect during operation</li>
+				<li>Robot is capable of distributing power on 12V and 5V interfaces</li>
+				<li>Robot battery can supply idle operation for 2hr</li>
+			</ul>
+			<p>Software</p>
+			<ul>
+				<li>When the user substitutes a motor/sensor of matching spec during development time, the code shall work with the changed component with only minor changes needed to other nodes (this doesn’t include time to develop driver for motor/sensor)</li>
+				<li>When the user adds a motor/sensor during development time, the user shall be able to use that motor/sensor in other parts of the code within an hour (this doesn’t include software should be modular enough to time to develop a driver for motor/sensor)</li>
+				<li>When the user removes a motor/sensor during development time, the motor/sensor can be removed from the code with only nodes that used that motor/sensor requiring changes</li>
+				<li>When the user sets the robot up for the first time, the robot will be fully set up within two hours</li>
+				<li>When the user opens the development environment, the platform shall provide code to interact with the given motors and sensors.</li>
+				<li>When the user wants to modify the implementation of a motor/sensor, the rest of the code shall require little to no modifications to work with the new implementation</li>
+				<li>When the user starts learning to code the robot, the platform shall allow the user to learn the basics (any APIs, the programming language, the IDE) within a week</li>
+				<li>When the robot runs balancing code, the overall loop time (sensor value retrieval, calculations, and motor commands) shall take no longer than 20ms</li>
+				<li>When the user wants to develop code for the robot, the platform shall provide an IDE and programming language that can handle all robot functions</li>
+			</ul>
+			Miscellaneous
+			<ul>
+				<li>Produced documentation complies with web accessibility standards (WCAG 2)</li>
+				<li>Produced documentation is interpretable at a 9th grade reading level or below</li>
+			</ul>
+		</details>
+
+		<h2>Timeline</h2>
+		<p>Since this was for our senior capstone course, our advisors wanted all the teams to have a similar timeline.</p>
+		<p>We decided to create two robots: one alpha robot prototype and a final version. The table below describes some milestones and when we intend to reach them.</p>
+		<table class="center">
+			<tr>
+				<th>Milestone</th>
+				<th>Date</th>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin">Design review with benefactor<p>
+					<ul class="no-bottom-margin">
+						<li>Tentative sensor selection</li>
+						<li>Feature list</li>
+					</ul>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Midway through fall quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin">Alpha robot complete</p>
+					<ul class="no-bottom-margin">
+						<li>Driving wheels</li>
+						<li>Basic balancing capability</li>
+						<li>Ability to drive around</li>
+					</ul>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">End of fall quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Final robot done mechanically</p>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">End of winter quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Capstone report and final presentation complete</p>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Eighth week of spring quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin">Final robot complete</p>
+					<ul class="no-bottom-margin">
+						<li>Finished software</li>
+						<li>Fixed mechanical issues</li>
+					</ul>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">End of spring quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Documentation complete</p>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">End of spring quarter</p>
+				</td>
+			</tr>
+		</table>
 
 		<h2>Software Overview</h2>
 		<p>To make this a useful base for learning more robotics related skills, we spent most of the fall quarter on ROCKO's software architecture. We focused on <b>learnability</b> and <b>modifiability</b> so that users could get something working quickly and then add motors and sensors to explore more advanced topics in robotics. We decided to use <b>ROS2</b> and the <b>ros2_control</b> framework, letting users easily implement controllers and communicate with motors and sensors. ROS2 creates nodes, which communicate through topics that other nodes can subscribe to.</p>
@@ -34,7 +179,7 @@
 		</figure>
 
 		<h2>Controls</h2>
-		<p>While researching other self-balancing wheeled robots, we noticed that many of them implemented <b>LQR control</b>, and they used concepts that looked familiar from a Calculus of Variations course. Since ROCKO is a multidisciplinary capstone project and I am also a math major, we decided to implement LQR control. I did not have any <b>control theory</b> experience, so I spent a lot of the winter quarter learning control theory concepts, like TODO: find notes, and how to model an <b>inverted pendulum</b>.</p>
+		<p>Many of the self-balancing robots we researched implemented <b>LQR control</b>, and they used concepts that looked familiar from a Calculus of Variations course. Since ROCKO is a multidisciplinary capstone project and I am also a math major, we decided to implement LQR control. I did not have any <b>control theory</b> experience, so I spent a lot of the winter quarter learning control theory concepts, like TODO: find notes, and how to model an <b>inverted pendulum</b>.</p>
 		<p>However, we realized that we would need torque data from the motors if we wanted to use LQR control, and our motors that we could afford could not give us torque values. We then switched to using two <b>PID controllers</b>, for pitch and velocity, that many of my group members were already very familiar with.	TODO: image of inverted pendulum diagram</p>
 
 		<h2>Tank Mode</h2>

@@ -133,6 +133,10 @@ body {
 	width: 100%;
 }
 
+.image-with-text-text {
+	max-width: 70%;
+}
+
 #rockoIntroFigure {
 	width: 45%;
 }
@@ -172,6 +176,19 @@ body {
 
 .before-after-child {
 	width: 45%;
+}
+
+#rockoModesGrid {
+	align-items: center;
+	display: grid;
+	grid-template-columns: 35% 35%;
+	justify-content: space-around;
+	row-gap: 1em;
+}
+
+#rockoModesGrid img {
+	justify-self: center;
+	margin-bottom: 16px;
 }
 
 #contactInfo {
@@ -220,6 +237,18 @@ figure {
 	text-align: center;
 }
 
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	justify-content: top;
+	padding: 1em;
+	text-align: left;
+}
+
+td {
+	vertical-align: top;
+}
+
 .no-margin {
 	margin: 0;
 }
@@ -237,6 +266,10 @@ figure {
 	margin-right: 0;
 }
 
+.margin-2em {
+	margin: 2em;
+}
+
 .width-50 {
 	width: 50%;
 }
@@ -250,6 +283,8 @@ figure {
 }
 
 .center {
+	margin-left: auto;
+	margin-right: auto;
 	text-align: center;
 }
 

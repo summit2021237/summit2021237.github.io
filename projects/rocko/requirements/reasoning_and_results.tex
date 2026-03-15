@@ -1,0 +1,205 @@
+\documentclass{fank1basedocument}
+
+\usepackage[dvipsnames]{xcolor} % for colors
+\usepackage{array} % to not justify text in table
+
+\settitle{Reasoning and Final Results}
+
+\fancyhead[L]{ROCKO}
+\fancyhead[R]{2024-2025}
+
+\begin{document}
+
+This document contains our reasoning and final results for each requirement.\\
+
+{\large \textbf{Hardware 1}}\\
+Robot stays intact and functioning when it falls over or is dropped from 8 inches high
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} The robot is intended for use in classroom environments where accidents may occur and a robot may be knocked over. The particular height is derived from the height from the body to the floor when the robot’s legs are extended.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot survived fall intact multiple times with no discernable damage\\
+
+{\large \textbf{Hardware 2}}\\
+Robot is under 25 pounds
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} The robot is intended for use in classroom environments and as such, must be able to be lifted and moved by anyone.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot weighs 12.06 lbs\\
+
+{\large \textbf{Hardware 3}}\\
+Robot has encoders or potentiometers on each joint for closed-loop control
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} In order for balancing and precision navigation to be possible, encoders must be present so the user can determine physically how far the robot has moved in any direction.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot has an absolute encoder for each wheel\\
+
+{\large \textbf{Hardware 4}}\\
+Center of mass is directly above wheels for balancing
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} If the center of mass does not lie above the wheels in a standing configuration, the self-balancing control loop will not function.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} The robot’s adjustable battery position and addition of an offset in code allows for the shifting of the center of mass.\\
+
+{\large \textbf{Hardware 5}}\\
+Robot has a motor driving a wheel on the left and right side
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Separate motors on each side allow the robot to turn.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot has one motor per leg/wheel.\\
+
+{\large \textbf{Hardware 6}}\\
+Robot’s core functionality (driving and balancing) is assembled and wired
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Without complete wiring and assembly, robot status cannot be validated and software cannot be tested.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot fulfills expected functions at time of Rose Show\\
+
+{\large \textbf{Hardware 8}}\\
+Total cost of the robot is \$750
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} This was the target price point identified in discussion with stakeholders from each group.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Tabulated cost of robot is 744.79 USD. This includes all hardware, 3D printed parts, laser cut parts, and CoTS electronics parts.\\
+
+\pagebreak
+
+{\large \textbf{Hardware 9}}\\
+Robot will be no larger than 20 x 18 x 10 inches when extended
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} This is the size of the microwave in the BIC, identified by the primary stakeholder as being the target form-factor.\\
+\textbf{Status:} \color{BrickRed}Not Met\color{black}\\
+\textbf{Result:} Robot measures 19.5 x 17.25 x 10.75 inches, but the depth of the head was increased to accommodate for the sliding battery which was deemed more important than this requirement.\\
+
+{\large \textbf{Hardware 10}}\\
+Robot has a battery that has enough current delivery capacity to run all motors and sensors simultaneously
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} If the battery cannot accommodate all robot functions, robot objectives cannot be completed.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot is not experiencing undercurrent on devices\\
+
+{\large \textbf{Hardware 11}}\\
+Robot power supply can be disconnected when manually handled but will not disconnect during operation
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} If the robot is at risk of experiencing random or unplanned disconnection, dangerous situations may occur involving motors suddenly shutting off.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot uses Anderson Powerpole connectors for its primary battery- system connection, which cannot be disconnected as a result of impact or gravity during robot operation\\
+
+{\large \textbf{Hardware 12}}\\
+Robot is capable of distributing power on 12V and 5V interfaces
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} 12V and 5V are frequently-used voltage rails in hobbyist electronics contexts.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot possesses 12V, 5V, and 3.3V voltage rails\\
+
+{\large \textbf{Hardware 13}}\\
+Robot battery can supply idle operation for 2hr
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} New users can be expected to slowly work on projects in iteration and will not necessarily have highly optimized workflows. Therefore, the robot needs to be able to idle for an amount of time that allows a user to make changes.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Robot accommodated idle operation for $>$2.5 hrs\\
+
+{\large \textbf{Software 1}}\\
+When the user substitutes a motor/sensor of matching spec during development time, the code shall work with the changed component with only minor changes needed to other nodes (this doesn’t include time to develop driver for motor/sensor)
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Education and student stakeholders identified the lack of modularity of existing platforms as a barrier to their work and learning, respectively.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} To substitute a motor or sensor, the user needs to update the existing node for that motor or sensor, which may involve interfacing with new external libraries. The user does not need to make changes to existing nodes for ROCKO to work with this substituted motor or sensor.\\
+
+\pagebreak
+
+{\large \textbf{Software 2}}\\
+When the user adds a motor/sensor during development time, the user shall be able to use that motor/sensor in other parts of the code within an hour (this doesn’t include software should be modular enough to time to develop a driver for motor/sensor)
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} After a user develops a driver for the new motor or sensor, the user needs to integrate it into the system so that it can control ROCKO or give feedback to the controllers. Once they write the driver, the software should be modular enough to swap to using the new driver instead of the original driver or add it as a new input or output to a topic for a controller.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} To integrate a new motor or sensor after writing the hardware files, the user needs to change the CMake and ros2\_control.xacro files. This also assumes that the user is already familiar with how the code is structured. When we added the relative encoders, it took around 30 minutes to integrate the encoders.\\
+
+{\large \textbf{Software 3}}\\
+When the user removes a motor/sensor during development time, the motor/sensor can be removed from the code with only nodes that used that motor/sensor requiring changes
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} A user may need to remove a motor or sensor when substituting a motor or sensor or to make a simpler version of ROCKO. We want to ensure that specific motors and sensors are not hardcoded to the controllers so that components of the software can easily be removed.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} When a motor or sensor node is removed, any node that references it must be updated by the user, but no other nodes need to be modified for ROCKO to run.\\
+
+{\large \textbf{Software 4}}\\
+When the user sets the robot up for the first time, the robot will be fully set up within two hours
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Educators mentioned being frustrated with how long it took students to set up their robots. ROCKO should be able to be fully set up in a single class period, which is13 typically 2 hours for these courses at Rose- Hulman.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} A first-time installation in tandem with documentation took about 2 hours. An experienced installation in tandem with documentation took about 30 minutes.\\
+
+{\large \textbf{Software 5}}\\
+When the user opens the development environment, the platform shall provide code to interact with the given motors and sensors.
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Stakeholders wanted ROCKO to be accessible right out of the box for students of different disciplines and knowledge levels. Providing code to interface with all of ROCKO’s components helps students without significant experience focus on the controls system, ROCKO’s main educational aspect.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Code to interface with all the motors and sensors on ROCKO is available to users through our GitHub repo, which they clone to run ROCKO.\\
+
+{\large \textbf{Software 6}}\\
+When the user wants to modify the implementation of a motor/sensor, the rest of the code shall require little to no modifications to work with the new implementation
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Educators want a system that is modular and can be changed to fit the needs of their course. ROCKO should be modular enough to allow for modifications to a motor or sensor implementation without affecting the rest of the code.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Users can make changes to how a motor or sensor is implemented without needing to change any code the rest of the system.\\
+
+\pagebreak
+
+{\large \textbf{Software 7}}\\
+When the user starts learning to code the robot, the platform shall allow the user to learn the basics (any APIs, the programming language, the IDE) within a week
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Educators have had frustrations with other platforms requiring weeks of teaching for students to learn the basics.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Documentation and tutorials are provided to teach users how to set up ROCKO, how to add new motors and sensors, and how to run ROCKO in tank or balancing mode. This documentation can be read through in under a week.\\
+
+{\large \textbf{Software 8}}\\
+When the robot runs balancing code, the overall loop time (sensor value retrieval, calculations, and motor commands) shall take no longer than 20ms
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} The robot needs to be able to run in real- time to accommodate control loops. Code that takes a long time to run will result in low-accuracy balancing and therefore more falls.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} ROCKO’s loop time is 10ms.\\
+
+{\large \textbf{Software 9}}\\
+When the user wants to develop code for the robot, the platform shall provide an IDE and programming language that can handle all robot functions
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Educator stakeholders identified the lack of a pre-provided development platform as a point of friction for existing platforms.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} The ROCKO project provides documentation for setting up the VS Code platform in tandem with the ROCKO system.\\
+
+{\large \textbf{Miscellaneous 1}}\\
+Produced documentation complies with web accessibility standards (WCAG 2)
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} Educational tools cater by nature to diverse audiences. Therefore, documentation resources should be accessible with screen readers.\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Complete documentation complies with WCAG 2\\
+
+{\large \textbf{Miscellaneous 2}}\\
+Produced documentation is interpretable at a 9th grade reading level or below
+\hrule width \linewidth
+\vspace{2px}
+\textbf{Reasoning:} 9th grade encompasses the lowest age bracket of the project’s target audience\\
+\textbf{Status:} \color{ForestGreen}Success\color{black}\\
+\textbf{Result:} Complete documentation text complexity is rated at 8th grade level\\
+
+\end{document}
