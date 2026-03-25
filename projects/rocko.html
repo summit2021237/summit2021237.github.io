@@ -9,6 +9,7 @@
 
 		<script src="/home/fank1/Documents/website/website/scripts/jquery.min.js"></script>
 		<script src="/home/fank1/Documents/website/website/scripts/main.js"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
 
 		<title>Summit Fan</title>
 	</head>
@@ -171,19 +172,38 @@
 		</table>
 
 		<h2>Software Overview</h2>
-		<p>To make this a useful base for learning more robotics related skills, we spent most of the fall quarter on ROCKO's software architecture. We focused on <b>learnability</b> and <b>modifiability</b> so that users could get something working quickly and then add motors and sensors to explore more advanced topics in robotics. We decided to use <b>ROS2</b> and the <b>ros2_control</b> framework, letting users easily implement controllers and communicate with motors and sensors. ROS2 creates nodes, which communicate through topics that other nodes can subscribe to.</p>
-		<p>ROS2 can be used with either Python or C++, but ros2_control only supports C++. Since Python is generally easier for newer programmers, we developed a method for users to add Python ros2_control nodes. Then, users can choose between Python and C++.</p>
+		<p>We spent most of the fall quarter developing ROCKO's software architecture to make the platform a more useful base for learning robotics-related skills. We focused on <b>learnability</b> and <b>modifiability</b> so that users could get something working quickly and then add motors and sensors to explore more advanced topics in robotics. We decided to use <b>ROS2</b> and the <b>ros2_control</b> framework because it is used in industry and lets users easily implement controllers and communicate with motors and sensors.</p>
+		<p>The fundamental entities in ROS2 are <b>nodes</b> and <b>topics</b>. Each node contains logic, like reading values from sensors or determining a value to output, and the nodes communicate through topics, named interfaces for messages, by subscribing to or publishing to them.
+		<p>Some special nodes used in ros2_control are <b>hardware components</b> and <b>controllers</b>. ros2_control includes many built-in controllers, like a PID controller and a differential drive controller, making it easier for users to get started using ROS2, and users can also choose to write their own controllers. Each motor or sensor has a hardware component to read inputs or send outputs. Those components simplify the process of adding, removing, or modfying motors and sensors because only the hardware component and the topics it is publishing to or subscribed to would need to be modified.</p>
+		<p>ROS2 can be used with either Python or C++, but ros2_control only supports C++. Since Python is generally easier for newer programmers, we developed templates for users to add Python ros2_control nodes. Then, users can choose between Python and C++.</p>
+		<p>Tank mode only has the differential drive controller, giving ROCKO more processing power. That lets users run more complex logic in tank mode, like SLAM. It can also help the user make sure the motors are working correctly before trying standing mode.</p>
 		<figure class="no-side-margins">
 			<img src="./rocko/images/software_architecture.png" style="width: 100%">
-			<figcaption>ROCKO Software Architecture</figcaption>
+			<figcaption>ROCKO Software Diagram for Standing Mode</figcaption>
 		</figure>
 
 		<h2>Controls</h2>
-		<p>Many of the self-balancing robots we researched implemented <b>LQR control</b>, and they used concepts that looked familiar from a Calculus of Variations course. Since ROCKO is a multidisciplinary capstone project and I am also a math major, we decided to implement LQR control. I did not have any <b>control theory</b> experience, so I spent a lot of the winter quarter learning control theory concepts, like TODO: find notes, and how to model an <b>inverted pendulum</b>.</p>
-		<p>However, we realized that we would need torque data from the motors if we wanted to use LQR control, and our motors that we could afford could not give us torque values. We then switched to using two <b>PID controllers</b>, for pitch and velocity, that many of my group members were already very familiar with.	TODO: image of inverted pendulum diagram</p>
+		<p>Many of the self-balancing robots we researched implemented <b>linear-quadratic regulator (LQR) control</b>, and they used concepts that looked familiar from a calculus of variations course. Since ROCKO is a multidisciplinary capstone project and I am also a math major, we decided to implement LQR control. I did not have any <b>control theory</b> experience, so I spent a lot of the winter quarter learning control theory concepts, like state-space control and pole placement, and how to model an <b>inverted pendulum</b>.</p>
+		<p>However, we realized that we would need to control the motors' torque output if we wanted to use LQR control. But our motors were controlled by PWM, so we could not specify a torque to reach target position values. Torque control would require redoing the entire electrical system, changing motor and motor controller mounting, and purchasing new motors and controllers. We then switched to using two <b>proportional, integral, derivative (PID) controllers</b>, for pitch and velocity, that many of my group members were already very familiar with.	TODO: image of inverted pendulum diagram</p>
+
+		<h3>LQR Control</h3>
+		<p>In control theory, we often use state-space methods, where we design controllers for a system in state-space form. So, from a physical system, we input values from a measured state into the state feedback matrix, \(K\), and solve for the eigenvalues of \(K\) to determine the input to the physical system. LQR control determines the best eigenvalues based on a cost functional, which depends on motor characteristics and desired performance characteristics. We can optimize the cost functional using methods from calculus of variations.</p>
+
+		<h3>Mathematical Model</h3>
+		<p>We need a mathematical model of ROCKO to determine how to control it. We find equations of motion describing horizontal acceleration and rotational acceleration because ROCKO can be simplified as an inverted pendulum. We use the Euler-Lagrange method, which is based on energy, to derive the equations of motion.</p>
+		<h4>Lagrange Equation</h4>
+
+		<h3>PID Tuning</h3>
+		<p>We manually tuned the PID controllers' gain values in the following order:</p>
+		<ol>
+			<li>Pitch P component (recover after tipping)</li>
+			<li>Pitch D component (reduce oscillations when recovering)</li>
+			<li>Velocity P component (maintain a target velocity (0 if balancing))</li>
+			<li>Velocity I component (remain centered around starting location)</li>
+		</ol>
 
 		<h2>Tank Mode</h2>
-		<p>After we changed our controls method, which the other group members started working on, I created a tank mode for ROCKO. The tank mode is where the robot <b>does not balance</b>, allowing users to learn robotics concepts that require more computation power, because the robot does not need to balance. TODO: image of tank mode</p>
+		<p>After we changed our controls method, which the other group members started working on, I created a tank mode for ROCKO. The tank mode is where the robot <b>does not balance</b>, allowing users to learn robotics concepts that require more computation power, because the robot does not need to perform balancing calculations. TODO: image of tank mode</p>
 
 		<div id="contactInfo"></div>
 		<script>createContactInfo()</script>
