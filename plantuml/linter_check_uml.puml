@@ -1,0 +1,44 @@
+@startuml
+   package checks{
+        +interface Check {
+            +{abstract}run(classNode: MyClassNode): List<Message>
+        }
+
+        +class PrincipleOfLeastKnowledge {
+            -{static}{final}METHOD_OPCODES: Set<Integer>
+            -{final}instructionStack: Stack<MyAbstractInsnNode>
+            +run(classNode: MyClassNode): List<Message>
+            -checkMethod(myMethodNode: MyMethodNode): List<String>
+            -isConstructor(myAbstractInsnNode: MyAbstractInsnNode): boolean
+            -getInvalidReceiverNode(myAbstractInsnNode: MyAbstractInsnNode,
+            localVariableManager: LocalVariableManager): String
+            -removeMethodArgument(): void
+            -createMessagesForMethod(messageTexts: List<String>, className: String): List<Message>
+        }
+    }
+
+     +class Linter {
+        -{final}creator: MyClassNodeCreator
+        -{final}myClassNodes: List<MyClassNode>
+        -{final}checkTypeToCheck: Map<LintType, Check>
+        -{final}transformationTypeToTransformation: Map<LintType, Transformation>
+        -{final}diagramTypeToDiagram: Map<LintType, Diagram>
+        -{final}packageToMyClassNode: Map<String, List<MyASMClassNode>>
+        +Linter(classPaths: List<String>, myClassNodeCreator: MyClassNodeCreator,
+        outputPath: String, fileToPackage:Map<String, String>)
+        +runSelectedChecks(lintTypes: Set<LintType>): List<Message>
+        +runSelectedTransformations(transformations: Set<LintType>): List<Message>
+        +generateDiagrams(Set<LintType> diagrams):Map<StringBuilder,LintType>
+        -populateMaps(outputPath: String):void
+        -populateTransformMap(outputPath: String): void
+        -populateCheckMap(): void
+        -populateDiagramMap():void
+        -createClassNodes(classPaths: List<String>, fileToPackage:Map<String, String>): List<MyClassNode>
+        -runCheckOnAllNodes(lintType: LintType): List<Message>
+     }
+
+Linter --> "*"Check
+Linter ..> Check
+
+Check <|.. PrincipleOfLeastKnowledge
+@enduml
