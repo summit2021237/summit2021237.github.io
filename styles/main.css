@@ -79,6 +79,16 @@ body {
 	font-size: .85em;
 }
 
+#boneAppSummary {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5em;
+}
+
+#boneAppSummary h3 {
+	margin-top: 0;
+}
+
 .image-with-text {
 	align-items: flex-start;
 	display: flex;
