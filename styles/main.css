@@ -79,6 +79,20 @@ body {
 	font-size: .85em;
 }
 
+.project-experience-item-links {
+	display: flex;
+	flex-direction: row;
+	gap: .8em;
+}
+
+.project-link {
+	align-items: center;
+	display: flex;
+	flex-direction: row;
+	font-size: .8em;
+	gap: .3em;
+}
+
 #boneAppSummary {
 	display: flex;
 	flex-direction: column;
