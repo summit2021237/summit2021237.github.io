@@ -38,6 +38,15 @@ body {
 	font-weight: 700;
 }
 
+.about-text-and-image-container {
+	display: flex;
+	flex-direction: row;
+}
+
+.about-text-and-image-container img {
+	width: 100%;
+}
+
 .summary-container {
 	align-items: flex-start;
 	display: flex;
@@ -65,7 +74,7 @@ body {
 	max-width: 30%;
 	min-width: 30%;
 	object-fit: contain;
-	object-position: top;
+	object-position: center;
 }
 
 .project-experience-item h2 {
@@ -230,6 +239,14 @@ figure {
 
 .no-bottom-margin {
 	margin-bottom: 0;
+}
+
+.no-left-margin {
+	margin-left: 0;
+}
+
+.no-right-margin {
+	margin-right: 0;
 }
 
 .width-50 {
