@@ -1,0 +1,66 @@
+\documentclass{fank1basedocument}
+
+\usepackage{amssymb}
+\usepackage[shortlabels]{enumitem}
+
+\settitle{Definitions}
+
+\fancyhead[L]{MA490-01}
+\fancyhead[R]{Winter 2024-2025}
+
+\begin{document}
+
+{\large\textbf{$\mathbb{A}$ and $S$}}\\
+By $\mathbb{A}$, we denote the set of alphabet symbols listed in (a) through (e). By $S$, we denote the set of alphabet symbols listed in (f).
+
+\vspace{1em}
+
+{\large\textbf{Alphabet}}\\
+The \textit{alphabet of a first-order language} contains the following symbols:
+\begin{enumerate}[(a)]
+	\item $v_0,v_1,v_2,\dots$ (\textit{variables});
+	\item $\lnot,\land,\lor,\rightarrow,\leftrightarrow$ (\textit{not}, \textit{and}, \textit{or}, \textit{if-then}, \textit{if and only if});
+	\item $\forall,\exists$ (\textit{for all, there exists});
+	\item $\equiv$ (\textit{equality symbol});
+	\item $),($ (\textit{parentheses});
+	\item
+		\begin{enumerate}[1.]
+			\item for every $n\geq 1$ a (possibly empty) set of \textit{$n$-ary relation symbols},
+			\item for every $n\geq 1$ a (possibly empty) set of \textit{$n$-ary function symbols},
+			\item a (possibly empty) set of \textit{constants}.
+		\end{enumerate}
+\end{enumerate}
+
+\vspace{1em}
+
+{\large\textbf{$S$-Formula (First-Order Formula)}}\\
+A \textit{first order $S$-formula} is a string of $\mathbb{A}_S*$ which can be obtained by fintely many applications of the following rules:
+\begin{enumerate}[label={(F\arabic*)}]
+	\item If $t_1$ and $t_2$ are $S$-terms, then $t_1\equiv t_2$ is an $S$-formula.
+	\item If $t_1,\dots,t_n$ are $S$-terms and $R$ is an $n$-ary relation symbol in $S$, then $Rt_1\dots t_n$ is an $S$-formula.
+	\item If $\varphi$ is an $S$-formula, then $\lnot\varphi$ is an $S$-formula.
+	\item If $\varphi$ and $\psi$ are $S$-formulas, then $(\varphi\land\psi)$, $(\varphi\lor\psi)$, $(\varphi\rightarrow\psi)$, and $(\varphi\leftrightarrow\psi)$ are $S$-formulas.
+	\item If $\varphi$ is an $S$-formula and $x$ is a variable, then $\forall x\varphi$ and $\exists x\varphi$ are $S$-formulas.
+\end{enumerate}
+
+\vspace{1em}
+
+{\large\textbf{$S$-Sentence}}\\
+An \textit{$S$-sentence} is an $S$-formula without free variables.
+
+\vspace{1em}
+
+{\large\textbf{$S$-Term}}\\
+An \textit{$S$-term} is a string in $\mathbb{A}_S*$ which can be obtained by finitely many applications of the following rules:
+\begin{enumerate}[label={(T\arabic*)}]
+	\item Every variable is an $S$-term.
+	\item Every constant in $S$ is an $S$-term.
+	\item If the strings $t_1,\dots,t_n$ are $S$-terms and $f$ is an $n$-ary function symbol in $S$, then $ft_1\dots t_n$ is an $S$-term.
+\end{enumerate}
+
+\vspace{1em}
+
+{\large\textbf{Spectrum}}\\
+A set $M$ of natural numbers is called a \textit{spectrum} if there is a symbol set $S$ and an $S$-sentence $\varphi$ such that
+\[M=\{n\in \mathbb{N}\mid\varphi\text{ has a model containing exactly $n$ elements}\}.\]
+\end{document}
