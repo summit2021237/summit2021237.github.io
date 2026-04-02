@@ -63,6 +63,7 @@ body {
 .project-experience-item img {
 	align-items: flex-start;
 	max-width: 30%;
+	min-width: 30%;
 	object-fit: contain;
 	object-position: center;
 }
@@ -77,6 +78,48 @@ body {
 
 .languages-frameworks-tools {
 	font-size: .85em;
+}
+
+.project-experience-item-links {
+	display: flex;
+	flex-direction: row;
+	gap: .8em;
+}
+
+.project-link {
+	align-items: center;
+	display: flex;
+	flex-direction: row;
+	font-size: .8em;
+	gap: .3em;
+}
+
+#ma491Links {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-template-rows: repeat(3, min-content);
+	row-gap: .36em;
+}
+
+#ma491Links p {
+	font-size: .9em;
+	margin-bottom: 0;
+	margin-top: 0;
+	white-space: nowrap;
+}
+
+#ma491Links a {
+	white-space: nowrap;
+}
+
+#boneAppSummary {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5em;
+}
+
+#boneAppSummary h3 {
+	margin-top: 0;
 }
 
 .image-with-text {
