@@ -27,7 +27,7 @@
 					</blockquote>
 				</div>
 				<figure>
-					<img src="./get_attacked_by_a_bear/images/feeding_wildlife.png"></img>
+					<img src="../images/feeding_wildlife.png"></img>
 					<figcaption>An example of a law to prevent bear attacks from Mt. Seymour in Canada</figcaption>
 				</figure>
 			</div>
@@ -35,7 +35,7 @@
 			<h2>Software Architecture</h2>
 			<p>The diagram describes the software architecture. Each of the MongoDB nodes are run on different virtual machines, and the two InfluxDB nodes are run on separate virtual machines.</p>
 			<figure class="no-margin">
-				<img class="width-100" src="./get_attacked_by_a_bear/images/get_attacked_by_a_bear_plantuml.png"></img>
+				<img class="width-100" src="../images/get_attacked_by_a_bear_plantuml.png"></img>
 				<figcaption>Get Attacked By a Bear software architecture</figcaption>
 			</figure>
 			<h2>Features</h2>
@@ -73,7 +73,7 @@
 					<h3>MongoDB</h3>
 					<p class="no-top-margin">We track locations, encounters, and reviews of encounters, which all have many attributes. So it made since to use a system like MongoDB, which is <b>document-based</b>, and the ID of a document of one type can be a field in a document of another type, letting us simplify how locations are stored. The Encounter documents have a list of Reviews and reference a location ID, and the Location documents have a field containing encounter IDs of all the encounters that have occurred in that location.</p>
 					<figure class="no-margin">
-						<img class="width-100" src="./get_attacked_by_a_bear/images/mongodb_diagram.png"></img>
+						<img class="width-100" src="../images/mongodb_diagram.png"></img>
 						<figcaption>MongoDB Diagram</figcaption>
 					</figure>
 				</div>
@@ -81,7 +81,7 @@
 					<h3>Neo4j</h3>
 					<p class="no-top-margin">Since we recommend locations with high bear attack frequencies, we use Neo4j. The <b>graph</b> database would also make it easier to add other methods for recommending locations in the future. Neo4j tracks the population densities of species in various locations, as well as encounters.</p>
 					<figure class="no-margin">
-						<img class="width-100" src="./get_attacked_by_a_bear/images/neo4j_diagram.png"></img>
+						<img class="width-100" src="../images/neo4j_diagram.png"></img>
 						<figcaption>Neo4j Diagram</figcaption>
 					</figure>
 				</div>
@@ -89,7 +89,7 @@
 					<h3>InfluxDB</h3>
 					<p class="no-top-margin">We wanted to track encounters over time to determine the best times to try to get attacked by a bear. InfluxDB is a <b>time-series</b> database that stores measurements, a collection of points associating a values with times, and it has tags to add more information about the values stored. InfluxDB tracks the number of encounters for dates with tags providing more details on the encounters.</p>
 					<figure class="no-margin">
-						<img class="width-100" src="./get_attacked_by_a_bear/images/influxdb_diagram.png"></img>
+						<img class="width-100" src="../images/influxdb_diagram.png"></img>
 						<figcaption>InfluxDB Diagram</figcaption>
 					</figure>
 				</div>
