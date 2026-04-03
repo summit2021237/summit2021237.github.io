@@ -137,6 +137,31 @@ body {
 	width: 100%;
 }
 
+.api-table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.api-table table, th, td {
+	border: 1px solid;
+}
+
+.api-table th, td {
+	padding: 6px;
+}
+
+.api-table th {
+	text-align: left;
+}
+
+.api-table td {
+	vertical-align: top;
+}
+
+.api-table p {
+	margin: 0;
+}
+
 #polyglotPersistenceDiagrams {
 	display: flex;
 	flex-direction: row;
@@ -234,6 +259,10 @@ figure {
 
 .width-50 {
 	width: 50%;
+}
+
+.width-70 {
+	width: 70%;
 }
 
 .width-80 {

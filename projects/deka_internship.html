@@ -38,13 +38,13 @@
 			<h2>Metrics Forwarding Library</h2>
 			<p>The metrics forwarding library sends Go runtime and custom metrics from a service to a UDP port using the StatsD format.</p>
 			<h3>Existing Implementations</h3>
-			<p>There were two services that forwarded metrics to <a href="#telegraf">Telegraf</a>, an agent that collects, processes, aggregates, and writes metrics using a variety of plugins, which then outputted the metrics to an <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a> instance. Those services implemented the collection and forwarding logic differently, and the team was in the process of developing more Go services. So they wanted to pull the metrics collecting and forwarding logic into a separate Go library that could be used by the Go services.</p>
+			<p>There were two services that forwarded metrics to <a href="#telegraf">Telegraf</a>, an agent that collects, processes, aggregates, and writes metrics using a variety of plugins, which then outputted the metrics to an <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a> instance. Those services implemented the collection and forwarding logic differently, and the team was in the process of developing more Go services. So, they wanted to pull the metrics collecting and forwarding logic into a separate Go library that could be used by the Go services.</p>
+			<p>Some examples of metrics are number of goroutines, CPU and memory for Kubernetes pods, and API endpoint response times.</p>
 			<p>To design and develop the metrics library, I needed to analyze the current implementations to identify their features and understand how they worked. Some key features of the two implementations are</p>
 			<ul>
 				<li>Collect Go runtime metrics at a specified time interval</li>
-				<li>Store the metrics and then push batches of metrics to Telegraf</li>
+				<li>Cache the metrics and then push batches of metrics to Telegraf</li>
 				<li>Collect custom metrics, like request response times</li>
-				<li></li>
 			</ul>
 			<p>In terms of design, both implementations had interfaces for a sink to collect metrics and a pusher to forward metrics.</p>
 			<h3 id="telegraf">Telegraf</h3>
@@ -57,9 +57,83 @@
 			</div>
 			<p>The metrics library does not setup a Telegraf instance. Instead, the Go services do, allowing for more flexibility in how the metrics library is used. The metrics library only takes in a UDP port to forward to, and the services can configure the metrics library to use Telegraf's UDP port.</p>
 			<h3>Design</h3>
-			<h3>Custom Metrics</h3>
-			<h3>Go Runtime Metrics</h3>
-			- like go routines?
+			<p>The metrics library combines parts of both implementations. There is a <code>globals.go</code> file, which contains references to the sink and pusher to use. There are also <code>pusher.go</code> and <code>sink.go</code> files containing <code>Sink</code> and <code>Pusher</code> interface definitions and implementations and some collection-related functions.</p>
+			<h4>API</h4>
+			<p class="no-bottom-margin"><code>sink.go</code></p>
+			<table class="api-table">
+				<colgroup>
+					<col>
+					<col class="width-70">
+				</colgroup>
+				<tr>
+					<th>Method/Function</th>
+					<th>Description</th>
+				</tr>
+				<tr>
+					<td>
+						<p class="no-bottom-margin"><code>Sink</code> Interface</p>
+						<ul class="no-top-margin no-bottom-margin">
+							<li><code>AddCounter</code></li>
+							<li><code>AddTimer</code></li>
+							<li><code>AddGauge</code></li>
+							<li><code>AddSet</code></li>
+							<li><code>AddMetric</code></li>
+							<li><code>AddFunctionToCollectWithInterval</code></li>
+						</ul>
+					</td>
+					<td>
+						Add one of the main StatsD metric type, a custom metric, or a function to call at a time interval to collect metrics
+					</td>
+				</tr>
+				<tr>
+					<td><code>New&lt;SinkImplementation&gt;</code></td>
+					<td>Creates a new <code>SinkImplementation</code> (currently only <code>MetricsSink</code> is implemented)
+					</td>
+				</tr>
+				<tr>
+					<td><code>ConfigureGoMetricsCollection</code></td>
+					<td>Select which Go metrics to collect</td>
+				</tr>
+				<tr>
+					<td><code>StartCollection</code></td>
+					<td>Set the sink, pusher, StatsD flavor, and start interval collection</td>
+				</tr>
+				<tr>
+					<td><code>GetDefaultSink</code></td>
+					<td>Returns the noop sink</td>
+				</tr>
+			</table>
+			<p class="no-bottom-margin"><code>pusher.go</code></p>
+			<table class="api-table">
+				<colgroup>
+					<col>
+					<col class="width-70">
+				</colgroup>
+				<tr>
+					<th>Method/Function</th>
+					<th>Description</th>
+				</tr>
+				<tr>
+					<td>
+						<p><code>Pusher</code> Interface</p>
+					</td>
+					<td>
+						The user should not need to call pusher methods, but the pushers implement a method to push metrics
+					</td>
+				</tr>
+				<tr>
+					<td><code>New&lt;PusherImplementation&gt;</code></td>
+					<td>Creates a new <code>PusherImplementation</code> (currently only <code>UDPNoCachingPusher</code> is implemented)
+					</td>
+				</tr>
+				<tr>
+					<td><code>GetDefaultPusher</code></td>
+					<td>Returns the noop pusher</td>
+				</tr>
+			</table>
+			<h3>Testing and Debugging</h3>
+			<p>When implementing the design, I used test-driven development to avoid adding extra code and ensure that everything was working correctly. I also mocked Go objects. My only previous mocking experience was with EasyMock, and the Go mocking packages seemed complex. So, I made simpler mocks that tested arguments and return values.</p>
+			<p>I had many opportunities to apply what I learned in a debugging course, and those debugging strategies seemed to make me faster at debugging. Some of the most valuable strategies I used were writing down what I tried during the debugging process and the results to remember what I had tried and splitting up the system and testing smaller parts to narrow down the area with the defect.</p>
 			<h2>Analytics Indexer</h2>
 			<h3>AWS Services</h3>
 			<h3>Indexing Analytics</h3>
