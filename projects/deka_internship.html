@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/home/fank1/Documents/website/website/styles/main.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+		<script src="/home/fank1/Documents/website/website/scripts/jquery.min.js"></script>
+		<script src="/home/fank1/Documents/website/website/scripts/main.js"></script>
+
+		<title>Summit Fan</title>
+	</head>
+	<body>
+		<div id="navBar" class="top-bar-container"></div>
+		<script>createNav("Projects and Experience")</script>
+		
+		<div>
+			<h1>DEKA Internship</h1>
+			<p>This was my first time working on a team of software engineers to add features to an existing code base that would be used by many people. Throughout the summer, I improved at <b>communicating</b> with coworkers and <b>researching</b> topics that I was not familiar with. I also had many opportunities to apply what I had learned in Software Design, Debugging, Software Quality Assurance, and Software Requirements Engineering.</p>
+			<p>This internship also exposed me to many new languages, tools, and skills, such as</p>
+			<ul>
+				<li>Understanding <b>cloud software engineering</b> and <b>containerization</b> at a high level</li>
+				<li>Working on a <b>platform as a service</b> with a <b>microservice architecture</b></li>
+				<li>Participating in daily <b>standups</b> and using <b>Jira</b></li>
+				<li>Planning and writing <b>documentation</b> for how other people may use the software I wrote</li>
+				<li>Writing design documentation in <b>Confluence</b>, sharing it with coworkers, and improving it based on questions and feedback</li>
+				<li>Programming in <b>Go</b></li>
+				<li>Using <b>AWS</b>, specifically SQS and SNS</li>
+				<li>Implementing and using more complex <b>build</b> and <b>deployment</b> strategies</li>
+			</ul>
+			I worked on two projects over the summer:
+			<ol>
+				<li>A Go library that forwards metrics</li>
+				<li>A Go service that indexes analytics</li>
+			</ol>
+			<h2>Metrics Forwarding Library</h2>
+			<p>The metrics forwarding library sends Go runtime and custom metrics from a service to a UDP port using the StatsD format.</p>
+			<h3>Existing Implementations</h3>
+			<p>There were two services that forwarded metrics to <a href="#telegraf">Telegraf</a>, an agent that collects, processes, aggregates, and writes metrics using a variety of plugins, which then outputted the metrics to an <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a> instance. Those services implemented the collection and forwarding logic differently, and the team was in the process of developing more Go services. So they wanted to pull the metrics collecting and forwarding logic into a separate Go library that could be used by the Go services.</p>
+			<p>To design and develop the metrics library, I needed to analyze the current implementations to identify their features and understand how they worked. Some key features of the two implementations are</p>
+			<ul>
+				<li>Collect Go runtime metrics at a specified time interval</li>
+				<li>Store the metrics and then push batches of metrics to Telegraf</li>
+				<li>Collect custom metrics, like request response times</li>
+				<li></li>
+			</ul>
+			<p>In terms of design, both implementations had interfaces for a sink to collect metrics and a pusher to forward metrics.</p>
+			<h3 id="telegraf">Telegraf</h3>
+			<div class="image-with-text">
+				<figure class="width-100">
+					<img src="./deka/images/metrics_forwarding_with_telegraf.svg"></img>
+					<figcaption>An example of data flow using Telegraf and InfluxDB</figcaption>
+				</figure>
+				<p class="no-top-margin">We use <a href="https://www.influxdata.com/time-series-platform/telegraf/" target="_blank">Telegraf</a> to move metrics from our Go services to an InfluxDB instance. We start a Telegraf instance that we can access through a UDP port, and we configure it to output metrics to InfluxDB, which we pull timeseries data from for a few Grafana dashboards.</p>
+			</div>
+			<p>The metrics library does not setup a Telegraf instance. Instead, the Go services do, allowing for more flexibility in how the metrics library is used. The metrics library only takes in a UDP port to forward to, and the services can configure the metrics library to use Telegraf's UDP port.</p>
+			<h3>Design</h3>
+			<h3>Custom Metrics</h3>
+			<h3>Go Runtime Metrics</h3>
+			- like go routines?
+			<h2>Analytics Indexer</h2>
+			<h3>AWS Services</h3>
+			<h3>Indexing Analytics</h3>
+		</div>
+
+		<div id="contactInfo"></div>
+
+		<script>createContactInfo()</script>
+	</body>
+</html>
