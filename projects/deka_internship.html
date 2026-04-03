@@ -134,9 +134,28 @@
 			<h3>Testing and Debugging</h3>
 			<p>When implementing the design, I used test-driven development to avoid adding extra code and ensure that everything was working correctly. I also mocked Go objects. My only previous mocking experience was with EasyMock, and the Go mocking packages seemed complex. So, I made simpler mocks that tested arguments and return values.</p>
 			<p>I had many opportunities to apply what I learned in a debugging course, and those debugging strategies seemed to make me faster at debugging. Some of the most valuable strategies I used were writing down what I tried during the debugging process and the results to remember what I had tried and splitting up the system and testing smaller parts to narrow down the area with the defect.</p>
+
 			<h2>Analytics Indexer</h2>
-			<h3>AWS Services</h3>
-			<h3>Indexing Analytics</h3>
+			<p>During the last two weeks of the internship, I started working on a Go service that indexes analytics. The team was working on changing some of their Java monoliths to Go services, and they had a Java analytics forwarder that had a few distinct features. One of those features was an analytics indexer.</p>
+			<p>This project was much more complicated than the metrics library and had a lot of code that I needed to understand to figure out where to separate the indexer from the rest of the forwarder. After lots of code tracing, I found that the analytics forwarder starts threads to pull messages from an AWS SQS queue and process the message and forward the message to OpenSearch, an indexer, if forwarding is enabled.</p>
+			<p>Then, in the Go service, the following steps would forward the messages:</p>
+			<ol>
+				<li>Create an SQS queue</li>
+				<li>Subscribe to an SNS topic</li>
+				<li>Create a worker pool of goroutines</li>
+				<li>Workers repeatedly pull messages, and for each message,</li>
+				<ol type="a">
+					<li>Process the message (decode JSON and parse)</li>
+					<li>Forward the analytics to the indexer</li>
+					<li>Delete the message from the queue</li>
+				</ol>
+			</ol>
+			<p>Deploying a Go service is more complex since we need to run the service in a container instead of calling functions from a library. I spent some time looking through the deployment files in other Go services to learn how to deploy the analytics indexer. There were many Docker, Helm, and Terraform files that I started learning about but ran out of time during the internship.</p>
+
+			<h2>Conclusion</h2>
+			<p>This internship was extremely valuable because it helped me get better at asking questions to understand someone's design decisions or when I am confused. I also learned a lot about design documentation. At Rose-Hulman, we only really covered UML class diagrams, use case diagrams, and sequence diagrams, and our documentation was mainly meant for end users, not developers.</p>
+			<p>The people at DEKA were great at answering questions and explaining concepts to interns. They also provided detailed feedback in merge requests to help us consider alternative implementations and ensure the code is up to the team's standards.</p>
+			<p>The internship complemented my coursework well by letting me apply what I had learned, exposing me to material I learned that next school year, and letting me figure out how I could improve before having a full-time software engineering job.</p>
 		</div>
 
 		<div id="contactInfo"></div>
