@@ -222,6 +222,44 @@
 		F&=(m_w+m_{hl})\ddot{x}(t)-d_{hl}m_{hl}\left(\dot{\theta}(t)^2\sin\left(\theta(t)\right)-\cos\left(\theta(t)\right)\ddot{\theta}(t)\right)\\
 		\tau&=\left(d_{hl}^2m_{hl}+I_{hl}\right)\ddot{\theta}(t)-d_{hl}m_{hl}\left(g\sin\left(\theta(t)\right)-\cos\left(\theta(t)\right)\ddot{x}(t)\right)\text{.}
 		\end{aligned}\]
+		<h4>Uncoupling Equations</h4>
+		Next, we uncouple the two equations. Introducing state variables, let \(x_1=x\), \(x_2=\theta\), \(x_3=\dot{x}\), and \(x_4=\dot{\theta}\). Then, substituting state variables and expanding, we get
+		\[\begin{aligned}
+		F&=(m_{hl}+m_w)\dot{x}_3+\cos(x_2)d_{hl}m_{hl}\dot{x}_4-x_4^2\sin(x_2)d_{hl}m_{hl}\\
+		\tau&=\cos(x_2)d_{hl}m_{hl}\dot{x}_3+(d_{hl}^2m_{hl}+I_{hl})\dot{x}_4-gm_{hl}d_{hl}\sin(x_2)
+		\end{aligned}\]
+		Let
+		\[\begin{aligned}
+		a&=m_w+m_{hl}\text{,}\\
+		b&=\cos(x_2)d_{hl}m_{hl}\text{,}\\
+		c&=x_4^2\sin(x_2)d_{hl}m_{hl}\text{,}\\
+		d&=\cos(x_2)d_{hl}m_{hl}\text{,}\\
+		e&=d_{hl}^2m_{hl}+I_{hl}\text{, and}\\
+		f&=d_{hl}gm_{hl}\sin(x_2)\text{.}
+		\end{aligned}\]
+		Let \(u\) be the force acting on the wheel from the motor. Also, we assume that there is no external force rotating the robot. So, \(F=u\) and \(\tau=0\). Then, since \(\dot{x_1}=x_3\) and \(\dot{x_2}=x_4\), we have
+		\[\begin{bmatrix}
+			1 & 0 & 0 & 0\\
+			0 & 1 & 0 & 0\\
+			0 & 0 & a & b\\
+			0 & 0 & d & e
+		\end{bmatrix}\begin{bmatrix}
+			\dot{x}_1\\ \dot{x}_2\\ \dot{x}_3\\ \dot{x}_4
+		\end{bmatrix}=\begin{bmatrix}
+			x_3\\ x_4\\ u+c\\ f
+		\end{bmatrix}\text{.}\]
+		Then,
+		\[\begin{bmatrix}
+			\dot{x}_1\\ \dot{x}_2\\ \dot{x}_3\\ \dot{x}_4
+		\end{bmatrix}=\begin{bmatrix}
+			1 & 0 & 0 & 0\\
+			0 & 1 & 0 & 0\\
+			0 & 0 & a & b\\
+			0 & 0 & d & e
+		\end{bmatrix}^{-1}\begin{bmatrix}
+			x_3\\ x_4\\ u+c\\ f
+		\end{bmatrix}\text{.}\]
+		We then solve for \(\ddot{x}_3\) and \(\ddot{x}_4\) to find the equations of motion. We can also linearize the equations by using a first-order Taylor Series approximation about one of the equilibrium points.
 
 		<h3>PID Tuning</h3>
 		<p>We manually tuned the PID controllers' gain values in the following order:</p>
