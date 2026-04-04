@@ -262,7 +262,7 @@
 		We then solve for \(\ddot{x}_3\) and \(\ddot{x}_4\) to find the equations of motion. We can also linearize the equations by using a first-order Taylor Series approximation about one of the equilibrium points.
 
 		<h3>PID Tuning</h3>
-		<p>We manually tuned the PID controllers' gain values in the following order:</p>
+		<p>ROCKO uses two PID controllers: a pitch controller and a velocity controller. Those controllers are sufficient for letting ROCKO balance and drive around. We manually tuned the PID controllers' gain values in the following order:</p>
 		<ol>
 			<li>Pitch P component (recover after tipping)</li>
 			<li>Pitch D component (reduce oscillations when recovering)</li>
