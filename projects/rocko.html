@@ -178,7 +178,7 @@
 		<p>ROS2 can be used with either Python or C++, but ros2_control only supports C++. Since Python is generally easier for newer programmers, we developed templates for users to add Python ros2_control nodes. Then, users can choose between Python and C++.</p>
 		<p>Tank mode only has the differential drive controller, giving ROCKO more processing power. That lets users run more complex logic in tank mode, like SLAM. It can also help the user make sure the motors are working correctly before trying standing mode.</p>
 		<figure class="no-side-margins">
-			<img src="./rocko/images/software_architecture.png" style="width: 100%">
+			<img class="width-100" src="./rocko/images/software_architecture.png">
 			<figcaption>ROCKO Software Diagram for Standing Mode</figcaption>
 		</figure>
 
@@ -190,8 +190,38 @@
 		<p>In control theory, we often use state-space methods, where we design controllers for a system in state-space form. So, from a physical system, we input values from a measured state into the state feedback matrix, \(K\), and solve for the eigenvalues of \(K\) to determine the input to the physical system. LQR control determines the best eigenvalues based on a cost functional, which depends on motor characteristics and desired performance characteristics. We can optimize the cost functional using methods from calculus of variations.</p>
 
 		<h3>Mathematical Model</h3>
-		<p>We need a mathematical model of ROCKO to determine how to control it. We find equations of motion describing horizontal acceleration and rotational acceleration because ROCKO can be simplified as an inverted pendulum. We use the Euler-Lagrange method, which is based on energy, to derive the equations of motion.</p>
-		<h4>Lagrange Equation</h4>
+		<p>We need a mathematical model of ROCKO to determine how to control it. We find equations of motion describing horizontal acceleration and rotational acceleration because ROCKO can be simplified as an inverted pendulum, with the head and legs being a point mass. We use the Euler-Lagrange method, which is based on energy, to derive the equations of motion.</p>
+		<figure class="center width-50">
+			<img class="width-100" src="./rocko/images/equations_of_motion_diagram.png">
+			<figcaption>Variables used in the equations of motion, with \(w\), \(l\), and \(h\) describing the wheels, legs, and head, respectively</figcaption>
+		</figure>
+		<h4>Nonlinear Equations of Motion</h4>
+		<p>These first steps give us nonlinear, coupled equations of motion.</p>
+		<h5>Lagrangian</h5>
+		<p>First, we find the kinetic and potential energy of the system. Let \(x\) be ROCKO's distance from the starting point and \(\theta\) be the angle of the head from vertical. Then, the velocity of the wheels is</p>
+		\[\vec{v}_w=\langle \dot{x},0\rangle\text{,}\]
+		<p>the velocity of the head and legs is</p>
+		\[\vec{v}_{hl}=\langle \dot{x}+\dot{\theta}d_{hl}\cos(\theta),-\dot{\theta}d_{hl}\sin(\theta)\rangle\text{,}\]
+		<p>and the rotational velocity of the head and legs is</p>
+		\[\dot{\theta}_{hl}=\dot{\theta}\text{.}\]
+		<p>Then, we have the kinetic energy</p>
+		\[T=\frac{1}{2}m_{hl}\lvert\vec{v}_{hl}\rvert^2+\frac{1}{2}m_w\lvert\vec{v}_w\rvert^2+\frac{1}{2}I_{hl}\dot{\theta}_{hl}^2\text{.}\]
+		<p>The height of the mass for the head and legs is</p>
+		\[h_{hl}=d_{hl}\cos(\theta)\text{.}\]
+		<p>Then, we have the potential energy</p>
+		\[V=gm_{hl}h_{hl}\text{.}\]
+		<p>The Lagrangian is the difference between the kinetic and potential energies, so we have</p>
+		\[L=T-V\text{.}\]
+		<h5>\(x\) and  \(\theta\) Equations</h5>
+		<p>By Hamilton's Principle, we know that local extrema of</p>
+		\[J(\vec{q})=\int_{t_0}^{t_1}L(t,\vec{q}(t),\dot{\vec{q}}(t))dt\text{,}\]
+		<p>with \(\vec{q}=\langle x, \theta\rangle\), satisfy the Euler-Lagrange equations. We use the Euler-Lagrange equations</p>
+		\[\frac{\partial L}{\partial x}-\frac{d}{dt}\frac{\partial L}{\partial \dot{x}}=F\text{ and }\frac{\partial L}{\partial \theta}-\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta}}=\tau\text{,}\]
+		<p>with \(F\) and \(\tau\) being the input force and torque, respectively. Then, we have the coupled equations</p>
+		\[\begin{aligned}
+		F&=(m_w+m_{hl})\ddot{x}(t)-d_{hl}m_{hl}\left(\dot{\theta}(t)^2\sin\left(\theta(t)\right)-\cos\left(\theta(t)\right)\ddot{\theta}(t)\right)\\
+		\tau&=\left(d_{hl}^2m_{hl}+I_{hl}\right)\ddot{\theta}(t)-d_{hl}m_{hl}\left(g\sin\left(\theta(t)\right)-\cos\left(\theta(t)\right)\ddot{x}(t)\right)\text{.}
+		\end{aligned}\]
 
 		<h3>PID Tuning</h3>
 		<p>We manually tuned the PID controllers' gain values in the following order:</p>
@@ -203,7 +233,7 @@
 		</ol>
 
 		<h2>Tank Mode</h2>
-		<p>After we changed our controls method, which the other group members started working on, I created a tank mode for ROCKO. The tank mode is where the robot <b>does not balance</b>, allowing users to learn robotics concepts that require more computation power, because the robot does not need to perform balancing calculations. TODO: image of tank mode</p>
+		<p>After we changed our controls method, which the other group members started working on, I created a tank mode for ROCKO. The tank mode is where the robot <b>does not balance</b>, allowing users to learn robotics concepts that require <b>more computation power</b>, because the robot does not need to perform balancing calculations. TODO: image of tank mode</p>
 
 		<div id="contactInfo"></div>
 		<script>createContactInfo()</script>
