@@ -18,11 +18,37 @@
 		
 		<div>
 			<h1>Dog Walk Scheduler</h1>
+			<p>My family’s dog needs three walks each day, and we do not have a good way to determine who is walking her for each walk. This is mainly because of our complex and irregular schedules and walk durations that vary between walks, so we cannot have a consistent walk schedule. Additionally, there are speciﬁc walk times and dates that people prefer or do not prefer, and scheduling to account for those preferences can be difﬁcult.</p>
+			<p>This software takes in walks to be assigned, and each person rates their preference for each walk on a scale of 0 to 9. Then, a Pyomo model generates an optimal walk schedule based on a mathematical model and creates ICS files so that each person can import their walks into their calendar.</p>
+			<h2>Previous Solution</h2>
+			<p>Our original solution was to create a spreadsheet, let family members enter walk preferences into a notes column, and have a set date and time where people can start signing up for walks. The spreadsheet calculated the number of hours each person would walk the dog for, and we could manually check whether each person had a roughly equal amount of time.</p>
+			<p>That solution was not very effective because sometimes, people would forget to enter their walk preferences before the sign-up time, and if they were last to sign up, they could be forced to sign up for walks where they were unavailable. Then, everyone would have to discuss and trade walks until the schedule worked for everyone. That system also gave an advantage to people who could enter values into a spreadsheet faster, so some people might get all the walks they prefer, while other people do not get any of the walks they prefer.</p>
 			<h2>Mathematical Model</h2>
+			<p>The mathematical model is described in <a href="./dog_walk_scheduler/model.pdf" target="_blank">pdf</a>.
 			<h2>Configuration</h2>
+			<p>The software is configured in the <code>config.json</code> file. The configuration options include</p>
+			<ul>
+				<li>Walk name and duration</li>
+				<li>Date range to schedule</li>
+				<li>Dates and names of walks not needed</li>
+				<li>Person information</li>
+				<ul>
+					<li>Name</li>
+					<li>Name of their ratings file</li>
+					<li>Walk calendar event names and times</li>
+				</ul>
+				<li>Whether durations are evenly distributed among people</li>
+				<li>Multiplier influencing the chance someone will have all the walks in one day</li>
+			</ul>
+			<p>An example can be found <a href="https://github.com/summit2021237/little-bear-walks/blob/main/documentation/config_example.json" target="_blank">here</a>, and a detailed description of the configuration options can be found <a href="https://github.com/summit2021237/little-bear-walks/blob/main/documentation/config_file.md" target="_blank">here</a>.</p>
 			<h2>Scripts</h2>
-			<h3>Process Input</h3>
+			<p>The software would require reading from and writing to many files, and I wanted to try to learn something new. So, I looked up languages that were good for file input and output and found Perl. Below are descriptions of the Perl scripts in this project.</p>
+			<h3>Create DAT File</h3>
+			<p>The Pyomo model reads its input sets and parameters from a DAT file. This script creates a <code>WalkConfig</code> object from the config file. Then, it writes configuration information and walk ratings to a DAT file.</p>
+			<h3>Solution to Assignments</h3>
+			<p>The solution that Pyomo generates is written to a text file. This script parses that file and creates a CSV with with a table of walk assignments.</p>
 			<h3>Generate ICS Files</h3>
+			<p>It can be time-consuming for people to manually add 20-40 calendar events to their calendar, so this script creates an ICS file for each person with their desired walk names and times of day. That lets them easily import all their assigned walks.</p>
 			<h2>Docker</h2>
 			<h2>Potential Features</h2>
 			<!-- identify which walks can't be assigned, support not distributing durations evenly -->
