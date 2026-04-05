@@ -50,8 +50,14 @@
 			<h3>Generate ICS Files</h3>
 			<p>It can be time-consuming for people to manually add 20-40 calendar events to their calendar, so this script creates an ICS file for each person with their desired walk names and times of day. That lets them easily import all their assigned walks.</p>
 			<h2>Docker</h2>
+			<p>I had heard of Docker in many places, but I had never used it. This project seemed like a good way to get some experience with Docker because it requires the Python library, Pyomo, and a GLPK, a solver for Pyomo, and I did not want to install them on my computer in case I needed the storage space or needed to run the program on a different computer. It was also simple, so it could be a good way to learn some basic Docker concepts. It was helpful to get the same environment everytime I ran the program and not have to remember all the commands, especially since we update the dog walk schedule monthly.</p>
+			<p>From this project, I learned how to create a Dockerfile, use an entrypoint, and transfer files between the local file system and the Docker container. The most valuable concept I learned was the order of commands in the Dockerfile. For example, some of the Perl modules take a few minutes to install, so I could make use of cached images to save time and not wait for them to install each time by running commands with files that change often near the end.</p>
 			<h2>Potential Features</h2>
-			<!-- identify which walks can't be assigned, support not distributing durations evenly -->
+			<p>These are some features that could be helpful</p>
+			<h3>Identifying Which Walks Cannot Be Assigned</h3>
+			<p>This feature would check which walks cannot be assigned and then note those walks in the output. Right now, we have to manually go through the ratings and check when no one is available for a walk. It would save time if we did not need to look through each ratings file before assigning walks.</p>
+			<h3>Not Distributing Durations Evenly</h3>
+			<p>This feature would support specifying a percentage of the total walk duration that each person would walk the dog for. Then, the scheduler can account for people who had agreed to take less walk hours.</p>
 		</div>
 		<div id="contactInfo"></div>
 
