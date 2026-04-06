@@ -35,6 +35,15 @@ body {
 	font-weight: 700;
 }
 
+.about-text-and-image-container {
+	display: flex;
+	flex-direction: row;
+}
+
+.about-text-and-image-container img {
+	width: 100%;
+}
+
 .summary-container {
 	align-items: flex-start;
 	display: flex;
@@ -90,7 +99,7 @@ body {
 	max-width: 30%;
 	min-width: 30%;
 	object-fit: contain;
-	object-position: top;
+	object-position: center;
 }
 
 .project-experience-item h2 {
@@ -282,6 +291,11 @@ td {
 	margin: 0;
 }
 
+.no-side-margins {
+	margin-left: 0;
+	margin-right: 0;
+}
+
 .no-top-margin {
 	margin-top: 0;
 }
@@ -290,8 +304,11 @@ td {
 	margin-bottom: 0;
 }
 
-.no-side-margins {
+.no-left-margin {
 	margin-left: 0;
+}
+
+.no-right-margin {
 	margin-right: 0;
 }
 
