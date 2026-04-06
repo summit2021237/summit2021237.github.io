@@ -42,7 +42,7 @@ function createNav(currentPageName) {
 	while (!result.done) {
 		let pageName = result.value;
 		if (currentPageName === pageName) {
-			pages += `<div class="nav-item nav-item-selected">${pageName}</div>`;
+			pages += `<div class="nav-item nav-item-selected"><a href=${pageNamesToPages.get(pageName)}>${pageName}</a></div>`;
 		} else {
 			pages += `<div class="nav-item"><a class="link-no-color" href=${pageNamesToPages.get(pageName)}>${pageName}</a></div>`;
 		}
