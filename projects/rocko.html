@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<link rel="stylesheet" href="/home/fank1/Documents/website/website/styles/main.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+
+		<script src="/home/fank1/Documents/website/website/scripts/jquery.min.js"></script>
+		<script src="/home/fank1/Documents/website/website/scripts/main.js"></script>
+		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+
+		<title>Summit Fan</title>
+	</head>
+	<body>
+		<div id="navBar" class="top-bar-container"></div>
+		<script>createNav("Projects and Experience")</script>
+
+		<h1>ROCKO</h1>
+		<p><i>An application of software requirements engineering, software architecture, calculus of variations, and writing documentation</i></p>
+		<figure class="margin-2em">
+			<img class="width-80" src="./rocko/images/capstone.jpg"></img>
+			<figcaption>ROCKO balancing at the Rose Show, where ROCKO was given the William A. Kline Innovation Award</figcaption>
+		</figure>
+		<p>ROCKO is an <b>educational, bipedal, wheeled robotics platform</b> designed to bridge the gap between introductory robotics education and graduate-level applications. It is intended <b>for hobbyists, students, and educators</b> and is <b>open-source</b> and <b>highly expandable</b> for applications like controls, automation, and vision.</p>
+
+		<h2>Goal</h2>
+		<p>This project was inspired by our primary stakeholder's experience with a mobile robotics course. The course content revolved around implementing a robotic system to autonomously navigate an environment with sensor integration. However, the stakeholder and their team struggled to implement features to the level they wanted because the provided robotics platform did not have high-accuracy sensor readings and had limited onboard computation power.</p>
+		<p>While researching existing robotics platforms, we found that there is <b>no commonly-used platform targeting "intermediate" level learners</b>. With ROCKO, we aim to provide a <b>reliable mechanical system</b> with <b>high-performance electrical hardware</b> and an <b>extensible, production-like software architecture</b> that is <b>capable of advanced robotics research</b> costing <b>less than $750</b>.</p>
+
+		<h2>Key Features</h2>
+		Some key features of the final product include:
+		<ol>
+			<li>Standing mode and tank mode</li>
+			<li>ros2_control PID controllers</li>
+			<li>Python integration</li>
+			<li>Detailed and understsandable documentation</li>
+		</ol>
+
+		<h2>System Overview</h2>
+		<p>ROCKO has two modes. It can operate as a balancing, wheeled biped robot and as a stable tank drive robot.</p>
+		<figure class="no-margin">
+			<div id="rockoModesGrid">
+				<p>Standing Mode</p>
+				<p>Tank Mode</p>
+				<img class="width-80" src="./rocko/images/standing_mode.png"></img>
+				<img class="width-80" src="./rocko/images/tank_mode.png"></img>
+			</div>
+			<figcaption>Standing mode and tank mode</figcaption>
+		</figure>
+		<p>ROCKO can be described in terms of mechanical, electrical, and software subsystems.</p>
+		<figure class="no-margin">
+			<img class="width-50" src="./rocko/images/subsystems.png"></img>
+			<figcaption>A high-level diagram of how the subsystems work together</figcaption>
+		</figure>
+
+		<h2>Requirements</h2>
+		<p>We started by applying what some of us had learned in Software Requirements Engineering to <b>elicit needs</b> from four stakeholder categories:</p>
+		<ul>
+			<li>benefactor</li>
+			<li>hobbyist</li>
+			<li>student</li>
+			<li>educator</li>
+		</ul>
+		<p>From the needs, we developed <b>features</b> and then <b>requirements</b>. Below is a list of our hardware and software requirements. See the linked pdfs for the <a href="./rocko/requirements/formal_needs_features_requirements.pdf" target="_blank">formal needs, features, and requirements</a> with mapping and <a href="./rocko/requirements/reasoning_and_results.pdf" target="_blank">reasoning and final results</a> for the requirements below.</p>
+		<details>
+			<summary>Requirements</summary>
+			<p>Hardware</p>
+			<ul>
+				<li>Robot stays intact and functioning when it falls over or is dropped from 8 inches high</li>
+				<li>Robot is under 25 pounds</li>
+				<li>Robot has encoders or potentiometers on each joint for closed-loop control</li>
+				<li>Center of mass is directly above wheels for balancing</li>
+				<li>Robot has a motor driving a wheel on the left and right side</li>
+				<li>Robot’s core functionality (driving and balancing) is assembled and wired</li>
+				<li>Total cost of the robot is $750</li>
+				<li>Robot will be no larger than 20 x 18 x 10 inches when extended</li>
+				<li>Robot has a battery that has enough current delivery capacity to run all motors and sensors simultaneously</li>
+				<li>Robot power supply can be disconnected when manually handled but will not disconnect during operation</li>
+				<li>Robot is capable of distributing power on 12V and 5V interfaces</li>
+				<li>Robot battery can supply idle operation for 2hr</li>
+			</ul>
+			<p>Software</p>
+			<ul>
+				<li>When the user substitutes a motor/sensor of matching spec during development time, the code shall work with the changed component with only minor changes needed to other nodes (this doesn’t include time to develop driver for motor/sensor)</li>
+				<li>When the user adds a motor/sensor during development time, the user shall be able to use that motor/sensor in other parts of the code within an hour (this doesn’t include software should be modular enough to time to develop a driver for motor/sensor)</li>
+				<li>When the user removes a motor/sensor during development time, the motor/sensor can be removed from the code with only nodes that used that motor/sensor requiring changes</li>
+				<li>When the user sets the robot up for the first time, the robot will be fully set up within two hours</li>
+				<li>When the user opens the development environment, the platform shall provide code to interact with the given motors and sensors.</li>
+				<li>When the user wants to modify the implementation of a motor/sensor, the rest of the code shall require little to no modifications to work with the new implementation</li>
+				<li>When the user starts learning to code the robot, the platform shall allow the user to learn the basics (any APIs, the programming language, the IDE) within a week</li>
+				<li>When the robot runs balancing code, the overall loop time (sensor value retrieval, calculations, and motor commands) shall take no longer than 20ms</li>
+				<li>When the user wants to develop code for the robot, the platform shall provide an IDE and programming language that can handle all robot functions</li>
+			</ul>
+			Miscellaneous
+			<ul>
+				<li>Produced documentation complies with web accessibility standards (WCAG 2)</li>
+				<li>Produced documentation is interpretable at a 9th grade reading level or below</li>
+			</ul>
+		</details>
+
+		<h2>Timeline</h2>
+		<p>Since this was for our senior capstone course, our advisors wanted all the teams to have a similar timeline.</p>
+		<p>We decided to create two robots: one alpha robot prototype and a final version. The table below describes some milestones and when we intend to reach them.</p>
+		<table class="center">
+			<tr>
+				<th>Milestone</th>
+				<th>Date</th>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin">Design review with benefactor<p>
+					<ul class="no-bottom-margin">
+						<li>Tentative sensor selection</li>
+						<li>Feature list</li>
+					</ul>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Midway through fall quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin">Alpha robot complete</p>
+					<ul class="no-bottom-margin">
+						<li>Driving wheels</li>
+						<li>Basic balancing capability</li>
+						<li>Ability to drive around</li>
+					</ul>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">End of fall quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Final robot done mechanically</p>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">End of winter quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Capstone report and final presentation complete</p>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Eighth week of spring quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin">Final robot complete</p>
+					<ul class="no-bottom-margin">
+						<li>Finished software</li>
+						<li>Fixed mechanical issues</li>
+					</ul>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">End of spring quarter</p>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p class="no-top-margin no-bottom-margin">Documentation complete</p>
+				</td>
+				<td>
+					<p class="no-top-margin no-bottom-margin">End of spring quarter</p>
+				</td>
+			</tr>
+		</table>
+
+		<h2>Software Overview</h2>
+		<p>We spent most of the fall quarter developing ROCKO's software architecture to make the platform a more useful base for learning robotics-related skills. We focused on <b>learnability</b> and <b>modifiability</b> so that users could get something working quickly and then add motors and sensors to explore more advanced topics in robotics. We decided to use <b>ROS2</b> and the <b>ros2_control</b> framework because it is used in industry and lets users easily implement controllers and communicate with motors and sensors.</p>
+		<p>The fundamental entities in ROS2 are <b>nodes</b> and <b>topics</b>. Each node contains logic, like reading values from sensors or determining a value to output, and the nodes communicate through topics, named interfaces for messages, by subscribing to or publishing to them.
+		<p>Some special nodes used in ros2_control are <b>hardware components</b> and <b>controllers</b>. ros2_control includes many built-in controllers, like a PID controller and a differential drive controller, making it easier for users to get started using ROS2, and users can also choose to write their own controllers. Each motor or sensor has a hardware component to read inputs or send outputs. Those components simplify the process of adding, removing, or modfying motors and sensors because only the hardware component and the topics it is publishing to or subscribed to would need to be modified.</p>
+		<p>ROS2 can be used with either <b>Python or C++</b>, but ros2_control only supports C++. Since Python is generally easier for newer programmers, we developed templates for users to add Python ros2_control nodes. Then, users can choose between Python and C++.</p>
+		<p>Tank mode only has the differential drive controller, giving ROCKO more processing power. That lets users run more complex logic in tank mode, like SLAM. It can also help the user make sure the motors are working correctly before trying standing mode.</p>
+		<figure class="no-side-margins">
+			<img class="width-100" src="./rocko/images/software_architecture.png">
+			<figcaption>ROCKO Software Diagram for Standing Mode</figcaption>
+		</figure>
+
+		<h2>Controls</h2>
+		<p>Many of the self-balancing robots we researched implemented <b>linear-quadratic regulator (LQR) control</b>, and they used concepts that looked familiar from a calculus of variations course. Since ROCKO is a multidisciplinary capstone project and I am also a math major, we decided to implement LQR control. I did not have any <b>control theory</b> experience, so I spent a lot of the winter quarter learning control theory concepts, like state-space control and pole placement, and how to model an <b>inverted pendulum</b>.</p>
+		<p>However, we realized that we would need to control the motors' torque output if we wanted to use LQR control. But our motors were controlled by PWM, so we could not specify a torque to reach target position values. Torque control would require redoing the entire electrical system, changing motor and motor controller mounting, and purchasing new motors and controllers. We then switched to using two <b>proportional, integral, derivative (PID) controllers</b>, for pitch and velocity, that many of my group members were already very familiar with.</p>
+
+		<h3>LQR Control</h3>
+		<p>In control theory, we often use <b>state-space methods</b>, where we design controllers for a system in state-space form. So, from a physical system, we input values from a measured state into the state feedback matrix, \(K\), and solve for the eigenvalues of \(K\) to determine the input to the physical system. LQR control determines the <b>best eigenvalues</b> based on a <b>cost functional</b>, which depends on motor characteristics and desired performance characteristics. We can optimize the cost functional using methods from calculus of variations.</p>
+
+		<h3>Mathematical Model</h3>
+		<p>We need a mathematical model of ROCKO to determine how to control it. We find <b>equations of motion</b> describing linear acceleration and rotational acceleration because ROCKO can be simplified as an inverted pendulum, with the head and legs being a point mass. We use the Euler-Lagrange method, which is based on energy, to derive the equations of motion.</p>
+		<figure class="center width-50">
+			<img class="width-100" src="./rocko/images/equations_of_motion_diagram.png">
+			<figcaption>Variables used in the equations of motion, with \(w\), \(l\), and \(h\) describing the wheels, legs, and head, respectively</figcaption>
+		</figure>
+		<h4>Nonlinear Equations of Motion</h4>
+		<p>These first steps give us nonlinear, coupled equations of motion.</p>
+		<h5>Lagrangian</h5>
+		<p>First, we find the kinetic and potential energy of the system. Let \(x\) be ROCKO's distance from the starting point and \(\theta\) be the angle of the head from vertical. Then, the velocity of the wheels is</p>
+		\[\vec{v}_w=\langle \dot{x},0\rangle\text{,}\]
+		<p>the velocity of the head and legs is</p>
+		\[\vec{v}_{hl}=\langle \dot{x}+\dot{\theta}d_{hl}\cos(\theta),-\dot{\theta}d_{hl}\sin(\theta)\rangle\text{,}\]
+		<p>and the rotational velocity of the head and legs is</p>
+		\[\dot{\theta}_{hl}=\dot{\theta}\text{.}\]
+		<p>Then, we have the kinetic energy</p>
+		\[T=\frac{1}{2}m_{hl}\lvert\vec{v}_{hl}\rvert^2+\frac{1}{2}m_w\lvert\vec{v}_w\rvert^2+\frac{1}{2}I_{hl}\dot{\theta}_{hl}^2\text{.}\]
+		<p>The height of the mass for the head and legs is</p>
+		\[h_{hl}=d_{hl}\cos(\theta)\text{.}\]
+		<p>Then, we have the potential energy</p>
+		\[V=gm_{hl}h_{hl}\text{.}\]
+		<p>The Lagrangian is the difference between the kinetic and potential energies, so we have</p>
+		\[L=T-V\text{.}\]
+		<h5>\(x\) and  \(\theta\) Equations</h5>
+		<p>By Hamilton's Principle, we know that local extrema of</p>
+		\[J(\vec{q})=\int_{t_0}^{t_1}L(t,\vec{q}(t),\dot{\vec{q}}(t))dt\text{,}\]
+		<p>with \(\vec{q}=\langle x, \theta\rangle\), satisfy the Euler-Lagrange equations. We use the Euler-Lagrange equations</p>
+		\[\frac{\partial L}{\partial x}-\frac{d}{dt}\frac{\partial L}{\partial \dot{x}}=F\text{ and }\frac{\partial L}{\partial \theta}-\frac{d}{dt}\frac{\partial L}{\partial \dot{\theta}}=\tau\text{,}\]
+		<p>with \(F\) and \(\tau\) being the input force and torque, respectively. Then, we have the coupled equations</p>
+		\[\begin{aligned}
+		F&=(m_w+m_{hl})\ddot{x}(t)-d_{hl}m_{hl}\left(\dot{\theta}(t)^2\sin\left(\theta(t)\right)-\cos\left(\theta(t)\right)\ddot{\theta}(t)\right)\\
+		\tau&=\left(d_{hl}^2m_{hl}+I_{hl}\right)\ddot{\theta}(t)-d_{hl}m_{hl}\left(g\sin\left(\theta(t)\right)-\cos\left(\theta(t)\right)\ddot{x}(t)\right)\text{.}
+		\end{aligned}\]
+		<h4>Uncoupling Equations</h4>
+		Next, we uncouple the two equations. Introducing state variables, let \(x_1=x\), \(x_2=\theta\), \(x_3=\dot{x}\), and \(x_4=\dot{\theta}\). Then, substituting state variables and expanding, we get
+		\[\begin{aligned}
+		F&=(m_{hl}+m_w)\dot{x}_3+\cos(x_2)d_{hl}m_{hl}\dot{x}_4-x_4^2\sin(x_2)d_{hl}m_{hl}\\
+		\tau&=\cos(x_2)d_{hl}m_{hl}\dot{x}_3+(d_{hl}^2m_{hl}+I_{hl})\dot{x}_4-gm_{hl}d_{hl}\sin(x_2)
+		\end{aligned}\]
+		Let
+		\[\begin{aligned}
+		a&=m_w+m_{hl}\text{,}\\
+		b&=\cos(x_2)d_{hl}m_{hl}\text{,}\\
+		c&=x_4^2\sin(x_2)d_{hl}m_{hl}\text{,}\\
+		d&=\cos(x_2)d_{hl}m_{hl}\text{,}\\
+		e&=d_{hl}^2m_{hl}+I_{hl}\text{, and}\\
+		f&=d_{hl}gm_{hl}\sin(x_2)\text{.}
+		\end{aligned}\]
+		Let \(u\) be the force acting on the wheel from the motor. Also, we assume that there is no external force rotating the robot. So, \(F=u\) and \(\tau=0\). Then, since \(\dot{x_1}=x_3\) and \(\dot{x_2}=x_4\), we have
+		\[\begin{bmatrix}
+			1 & 0 & 0 & 0\\
+			0 & 1 & 0 & 0\\
+			0 & 0 & a & b\\
+			0 & 0 & d & e
+		\end{bmatrix}\begin{bmatrix}
+			\dot{x}_1\\ \dot{x}_2\\ \dot{x}_3\\ \dot{x}_4
+		\end{bmatrix}=\begin{bmatrix}
+			x_3\\ x_4\\ u+c\\ f
+		\end{bmatrix}\text{.}\]
+		Then,
+		\[\begin{bmatrix}
+			\dot{x}_1\\ \dot{x}_2\\ \dot{x}_3\\ \dot{x}_4
+		\end{bmatrix}=\begin{bmatrix}
+			1 & 0 & 0 & 0\\
+			0 & 1 & 0 & 0\\
+			0 & 0 & a & b\\
+			0 & 0 & d & e
+		\end{bmatrix}^{-1}\begin{bmatrix}
+			x_3\\ x_4\\ u+c\\ f
+		\end{bmatrix}\text{.}\]
+		We then solve for \(\ddot{x}_3\) and \(\ddot{x}_4\) to find the equations of motion. We can also <b>linearize</b> the equations by using a first-order Taylor Series approximation about one of the equilibrium points.
+
+		<h3>PID Tuning</h3>
+		<div class="image-with-text">
+			<div>
+				<p>ROCKO uses <b>two PID controllers</b>: a pitch controller and a velocity controller. Those controllers are sufficient for letting ROCKO balance and drive around. We manually tuned the PID controllers' gain values in the following order:</p>
+				<ol>
+					<li>Pitch P component (recover after tipping)</li>
+					<li>Pitch D component (reduce oscillations when recovering)</li>
+					<li>Velocity P component (maintain a target velocity (0 if balancing))</li>
+					<li>Velocity I component (remain centered around starting location)</li>
+				</ol>
+			</div>
+			<figure>
+				<video controls autoplay muted loop class="width-100">
+					<source src="./rocko/images/pid_tuning.mp4">
+				</video>
+				<figcaption>PID tuning</figcaption>
+			</figure>
+		</div>
+
+		<h2>Tank Mode</h2>
+		<p>After we changed our controls method, which the other group members started working on, I created a tank mode for ROCKO. The tank mode is where the robot <b>does not balance</b>, allowing users to learn robotics concepts that require <b>more computation power</b>, because the robot does not need to perform balancing calculations.</p>
+
+		<h2>Communication</h2>
+		<p>This project gave me experience communicating with many different people. Our client was a Rose alumnus, and we constantly updated him on progress and discussed ideas. Every week, we met with our advisor to go over progress and ask questions about his expectations for deliverables. When we were learning controls, we met with one of the mechanical engineering professors to see if we were on the right track and ask modeling-related questions. Since this was a multidisciplinary capstone, we had group members working on mechanical, electrical, and software components, and it was extremely important for us to communicate with each other so that we understood possible limitations and to make sure each part we worked on could be combined to make ROCKO.</p>
+
+		<div id="contactInfo"></div>
+		<script>createContactInfo()</script>
+	</body>
+</html>

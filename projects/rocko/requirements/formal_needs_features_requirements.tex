@@ -1,0 +1,346 @@
+\documentclass{fank1basedocument}
+
+\usepackage{hyperref}
+\usepackage{array} % to not justify text in table
+\usepackage[normalem]{ulem} % for strikethrough text
+
+\settitle{Formal Needs, Features, and Requirements}
+
+\fancyhead[L]{ROCKO}
+\fancyhead[R]{2024-2025}
+
+\begin{document}
+
+\tableofcontents
+
+\addcontentsline{toc}{section}{Needs}
+\section*{Needs}
+Educator \#1
+\begin{enumerate}
+	\item The robots used in the course are not robust (loses 40\% every year)
+	\item It is difficult and expensive to find replacement parts
+	\item A scaled-down robot needs to be affordable (similar price range to previous models ($200-$400))
+	\item Having too many sensors can make the robot too complicated
+	\item Some sensor APIs aren’t approachable
+	\item Students want to work on a system that looks advanced
+	\item It takes too long (2 weeks) for students to learn the platform (includes robot, programming language, and APIs)
+\end{enumerate}
+Educator \#2
+\begin{enumerate}
+	\setcounter{enumi}{7}
+	\item It is difficult to provide examples when students use different IDEs
+	\item It is difficult to help students who use different methods for calling APIs
+	\item The current robots are no longer being produced
+	\item The motors are more precise than the encoders
+	\item There is no built in support for wireless communication, leading to many solutions
+	\item The cameras are unreliable
+	\item Modular platforms make it easier to adjust the course
+\end{enumerate}
+Hobbyist \#1
+\begin{enumerate}
+	\setcounter{enumi}{14}
+	\item In FIRST Robotics Competition, students can’t reimplement things to learn how they work
+	\item Bad quality components are time consuming and difficult to debug
+	\item Closed platform, restrictions on motors (in FIRST Robotics Competition)
+	\item The step between basics and more complicated features is too big
+	\item Most kits are meant for learning software, not electrical components
+\end{enumerate}
+Hobbyist \#2
+\begin{enumerate}
+	\setcounter{enumi}{19}
+	\item Need to set up the entire control system to run quick tests
+	\item Wants adding sensors to be straightforward
+	\item Too easy to break robots if a sensor comes unplugged
+	\item Had issues with wires coming unplugged on breadboard robot
+\end{enumerate}
+Student/Benefactor
+\begin{enumerate}
+	\setcounter{enumi}{23}
+	\item Things didn’t always work in mobile robotics
+	\item Difficult to set up
+	\item Didn’t have the computing power for SLAM on the robot
+	\item Robot price should be \$750-\$1000
+	\item FIRST Robotics Competition robots are too heavy
+	\item FIRST Robotics Competition robots are too large
+\end{enumerate}
+
+\addcontentsline{toc}{section}{Features}
+\section*{Features}
+\begin{center}
+	\begin{tabular}{|p{.1\textwidth}|p{.7\textwidth}|p{.12\textwidth}|}
+		\hline
+		\textbf{Number} & \textbf{Feature} & \textbf{Needs}\\
+		\hline
+		1 & Ability to add motors and sensors & 14, 15, 17, 21\\
+		\hline
+		2 & Ability to remove motors and sensors & 3, 4, 14, 15, 17\\
+		\hline
+		3 & Ability to substitute motors and sensors (compatible specs) & 3, 10, 14, 15, 17\\
+		\hline
+		4 & Prototype robot price should be \$750-\$1000 & 27\\
+		\hline
+		5 & Scaled-down robot price should be \$200-\$400 & 3\\
+		\hline
+		6 & Software platform should have code to communicate with provided motors & 9\\
+		\hline
+		7 & Software platform should have code to communicate with provided sensors & 5, 9\\
+		\hline
+		8 & Software platform should handle demos & 7\\
+		\hline
+		9 & Software platform should include various levels of tutorials & 7, 18\\
+		\hline
+		10 & Users should be able to change the code implementation of their motors & 15\\
+		\hline
+		11 & Users should be able to change the code implementation of their sensors & 15\\
+		\hline
+		12 & APIs should be easy to learn & 5, 7\\
+		\hline
+		13 & Users should be able to use programming languages that are easy to learn & 5, 7\\
+		\hline
+		14 & Software platform should be unified & 8\\
+		\hline
+		15 & Robot should be robust & 1, 23, 24\\
+		\hline
+		16 & Ability to survive drop tests & 1, 23\\
+		\hline
+		17 & Ability to view sensor outputs when the robot is not enabled & 5, 7, 22\\
+		\hline
+		18 & Wires should not come unplugged easily & 23, 24\\
+		\hline
+		19 & Electrical component quality should be appropriate for hobbyists & 11, 13, 16, 24\\
+		\hline
+		20 & Robot should be straightforward to set up & 7, 25\\
+		\hline
+		21 & Robot should look advanced & 6\\
+		\hline
+		22 & Ability to implement advanced software features & 26\\
+		\hline
+		23 & One person should be able to lift the robot & 28\\
+		\hline
+		24 & Ability to communicate wirelessly & 12\\
+		\hline
+		25 & Ability to balance & 6\\
+		\hline
+		26 & Robot should work & 24\\
+		\hline
+		27 & Robot has an articulated leg & 6\\
+		\hline
+		28 & Robot has sensors to detect the environment & 6\\
+		\hline
+		29 & Robot should be smaller than a microwave when fully extended & 29\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\addcontentsline{toc}{section}{Requirements}
+\section*{Requirements}
+\addcontentsline{toc}{subsection}{Hardware}
+\subsection*{Hardware}
+\begin{center}
+	\begin{tabular}{|p{.1\textwidth}|p{.7\textwidth}|p{.12\textwidth}|}
+		\hline
+		\textbf{Number} & \textbf{Requirement} & \textbf{Features}\\
+		\hline
+		1 & Robot stays intact and functioning when it falls over or is dropped from 8 inches high & 15\\
+		\hline
+		2 & Robot is under 25 pounds & 23\\
+		\hline
+		3 & Robot has encoders or potentiometers on each joint for closed-loop control & 25\\
+		\hline
+		4 & Center of mass is directly above wheels for balancing & 25\\
+		\hline
+		5 & Robot has a motor driving a wheel on the left and right side & 25\\
+		\hline
+		6 & Robot’s core functionality (driving and balancing) is assembled and wired & 26\\
+		\hline
+		\sout{7} & \sout{Robot has a motor driving the shoulder joint on the left and right side} & \sout{27}\\
+		\hline
+		8 & Total cost of robot is \$750 & 4\\
+		\hline
+		9 & Robot will be no larger than 20 x 18 x 10 inches when extended & 29\\
+		\hline
+		10 & Robot has a battery that has enough current delivery capacity to run all motors and sensors simultaneously & 24\\
+		\hline
+		11 & Robot power supply can be disconnected when manually handled but will not disconnect during operation & 18\\
+		\hline
+		12 & Robot is capable of distributing power on 12V and 5V interfaces & 26\\
+		\hline
+		13 & Robot battery can supply idle operation for 2hr & 26\\
+		\hline
+	\end{tabular}
+\end{center}
+Requirement 7 was removed after testing with Alpha Bot because of time it would require for controls and to improve packaging for the tank mode.
+
+\addcontentsline{toc}{subsection}{Software}
+\subsection*{Software}
+Since the end-user's primary interaction with this system is through modifying code in their own development environment, most of our requirements are nonfunctional.
+
+\addcontentsline{toc}{subsubsection}{Functional Requirements}
+\subsubsection*{Functional Requirements}
+
+\paragraph{Use Cases}
+\begin{center}
+	\begin{tabular}{|p{.1\textwidth}|>{\raggedright\arraybackslash}p{.2\textwidth}|p{.5\textwidth}|p{.12\textwidth}|}
+		\hline
+		\textbf{Number} & \textbf{Name} & \textbf{Description} & \textbf{Features}\\
+		\hline
+		1 & Run demo & The user runs some provided demo code on the robot  & 8\\
+		\hline
+		2 & Do tutorial & The user completes a tutorial to learn the robot platform & 9\\
+		\hline
+		3 & View sensor values & The user views the current values of sensors for debugging/troubleshooting & 17\\
+		\hline
+		4 & Communicate with robot using joystick & The user wants to drive the robot & 24\\
+		\hline
+		5 & Communicate with robot using computer & The user wants to view various pieces of data from the robot on their computer, such as sensor data and visualizations & 24\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\pagebreak
+
+\addcontentsline{toc}{subsubsection}{Nonfunctional Requirements}
+\subsubsection*{Nonfunctional Requirements}
+
+\paragraph{Scenarios}
+\begin{center}
+	\begin{tabular}{|p{.1\textwidth}|>{\raggedright\arraybackslash}p{.7\textwidth}|p{.12\textwidth}|}
+		\hline
+		\textbf{Number} & \textbf{Scenario} & \textbf{Features}\\
+		\hline
+		1 & \large{\textbf{Substitute Motor/Sensor - Integrability}}\newline
+				\textbf{Source of Stimulus:} User\newline
+				\textbf{Stimulus:} Substitutes a motor/sensor of similar spec\newline
+				\textbf{Artifact:} The robot code\newline
+				\textbf{Environment:} Development time\newline
+				\textbf{Response:} The rest of the software works with the changed component\newline
+				\textbf{Response Measure:} The other nodes only need minor changes, like retuning PIDs or changing the node it’s subscribed to
+			& 3, 28\\
+		\hline
+		2 & \large{\textbf{Add Motor/Sensor - Integrability}}\newline
+				\textbf{Source of Stimulus:} User\newline
+				\textbf{Stimulus:} Adds a motor/sensor\newline
+				\textbf{Artifact:} The robot code\newline
+				\textbf{Environment:} Development time\newline
+				\textbf{Response:} The motor/sensor can be interacted with in the rest of the system\newline
+				\textbf{Response Measure:} Only nodes that used the motor/sensor need to be modified
+			& 2\\
+		\hline
+		3 & \large{\textbf{Remove Motor/Sensor - Integrability}}\newline
+				\textbf{Source of Stimulus:} User\newline
+				\textbf{Stimulus:} Removes a motor/sensor\newline
+				\textbf{Artifact:} The robot code\newline
+				\textbf{Environment:} Development time\newline
+				\textbf{Response:} The motor/sensor can be removed from the code\newline
+				\textbf{Response Measure:} The other nodes only need minor changes, like retuning PIDs or changing the node it’s subscribed to
+			& 3, 28\\
+		\hline
+		4 & \large{\textbf{First Setup - Usability}}\newline
+				\textbf{Source of Stimulus:} User\newline
+				\textbf{Stimulus:} Sets up the robot for the first time\newline
+				\textbf{Artifact:} The robot\newline
+				\textbf{Environment:} Runtime\newline
+				\textbf{Response:} Will be fully set up and ready to run sample code\newline
+				\textbf{Response Measure:} Takes no more than two hours
+			& 20\\
+		\hline
+		5 & \large{\textbf{Pre-Provided Code - Usability}}\newline
+				\textbf{Source of Stimulus:} User\newline
+				\textbf{Stimulus:} Opens development environment\newline
+				\textbf{Artifact:} Platform\newline
+				\textbf{Environment:} Development time\newline
+				\textbf{Response:} There is code to run the provided motors/sensors\newline
+				\textbf{Response Measure:} The user doesn’t need to write this code
+			& 6, 7, 28\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\pagebreak
+
+\begin{center}
+	\begin{tabular}{|p{.1\textwidth}|>{\raggedright\arraybackslash}p{.7\textwidth}|p{.12\textwidth}|}
+		\hline
+		6 & \large{\textbf{Modify motor/sensor implementation - Modifiability}}\newline
+				\textbf{Source of Stimulus:} User\newline
+				\textbf{Stimulus:} Wants to modify a motor/sensor implementation\newline
+				\textbf{Artifact:} Robot code\newline
+				\textbf{Environment:} Development time\newline
+				\textbf{Response:} User can change implementation\newline
+				\textbf{Response Measure:} The rest of the code won’t be affected
+			& 10, 11\\
+		\hline
+		7 & \large{\textbf{Learning Platform - Usability}}\newline
+				\textbf{Source of Stimulus:} User\newline
+				\textbf{Stimulus:} Starts learning how to code the robot\newline
+				\textbf{Artifact:} The platform\newline
+				\textbf{Environment:} Development time\newline
+				\textbf{Response:} User can learn the basics of the platform (any APIs, the programming language, etc)\newline
+				\textbf{Response Measure:} Within 1 week
+			& 12, 13\\
+		\hline
+		8 & \large{\textbf{Balancing - Performance}}\newline
+				\textbf{Source of Stimulus:} Robot\newline
+				\textbf{Stimulus:} Runs balancing code\newline
+				\textbf{Artifact:} Control nodes\newline
+				\textbf{Environment:} Runtime\newline
+				\textbf{Response:} Sensor values are retrieved, and outputs are calculated and sent to motors\newline
+				\textbf{Response Measure:} Fast enough for balancing to occur effectively (early guess is around 20ms)
+			& 25\\
+		\hline
+		9 & \large{\textbf{Unified Platform - Usability}}\newline
+				\textbf{Source of Stimulus:} User\newline
+				\textbf{Stimulus:} Wants to develop code for the robot\newline
+				\textbf{Artifact:} The platform\newline
+				\textbf{Environment:} Development time\newline
+				\textbf{Response:} Has an IDE and programming language in place\newline
+				\textbf{Response Measure:} They can be used to perform all normal functions
+			& 14\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\pagebreak
+
+\paragraph{Shall Statements}
+\begin{center}
+	\begin{tabular}{|p{.1\textwidth}|p{.7\textwidth}|p{.12\textwidth}|}
+		\hline
+		\textbf{Number} & \textbf{Shall Statement} & \textbf{Scenarios}\\
+		\hline
+		1 & When the user substitutes a motor/sensor of matching spec during development time, the code shall work with the changed component with only minor changes needed to other nodes & 1\\
+		\hline
+		2 & When the user adds a motor/sensor during development time, the user shall be able to use that motor/sensor in other parts of the code within an hour (this doesn’t include time to develop driver for motor/sensor) & 2\\
+		\hline
+		3 & When the user removes a motor/sensor during development time, the motor/sensor can be removed from the code with only nodes that used that motor/sensor requiring changes & 3\\
+		\hline
+		4 & When the user sets the robot up for the first time, the robot will be fully set up within two hours & 4\\
+		\hline
+		5 & When the user opens the development environment, the platform shall provide code to interact with the given motors and sensors. & 5\\
+		\hline
+		6 & When the user wants to modify the implementation of a motor/sensor, the rest of the code shall require little to no modifications to work with the new implementation & 6\\
+		\hline
+		7 & When the user starts learning to code the robot, the platform shall allow the user to learn the basics (any APIs, the programming language, the IDE) within a week & 7\\
+		\hline
+		8 & When the robot runs balancing code, the overall loop time (sensor value retrieval, calculations, and motor commands) shall take no longer than 20ms & 8\\
+		\hline
+		9 & When the user wants to develop code for the robot, the platform shall provide an IDE and programming language that can handle all robot functions & 9\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\addcontentsline{toc}{subsection}{Miscellaneous}
+\subsection*{Miscellaneous}
+\begin{center}
+	\begin{tabular}{|p{.1\textwidth}|p{.7\textwidth}|p{.12\textwidth}|}
+		\hline
+		\textbf{Number} & \textbf{Requirement} & \textbf{Features}\\
+		\hline
+		1 & Produced documentation complies with web accessibility standards (WCAG 2) & N/A\\
+		\hline
+		2 & Produced documentation is interpretable at a 9th grade reading level or below & N/A\\
+		\hline
+	\end{tabular}
+\end{center}
+
+\end{document}
