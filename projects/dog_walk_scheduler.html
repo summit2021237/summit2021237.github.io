@@ -20,10 +20,10 @@
 			<h1>Dog Walk Scheduler</h1>
 			<img class="width-100" src="./dog_walk_scheduler/images/little_bear.jpeg">
 			<p>My family’s dog needs three walks each day, and we do not have a good way to determine who is walking her for each walk. This is mainly because of our complex and irregular schedules and walk durations that vary between walks, so we cannot have a consistent walk schedule. Additionally, there are speciﬁc walk times and dates that people prefer or do not prefer, and scheduling to account for those preferences can be difﬁcult.</p>
-			<p>This software takes in walks to be assigned, and each person rates their preference for each walk on a scale of 0 to 9. Then, a Pyomo model generates an optimal walk schedule based on a mathematical model and creates ICS files so that each person can import their walks into their calendar.</p>
+			<p>This dog walk scheduler takes in walks to be assigned, and each person rates their preference for each walk on a scale of 0 to 9. Then, a Pyomo model generates an optimal walk schedule based on a mathematical model and creates ICS files so that each person can import their walks into their calendar.</p>
 			<h2>Previous Solution</h2>
 			<p>Our original solution was to create a spreadsheet, let family members enter walk preferences into a notes column, and have a set date and time where people can start signing up for walks. The spreadsheet calculated the number of hours each person would walk the dog for, and we could manually check whether each person had a roughly equal amount of time.</p>
-			<p>That solution was not very effective because sometimes, people would forget to enter their walk preferences before the sign-up time, and if they were last to sign up, they could be forced to sign up for walks where they were unavailable. Then, everyone would have to discuss and trade walks until the schedule worked for everyone. That system also gave an advantage to people who could enter values into a spreadsheet faster, so some people might get all the walks they prefer, while other people do not get any of the walks they prefer.</p>
+			<p>That solution was not very effective because sometimes, people would forget to enter their walk preferences before the signup time, and if they were last to sign up, they could be forced to sign up for walks where they were unavailable. Then, everyone would have to discuss and trade walks until the schedule worked for everyone. That system also gave an advantage to people who could enter values into a spreadsheet faster, so some people might get all the walks they prefer, while other people do not get any of the walks they prefer.</p>
 			<h2>Mathematical Model</h2>
 			<p>The mathematical model is described in <a href="./dog_walk_scheduler/model.pdf" target="_blank">pdf</a>.
 			<h2>Configuration</h2>
@@ -47,18 +47,24 @@
 			<h3>Create DAT File</h3>
 			<p>The Pyomo model reads its input sets and parameters from a DAT file. This script creates a <code>WalkConfig</code> object from the config file. Then, it writes configuration information and walk ratings to a DAT file.</p>
 			<h3>Solution to Assignments</h3>
-			<p>The solution that Pyomo generates is written to a text file. This script parses that file and creates a CSV with with a table of walk assignments.</p>
+			<p>The solution that Pyomo generates is written to a text file. This script parses that file and creates a CSV with a table of walk assignments.</p>
 			<h3>Generate ICS Files</h3>
 			<p>It can be time-consuming for people to manually add 20-40 calendar events to their calendar, so this script creates an ICS file for each person with their desired walk names and times of day. That lets them easily import all their assigned walks.</p>
 			<h2>Docker</h2>
-			<p>I had heard of Docker in many places, but I had never used it. This project seemed like a good way to get some experience with Docker because it requires the Python library, Pyomo, and a GLPK, a solver for Pyomo, and I did not want to install them on my computer in case I needed the storage space or needed to run the program on a different computer. It was also simple, so it could be a good way to learn some basic Docker concepts. It was helpful to get the same environment everytime I ran the program and not have to remember all the commands, especially since we update the dog walk schedule monthly.</p>
-			<p>From this project, I learned how to create a Dockerfile, use an entrypoint, and transfer files between the local file system and the Docker container. The most valuable concept I learned was the order of commands in the Dockerfile. For example, some of the Perl modules take a few minutes to install, so I could make use of cached images to save time and not wait for them to install each time by running commands with files that change often near the end.</p>
+			<p>I had heard of Docker in many places, but I had never used it. This project seemed like a good way to get some experience with Docker because it requires the Python library, Pyomo, and a GLPK, a solver for Pyomo, and I did not want to install them on my computer in case I needed the storage space or needed to run the program on a different computer. It was also simple, so it could be a good way to learn some basic Docker concepts. It was helpful to get the same environment everytime I ran the program and not have to remember all the steps, especially since we update the dog walk schedule monthly.</p>
+			<p>From this project, I learned how to create a Dockerfile, use an entrypoint, and transfer files between the local file system and the Docker container. The most valuable concept I learned was optimizing the order of commands in the Dockerfile. For example, some of the Perl modules take a few minutes to install, so I could make use of cached images to save time and not wait for them to install every time by running commands with files that change often near the end.</p>
+			<h2>Makefile</h2>
+			<p>The Docker container uses a bind mount for the output files, which makes the command for running the container long, and there are more opportunities to make typos. To make it easier to build and run the container, the Makefile has build, run, and clean tasks, and the default task cleans, then builds, then runs. That simplifies the building and running process and reduces the chance of making mistakes.</p>
 			<h2>Potential Features</h2>
-			<p>These are some features that could be helpful</p>
+			<p>These are some features that could be helpful.</p>
 			<h3>Identifying Which Walks Cannot Be Assigned</h3>
 			<p>This feature would check which walks cannot be assigned and then note those walks in the output. Right now, we have to manually go through the ratings and check when no one is available for a walk. It would save time if we did not need to look through each ratings file before assigning walks.</p>
+			<h3>Choose the Number of Walk Times</h3>
+			<p>The model currently supports three walks. The model could be improved by determining the number of walks from the config file and having more general logic in the model's constraints.</p>
 			<h3>Not Distributing Durations Evenly</h3>
-			<p>This feature would support specifying a percentage of the total walk duration that each person would walk the dog for. Then, the scheduler can account for people who had agreed to take less walk hours.</p>
+			<p>This feature would support specifying a percentage of the total walk duration that each person would walk the dog for. Then, the scheduler can account for people who have agreed to take less walk hours.</p>
+			<h2>Conclusion</h2>
+			<p>The model is effective at assigning walks based on preferences and is more fair than the previous solution of choosing open walk time slots from a spreadsheet. The model has been used to assign walks starting from January 2026, and so far, everyone has been satisﬁed with the assignments. It has also saved lots of time that was spent trading walks to ensure the assignments worked with everyone’s schedule.</p>
 		</div>
 		<div id="contactInfo"></div>
 
