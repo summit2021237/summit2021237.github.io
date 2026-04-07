@@ -1,8 +1,10 @@
+const websiteLocation = "http://summit2021237.github.io";
+
 const pageNamesToPages = new Map([
-	["About", "./about.html"],
-	["Projects and Experience", "./projects_and_experience.html"],
-	["Other Interests", "./other_interests.html"],
-	["Resume", "./Fan_Summit_Resume.pdf"]
+	["About", `${websiteLocation}/about.html`],
+	["Projects and Experience", `${websiteLocation}/projects_and_experience.html`],
+	["Other Interests", `${websiteLocation}/other_interests.html`],
+	["Resume", `${websiteLocation}/Fan_Summit_Resume.pdf`]
 ]);
 
 const envelopeIcon = `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640"><!--!Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.--><path d="M112 128C85.5 128 64 149.5 64 176C64 191.1 71.1 205.3 83.2 214.4L291.2 370.4C308.3 383.2 331.7 383.2 348.8 370.4L556.8 214.4C568.9 205.3 576 191.1 576 176C576 149.5 554.5 128 528 128L112 128zM64 260L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 260L377.6 408.8C343.5 434.4 296.5 434.4 262.4 408.8L64 260z"/></svg>`;
@@ -33,7 +35,7 @@ function addProjectLink(id, displayText, url, icon) {
 }
 
 function createNav(currentPageName) {
-	let name = `<div id="name"><a class="link-no-color" href="./index.html">Summit Fan</a></div>`;
+	let name = `<div id="name"><a class="link-no-color" href="${websiteLocation}/index.html">Summit Fan</a></div>`;
 	let pages = `<div class="nav-container">`;
 
 	let pageNamesIter = pageNamesToPages.keys();
