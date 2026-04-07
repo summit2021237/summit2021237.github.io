@@ -35,10 +35,10 @@
 				<li>A Go library that forwards metrics (from concept to release)</li>
 				<li>A Go service that indexes analytics (implemented most of the functionality)</li>
 			</ol>
-			<h2>Metrics Forwarding Library</h2>
-			<p>The metrics forwarding library sends Go runtime and custom metrics from a service to a UDP port using the StatsD format.</p>
+			<h2>Metrics Library</h2>
+			<p>The metrics library collects and sends Go runtime and custom metrics from a service to a UDP port using the StatsD format.</p>
 			<h3>Existing Implementations</h3>
-			<p>There were two services that forwarded metrics to <a href="#telegraf">Telegraf</a>, an agent that collects, processes, aggregates, and writes metrics using a variety of plugins, which then outputted the metrics to an <a href="https://www.influxdata.com/" target="_blank">InfluxDB</a> instance. Those services implemented the collection and forwarding logic differently, and the team was in the process of developing more Go services. So, they wanted to pull the metrics collecting and forwarding logic into a separate Go library that could be used by the Go services.</p>
+			<p>There were two services that forwarded metrics to <b><a href="#telegraf">Telegraf</a></b>, an agent that collects, processes, aggregates, and writes metrics using a variety of plugins, which then outputted the metrics to an <b><a href="https://www.influxdata.com/" target="_blank">InfluxDB</a></b> instance. Those services implemented the collection and forwarding logic differently, and the team was in the process of developing more Go services. So, they wanted to pull the metrics <b>collecting and forwarding</b> logic into a separate Go library that could be used by the Go services.</p>
 			<p>Some examples of metrics are number of goroutines, CPU and memory for Kubernetes pods, and API endpoint response times.</p>
 			<p>To design and develop the metrics library, I needed to analyze the current implementations to identify their features and understand how they worked. Some key features of the two implementations are</p>
 			<ul>
@@ -55,7 +55,7 @@
 				</figure>
 				<p class="no-top-margin">We use <a href="https://www.influxdata.com/time-series-platform/telegraf/" target="_blank">Telegraf</a> to move metrics from our Go services to an InfluxDB instance. We start a Telegraf instance that we can access through a UDP port, and we configure it to output metrics to InfluxDB, which we pull timeseries data from for a few Grafana dashboards.</p>
 			</div>
-			<p>The metrics library does not setup a Telegraf instance. Instead, the Go services do, allowing for more flexibility in how the metrics library is used. The metrics library only takes in a UDP port to forward to, and the services can configure the metrics library to use Telegraf's UDP port.</p>
+			<p>The metrics library does not set up a Telegraf instance. Instead, the Go services do, allowing for more flexibility in how the metrics library is used. The metrics library only takes in a UDP port to forward to, and the services can configure the metrics library to use Telegraf's UDP port.</p>
 			<h3>Design</h3>
 			<p>The metrics library combines parts of both implementations. There is a <code>globals.go</code> file, which contains references to the sink and pusher to use. There are also <code>pusher.go</code> and <code>sink.go</code> files containing <code>Sink</code> and <code>Pusher</code> interface definitions and implementations and some collection-related functions.</p>
 			<h4>API</h4>
@@ -132,12 +132,12 @@
 				</tr>
 			</table>
 			<h3>Testing and Debugging</h3>
-			<p>When implementing the design, I used test-driven development to avoid adding extra code and ensure that everything was working correctly. I also mocked Go objects. My only previous mocking experience was with EasyMock, and the Go mocking packages seemed complex. So, I made simpler mocks that tested arguments and return values.</p>
-			<p>I had many opportunities to apply what I learned in a debugging course, and those debugging strategies seemed to make me faster at debugging. Some of the most valuable strategies I used were writing down what I tried during the debugging process and the results to remember what I had tried and splitting up the system and testing smaller parts to narrow down the area with the defect.</p>
+			<p>When implementing the design, I used <b>test-driven development</b> to avoid adding extra code and ensure that everything was working correctly. I also <b>mocked</b> Go objects. My only previous mocking experience was with EasyMock, and the Go mocking packages seemed complex. So, I made simpler mocks that tested arguments and return values.</p>
+			<p>I had many opportunities to apply what I learned in a debugging course, and those <b>debugging strategies</b> seemed to make me faster at debugging. Some of the most valuable strategies I used were writing down what I tried during the debugging process and the results to remember what I had tried and splitting up the system and testing smaller parts to narrow down the area with the defect.</p>
 
 			<h2>Analytics Indexer</h2>
-			<p>During the last two weeks of the internship, I started working on a Go service that indexes analytics. The team was working on changing some of their Java monoliths to Go services, and they had a Java analytics forwarder that had a few distinct features. One of those features was an analytics indexer.</p>
-			<p>This project was much more complicated than the metrics library and had a lot of code that I needed to understand to figure out where to separate the indexer from the rest of the forwarder. After lots of code tracing, I found that the analytics forwarder starts threads to pull messages from an AWS SQS queue and process the message and forward the message to OpenSearch, an indexer, if forwarding is enabled.</p>
+			<p>During the last two weeks of the internship, I started working on a Go service that indexes analytics. The team was working on changing some of their <b>Java monoliths to Go services</b>, and they had a Java analytics forwarder that had a few distinct features. One of those features was an analytics indexer.</p>
+			<p>This project was much more complicated than the metrics library and had a lot of code that I needed to understand to figure out where to separate the indexer from the rest of the forwarder. After lots of code <b>tracing</b>, I found that the analytics forwarder starts threads to <b>pull</b> messages from an AWS SQS queue, <b>process</b> the messages, and <b>forward</b> the messages to OpenSearch, an indexer, if forwarding is enabled.</p>
 			<p>Then, in the Go service, the following steps would forward the messages:</p>
 			<ol>
 				<li>Create an SQS queue</li>
@@ -150,11 +150,11 @@
 					<li>Delete the message from the queue</li>
 				</ol>
 			</ol>
-			<p>Deploying a Go service is more complex since we need to run the service in a container instead of calling functions from a library. I spent some time looking through the deployment files in other Go services to learn how to deploy the analytics indexer. There were many Docker, Helm, and Terraform files that I started learning about but ran out of time during the internship.</p>
+			<p>Deploying a Go service is more complex since we need to run the service in a container instead of calling functions from a library. I spent some time looking through the <b>deployment files</b> in other Go services to learn how to deploy the analytics indexer. There were many Docker, Helm, and Terraform files that I started learning about but ran out of time during the internship.</p>
 
 			<h2>Conclusion</h2>
-			<p>This internship was extremely valuable because it helped me get better at asking questions to understand someone's design decisions or when I am confused. I also learned a lot about design documentation. At Rose-Hulman, we only really covered UML class diagrams, use case diagrams, and sequence diagrams, and our documentation was mainly meant for end users, not developers.</p>
-			<p>The people at DEKA were great at answering questions and explaining concepts to interns. They also provided detailed feedback in merge requests to help us consider alternative implementations and ensure the code is up to the team's standards.</p>
+			<p>This internship was extremely valuable because it helped me get better at <b>asking questions</b> to understand someone's design decisions or when I am confused. I also learned a lot about <b>design documentation</b>. At Rose-Hulman, we only really covered UML class diagrams, use case diagrams, and sequence diagrams, and our documentation was mainly meant for end users, not developers.</p>
+			<p>The people at DEKA were great at answering questions and explaining concepts to interns. They also provided detailed feedback in merge requests to help us <b>consider alternative implementations</b> and ensure the code is up to the team's standards.</p>
 			<p>The internship complemented my coursework well by letting me apply what I had learned, exposing me to material I learned that next school year, and letting me figure out how I could improve before having a full-time software engineering job.</p>
 		</div>
 
